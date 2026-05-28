@@ -11,8 +11,14 @@ config_version=5
 [application]
 
 config/name="New Game Project"
+run/main_scene="uid://crev2inf1u6xe"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/borderless=true
+window/stretch/mode="canvas_items"
 
 [physics]
 
@@ -21,3 +27,4 @@ config/icon="res://icon.svg"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+environment/defaults/default_clear_color=Color(0.06666667, 0.13333334, 0.06666667, 1)

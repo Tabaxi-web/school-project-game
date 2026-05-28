@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://crev2inf1u6xe"]
+
+[ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://exodus_cl_night.png" id="1_7vrkn"]
+[ext_resource type="Shader" uid="uid://04nwxxydbxwn" path="res://crt_main.gdshader" id="1_fu7sn"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://pixChicago.ttf" id="2_fu7sn"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fu7sn"]
+viewport_path = NodePath("Gamelayer/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fu7sn"]
+resource_local_to_scene = true
+shader = ExtResource("1_fu7sn")
+shader_parameter/tex = SubResource("ViewportTexture_fu7sn")
+shader_parameter/mask_type = 1
+shader_parameter/curve = 0.294000013965
+shader_parameter/sharpness = 0.7550000121125
+shader_parameter/color_offset = 0.08300002769250003
+shader_parameter/mask_brightness = 1.0
+shader_parameter/scanline_brightness = 1.0
+shader_parameter/min_scanline_thickness = 0.3570000050825
+shader_parameter/aspect = 1.0
+shader_parameter/wobble_strength = 1.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_jix8l"]
+font = ExtResource("2_fu7sn")
+font_color = Color(0, 1, 0, 1)
+
+[node name="Node2D" type="Node2D" unique_id=343072824]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1411437698]
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer" unique_id=1897642081]
+position = Vector2(575.99994, 323.99997)
+scale = Vector2(0.59999996, 0.59999996)
+texture = ExtResource("1_7vrkn")
+
+[node name="Gamelayer" type="CanvasLayer" parent="." unique_id=1923482647]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Gamelayer" unique_id=743226254]
+material = SubResource("ShaderMaterial_fu7sn")
+offset_left = 130.0
+offset_right = 1030.0
+offset_bottom = 648.0
+metadata/_edit_lock_ = true
+
+[node name="SubViewport" type="SubViewport" parent="Gamelayer" unique_id=1978846609]
+canvas_item_default_texture_filter = 0
+size = Vector2i(1152, 648)
+
+[node name="Label" type="Label" parent="Gamelayer/SubViewport" unique_id=1107103337]
+offset_right = 1152.0
+offset_bottom = 648.0
+text = "blahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblahblah"
+label_settings = SubResource("LabelSettings_jix8l")
+autowrap_mode = 3
