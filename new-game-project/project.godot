@@ -10,15 +10,23 @@ config_version=5
 
 [application]
 
-config/name="New Game Project"
+config/name="School Game"
 run/main_scene="uid://crev2inf1u6xe"
 config/features=PackedStringArray("4.6", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/icon.svg"
+
+[autoload]
+
+flowerwall_crt="*uid://cc1fomjf362h5"
 
 [display]
 
 window/size/borderless=true
 window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/flowerwall_crt/plugin.cfg")
 
 [physics]
 
@@ -27,4 +35,5 @@ window/stretch/mode="canvas_items"
 [rendering]
 
 rendering_device/driver.windows="d3d12"
+scaling_3d/scale=0.33333334
 environment/defaults/default_clear_color=Color(0.06666667, 0.13333334, 0.06666667, 1)

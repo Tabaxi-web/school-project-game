@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://nutd3l60t4pw"
-path="res://.godot/imported/exodus_cl_night.png-5f5d535c4a9aa7a0e1005cad4000f5e1.ctex"
+path="res://.godot/imported/exodus_cl_night.png-fa428ccf636d21f1cb9aec0945bed1f5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://exodus_cl_night.png"
-dest_files=["res://.godot/imported/exodus_cl_night.png-5f5d535c4a9aa7a0e1005cad4000f5e1.ctex"]
+source_file="res://assets/exodus_cl_night.png"
+dest_files=["res://.godot/imported/exodus_cl_night.png-fa428ccf636d21f1cb9aec0945bed1f5.ctex"]
 
 [params]
 

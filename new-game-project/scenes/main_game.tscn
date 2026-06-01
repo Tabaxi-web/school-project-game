@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://wvnp3fck6aty"]
+
+[ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_s3esy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3esy"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="Node2D" type="Node2D" unique_id=567899002]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=711320777]
+layer = 105
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer" unique_id=789814436]
+z_index = 105
+position = Vector2(575.99994, 323.99997)
+scale = Vector2(0.59999996, 0.59999996)
+texture = ExtResource("1_s3esy")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1433920973]
+anchor_mode = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=150977368]
+offset_left = 143.0
+offset_right = 1015.0
+offset_bottom = 648.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_s3esy")
