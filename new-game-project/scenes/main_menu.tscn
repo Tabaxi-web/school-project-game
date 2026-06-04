@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://crev2inf1u6xe"]
 
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_8ln24"]
+[ext_resource type="Script" uid="uid://c8mmi8o8vgke2" path="res://scripts/main_menu.gd" id="1_rtw2f"]
 [ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_rtw2f"]
 [ext_resource type="Script" uid="uid://dsty8d6pbkof" path="res://scripts/evil_ahh_text.gd" id="3_oa1go"]
 [ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="4_tbmy8"]
@@ -17,6 +18,7 @@ font_size = 50
 font_color = Color(0, 1, 0, 1)
 
 [node name="Node2D" type="Node2D" unique_id=343072824]
+script = ExtResource("1_rtw2f")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1411437698]
 layer = 105
@@ -63,7 +65,7 @@ label_settings = SubResource("LabelSettings_7vrkn")
 layout_mode = 2
 theme_override_constants/separation = 0
 
-[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1123446676]
+[node name="PlayButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=1123446676]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
@@ -74,7 +76,7 @@ theme_override_styles/pressed = ExtResource("4_tbmy8")
 theme_override_styles/hover = ExtResource("5_jk1qb")
 text = "Play"
 
-[node name="Button2" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=928189288]
+[node name="OptionsButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=928189288]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
@@ -85,7 +87,7 @@ theme_override_styles/pressed = ExtResource("4_tbmy8")
 theme_override_styles/hover = ExtResource("5_jk1qb")
 text = "Options"
 
-[node name="Button3" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=236320092]
+[node name="QuitButton" type="Button" parent="HBoxContainer/VBoxContainer/VBoxContainer" unique_id=236320092]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
@@ -97,3 +99,6 @@ theme_override_styles/hover = ExtResource("5_jk1qb")
 text = "Quit"
 
 [connection signal="timeout" from="Label/Timer" to="Label" method="_on_timer_timeout"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_down"]

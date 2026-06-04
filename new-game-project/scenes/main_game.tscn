@@ -1,26 +1,70 @@
 [gd_scene format=3 uid="uid://wvnp3fck6aty"]
 
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_s3esy"]
+[ext_resource type="Script" uid="uid://ctxxulmnei26i" path="res://scripts/player.gd" id="2_72e8q"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3esy"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
+[sub_resource type="CircleShape2D" id="CircleShape2D_72e8q"]
+radius = 20.0
 
 [node name="Node2D" type="Node2D" unique_id=567899002]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=711320777]
+[node name="CrtBorder" type="CanvasLayer" parent="." unique_id=711320777]
 layer = 105
 
-[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer" unique_id=789814436]
+[node name="Sprite2D" type="Sprite2D" parent="CrtBorder" unique_id=789814436]
 z_index = 105
-position = Vector2(575.99994, 323.99997)
+position = Vector2(576, 323.99997)
 scale = Vector2(0.59999996, 0.59999996)
 texture = ExtResource("1_s3esy")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1433920973]
-anchor_mode = 0
+[node name="UIMain" type="CanvasLayer" parent="." unique_id=901089649]
+follow_viewport_enabled = true
 
-[node name="PanelContainer" type="PanelContainer" parent="." unique_id=150977368]
-offset_left = 143.0
-offset_right = 1015.0
-offset_bottom = 648.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_s3esy")
+[node name="HBoxContainer" type="HBoxContainer" parent="UIMain" unique_id=1194119633]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -138.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = -716
+alignment = 1
+
+[node name="PanelContainer" type="PanelContainer" parent="UIMain/HBoxContainer" unique_id=467102156]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="PanelContainer2" type="PanelContainer" parent="UIMain/HBoxContainer" unique_id=1446255789]
+layout_mode = 2
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1433920973]
+position_smoothing_enabled = true
+position_smoothing_speed = 100.0
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=314692743 node_paths=PackedStringArray("camera")]
+motion_mode = 1
+script = ExtResource("2_72e8q")
+camera = NodePath("../Camera2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1443567382]
+shape = SubResource("CircleShape2D_72e8q")
+
+[node name="ColorRect" type="ColorRect" parent="Player" unique_id=1229571217]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 1, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1151375317]
+offset_left = 150.0
+offset_top = 91.0
+offset_right = 190.0
+offset_bottom = 131.0
