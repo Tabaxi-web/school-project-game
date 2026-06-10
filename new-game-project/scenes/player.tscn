@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://jwhplx2e7ai4"]
+
+[ext_resource type="Script" uid="uid://ctxxulmnei26i" path="res://scripts/player.gd" id="1_3vyb7"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_dqkch"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="3_qlg0r"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="4_tuyoq"]
+[ext_resource type="Script" uid="uid://dc34i4a085b4g" path="res://scripts/reloading_bar.gd" id="5_qlg0r"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_72e8q"]
+radius = 20.0
+
+[node name="Player" type="CharacterBody2D" unique_id=1669383909 node_paths=PackedStringArray("bullet_cooldown_timer", "reload_timer", "reloading_ui") groups=["Player"]]
+motion_mode = 1
+script = ExtResource("1_3vyb7")
+bullet_cooldown_timer = NodePath("BulletCooldown")
+reload_timer = NodePath("ReloadTimer")
+reloading_ui = NodePath("ReloadingUI")
+
+[node name="ReloadingUI" type="VBoxContainer" parent="." unique_id=49943623]
+visible = false
+offset_left = -58.0
+offset_top = -72.0
+offset_right = 58.0
+offset_bottom = -32.0
+
+[node name="Label" type="Label" parent="ReloadingUI" unique_id=1099217768]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_dqkch")
+theme_override_font_sizes/font_size = 9
+text = "Reloading..."
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="ReloadingUI" unique_id=1201914822 node_paths=PackedStringArray("reload_timer")]
+custom_minimum_size = Vector2(0, 16.02)
+layout_mode = 2
+theme_override_styles/background = ExtResource("3_qlg0r")
+theme_override_styles/fill = ExtResource("4_tuyoq")
+max_value = 1.0
+show_percentage = false
+script = ExtResource("5_qlg0r")
+reload_timer = NodePath("../../ReloadTimer")
+
+[node name="Pivot" type="Node2D" parent="." unique_id=726673081]
+
+[node name="ColorRect" type="ColorRect" parent="Pivot" unique_id=66953391]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 1, 0, 1)
+
+[node name="ReloadTimer" type="Timer" parent="." unique_id=1743825999]
+
+[node name="BulletCooldown" type="Timer" parent="." unique_id=899863685]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1286775]
+shape = SubResource("CircleShape2D_72e8q")
+
+[connection signal="timeout" from="BulletCooldown" to="." method="_on_bullet_cooldown_timeout"]
