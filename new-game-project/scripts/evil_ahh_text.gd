@@ -6,6 +6,7 @@ var char_set = ["a", "b", "c", "d", "e", "f", "g", "h",
 "v", "w", "x", "y", "z"]
 @export var chance_numerator := 9995
 @export var chance_denominator := 10000
+@export var game_over_screen := false
 # Generate a string of random letters of a certain length.
 func _get_random_letter_string(length: int) -> String:
 	var string_result = ""
@@ -28,4 +29,9 @@ func _process(delta: float) -> void:
 
 func _on_timer_timeout() -> void:
 	# Change the whole thing after a set amount of time.
-	text = Marshalls.utf8_to_base64(_get_random_letter_string(10000))
+	if not game_over_screen:
+		text = Marshalls.utf8_to_base64(_get_random_letter_string(10000))
+	else:
+		text = ""
+		for i in range(10000):
+			text += "0"

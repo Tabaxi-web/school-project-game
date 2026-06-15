@@ -2,7 +2,8 @@ extends CharacterBody2D
 
 # -- MOVEMENT VARS --
 @export_category("Movement")
-@export var camera: Camera2D ## The Camera that follows the player.
+@export var camera_wrapper: Node2D ## The Wrapper of the camera, which follows the player.
+@export var camera: Camera2D ## Camera itself for shake effects.
 @export var max_speed := 500.0 ## The length of velocity is limited to this value.
 @export var acceleration := 3000.0 ## Controls the acceleration of the player.
 @export var friction := 30 ## Velocity is multiplied by (1 - this * delta). The higher, the more friction.
@@ -10,6 +11,7 @@ extends CharacterBody2D
 # -- GAMEPLAY VARS --
 @export_category("Gameplay")
 @export var max_health := 100.0 ## The max health of the player.
+@export var wave_manager: Node2D ## The wave manager. Player talks to it for the UI.
 var health: float
 
 # -- GUN VARS --
@@ -31,6 +33,7 @@ var ammo: int # The player's current ammo.
 @export var reload_timer: Timer ## Timer that controls the player's reload.
 @export var health_label: Label ## Health bar - uses strings, not progress bar
 @export var ammo_label: Label ## Ditto for ammo
+@export var wave_timer_label: Label ## Ditto for wave timer
 @export var bullet_scene: PackedScene ## Bullet scene to instantiate
 @onready var pivot := $Pivot # Pivot that the player's sprite rotates around
 @export var reloading_ui: Control ## UI for reloading.
@@ -57,7 +60,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#Camera logic. Note the camera and player start CENTERED at 0,0.
-	camera.position = position
+	camera_wrapper.position = position
 	#movement
 	var direction: Vector2
 	direction.x = Input.get_axis("movement_left", "movement_right")
@@ -79,7 +82,11 @@ func _process(delta: float) -> void:
 	+ " (" + str(health) + "/" + str(max_health) + ")"
 	ammo_label.text = "Ammo: " + _retro_bar_render(ammo, max_ammo, 10)\
 	+ " (" + str(ammo) + "/" + str(max_ammo) + ")"
+	wave_timer_label.text = _retro_bar_render(wave_manager.enemies_left, wave_manager.wave_enemies_amount, 50)
 	
+	# Death Handling.
+	if health <= 0:
+		get_tree().change_scene_to_file("res://scenes/game_over.tscn")
 	# Shooting!
 	# If automatic and pressed, or semi and just pressed, and not shooting, and ammo left:
 	if ((Input.is_action_pressed("shoot") and automatic)\
@@ -101,21 +108,28 @@ func _process(delta: float) -> void:
 			add_sibling(new_bullet)
 	
 	# Otherwise the same logic for auto and semi, but reloading, if the player has <1 ammo left.
-	elif ammo < 1\
+	elif ((ammo < 1\
 	and ((Input.is_action_just_pressed("shoot") and not automatic) or\
-	(Input.is_action_pressed("shoot") and automatic))\
+	(Input.is_action_pressed("shoot") and automatic)))\
+	or Input.is_action_just_pressed("reload"))\
 	and not reloading\
 	and not shooting:
 		reloading = true
 		reload_timer.start()
 		reloading_ui.visible = true
+		
 		await reload_timer.timeout
 		reloading_ui.visible = false
 		reloading = false
 		ammo = max_ammo
-
+	
+	# Fancy reload animation bar refill. This is cosmetic as you can't shoot while reloading.
+	if reloading:
+		@warning_ignore("narrowing_conversion")
+		ammo = (max_ammo * (1 - (reload_timer.time_left / reload_time)))
 # Stop shooting when done shooting.
 func _on_bullet_cooldown_timeout() -> void:
 	shooting = false
 func take_damage(damage: float) -> void:
+	camera.shake(0.3)
 	health -= damage

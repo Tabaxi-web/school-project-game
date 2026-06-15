@@ -6,6 +6,44 @@
 [ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="4_tuyoq"]
 [ext_resource type="Script" uid="uid://dc34i4a085b4g" path="res://scripts/reloading_bar.gd" id="5_qlg0r"]
 
+[sub_resource type="Animation" id="Animation_qlg0r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ReloadingUI/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Reloading"]
+}
+
+[sub_resource type="Animation" id="Animation_tuyoq"]
+resource_name = "reloading_text"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ReloadingUI/Label:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": ["Reloading", "Reloading.", "Reloading..", "Reloading..."]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fjrip"]
+_data = {
+&"RESET": SubResource("Animation_qlg0r"),
+&"reloading_text": SubResource("Animation_tuyoq")
+}
+
 [sub_resource type="CircleShape2D" id="CircleShape2D_72e8q"]
 radius = 20.0
 
@@ -28,8 +66,13 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_fonts/font = ExtResource("2_dqkch")
 theme_override_font_sizes/font_size = 9
-text = "Reloading..."
+text = "Reloading"
 horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ReloadingUI/Label" unique_id=440791458]
+root_node = NodePath("../../..")
+libraries/ = SubResource("AnimationLibrary_fjrip")
+autoplay = &"reloading_text"
 
 [node name="ProgressBar" type="ProgressBar" parent="ReloadingUI" unique_id=1201914822 node_paths=PackedStringArray("reload_timer")]
 custom_minimum_size = Vector2(0, 16.02)
@@ -38,6 +81,8 @@ theme_override_styles/background = ExtResource("3_qlg0r")
 theme_override_styles/fill = ExtResource("4_tuyoq")
 max_value = 1.0
 show_percentage = false
+indeterminate = true
+editor_preview_indeterminate = false
 script = ExtResource("5_qlg0r")
 reload_timer = NodePath("../../ReloadTimer")
 

@@ -8,6 +8,9 @@ var player: CharacterBody2D
 @export var attack_area : Area2D
 @export var attack_distance := 46
 @export var attack_timer: Timer
+@export var attack_damage := 5
+@export var stopping_distance := 50.0
+@export var friction_coeff := 5.0
 var cooling_down := false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,20 +20,28 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if player == null:
+		return
 	# Health handling.
 	if health <= 0:
 		queue_free()
 	health_bar.value = health / max_health
 	# Movement.
-	velocity += delta * acceleration * (player.position - position)
-	velocity = velocity.limit_length(max_speed)
+	if position.distance_to(player.position) > stopping_distance:
+		velocity += delta * acceleration * (player.position - position)
+		velocity = velocity.limit_length(max_speed)
+	else:
+		velocity *= (1 / friction_coeff) * delta
 	move_and_slide()
-	for body in attack_area.get_overlapping_bodies():
-		if body == player and not cooling_down:
-			cooling_down = true
-			player.take_damage(1.0)
-			set_deferred("attack_area.monitoring", false)
-			attack_timer.start()
+	if not cooling_down:
+		for body in attack_area.get_overlapping_bodies():
+			if body == player:
+				cooling_down = true
+				player.take_damage(attack_damage)
+				set_deferred("attack_area.monitoring", false)
+				attack_timer.start()
+	else:
+		pass
 
 func take_damage(damage: float) -> void:
 	health -= damage

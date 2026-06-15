@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://cder5ela3m3no"]
+
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="1_rt8v3"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_pin3n"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="2_rt8v3"]
+[ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="3_ewre8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_pin3n"]
+font = ExtResource("2_pin3n")
+font_size = 30
+font_color = Color(0, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ewre8"]
+font = ExtResource("2_pin3n")
+font_size = 29
+font_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fhkdb"]
+font = ExtResource("2_pin3n")
+font_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[node name="Node2D" type="Node2D" unique_id=1418396062]
+
+[node name="UIMain" type="CanvasLayer" parent="." unique_id=1587092731]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMain" unique_id=1099003758]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -388.0
+offset_top = -284.0
+offset_right = 388.0
+offset_bottom = 284.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+
+[node name="Label" type="Label" parent="UIMain/VBoxContainer" unique_id=56824656]
+custom_minimum_size = Vector2(0, 74)
+layout_mode = 2
+text = "CHOOSE AN UPGRADE"
+label_settings = SubResource("LabelSettings_pin3n")
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UIMain/VBoxContainer" unique_id=306774352]
+layout_mode = 2
+alignment = 1
+
+[node name="Upgrade 1" type="VBoxContainer" parent="UIMain/VBoxContainer/HBoxContainer" unique_id=787542142]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="UIMain/VBoxContainer/HBoxContainer/Upgrade 1" unique_id=1191461446]
+custom_minimum_size = Vector2(275, 100)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_rt8v3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMain/VBoxContainer/HBoxContainer/Upgrade 1/PanelContainer" unique_id=1969903492]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="UIMain/VBoxContainer/HBoxContainer/Upgrade 1/PanelContainer/VBoxContainer" unique_id=23260269]
+layout_mode = 2
+text = "UPGRADE"
+label_settings = SubResource("LabelSettings_ewre8")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="UIMain/VBoxContainer/HBoxContainer/Upgrade 1/PanelContainer/VBoxContainer" unique_id=1237927169]
+layout_mode = 2
+text = "X of 3"
+label_settings = SubResource("LabelSettings_fhkdb")
+horizontal_alignment = 1
+
+[node name="PanelContainer2" type="PanelContainer" parent="UIMain/VBoxContainer/HBoxContainer/Upgrade 1" unique_id=1792709431]
+custom_minimum_size = Vector2(0, 350)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("1_rt8v3")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMain/VBoxContainer/HBoxContainer/Upgrade 1/PanelContainer2" unique_id=364109910]
+layout_mode = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1072921435]
+layer = 105
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer" unique_id=1305318145]
+z_index = 105
+position = Vector2(575.99994, 323.99997)
+scale = Vector2(0.59999996, 0.59999996)
+texture = ExtResource("3_ewre8")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=969726701]
+anchor_mode = 0
