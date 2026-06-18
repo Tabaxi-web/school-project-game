@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://c7cucfte4udu"]
+
+[ext_resource type="Script" uid="uid://5nygm101377e" path="res://scripts/upgrade_card.gd" id="1_0hv3p"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="2_igsks"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="3_33rkj"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="4_sav2r"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ewre8"]
+font = ExtResource("3_33rkj")
+font_size = 29
+font_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_fhkdb"]
+font = ExtResource("3_33rkj")
+font_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ou5bx"]
+font = ExtResource("3_33rkj")
+font_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pin3n"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_ffiw0"]
+font = ExtResource("3_33rkj")
+font_size = 12
+font_color = Color(0, 1, 0, 1)
+
+[node name="Upgrade 1" type="VBoxContainer" unique_id=1448093152 node_paths=PackedStringArray("number_label", "upgrade_name_label", "upgrade_description_label")]
+theme_override_constants/separation = 0
+script = ExtResource("1_0hv3p")
+number_label = NodePath("Header/HeaderVBox/NumberOf3")
+upgrade_name_label = NodePath("Body/BodyVbox/UpgradeName")
+upgrade_description_label = NodePath("Body/BodyVbox/UpgradeDescription")
+
+[node name="Header" type="PanelContainer" parent="." unique_id=767731405]
+custom_minimum_size = Vector2(275, 100)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("2_igsks")
+
+[node name="HeaderVBox" type="VBoxContainer" parent="Header" unique_id=1554613942]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Upgrade" type="Label" parent="Header/HeaderVBox" unique_id=2053456313]
+layout_mode = 2
+text = "UPGRADE"
+label_settings = SubResource("LabelSettings_ewre8")
+horizontal_alignment = 1
+
+[node name="NumberOf3" type="Label" parent="Header/HeaderVBox" unique_id=1541752891]
+layout_mode = 2
+text = "X of 3"
+label_settings = SubResource("LabelSettings_fhkdb")
+horizontal_alignment = 1
+
+[node name="Body" type="PanelContainer" parent="." unique_id=1282883954]
+custom_minimum_size = Vector2(0, 350)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_sav2r")
+
+[node name="BodyVbox" type="VBoxContainer" parent="Body" unique_id=255108549]
+layout_mode = 2
+
+[node name="IconContainer" type="PanelContainer" parent="Body/BodyVbox" unique_id=1181801874]
+custom_minimum_size = Vector2(0, 175)
+layout_mode = 2
+
+[node name="UpgradeName" type="Label" parent="Body/BodyVbox" unique_id=974976630]
+layout_mode = 2
+text = "Upgrade Name"
+label_settings = SubResource("LabelSettings_ou5bx")
+horizontal_alignment = 1
+
+[node name="UpgradeDescription" type="Label" parent="Body/BodyVbox" unique_id=1579138105]
+custom_minimum_size = Vector2(5, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_pin3n")
+text = "The upgrade description goes here. Hopefully this looks pretty cool."
+label_settings = SubResource("LabelSettings_ffiw0")
+autowrap_mode = 2

@@ -52,10 +52,27 @@ func _retro_bar_render(number: float, maximum: float, length: int) -> String: #t
 
 func _ready() -> void:
 	# Init gameplay variables.
+	for upgrade in Globals.upgrades:
+		if upgrade["name"] == "Hollow Point I":
+			bullet_damage *= 1.5
+		if upgrade["name"] == "Gunner I":
+			fire_delay *= 0.2
+			max_ammo *= 3
+		if upgrade["name"] == "Buckshot I":
+			bullets_per_shot *= 5
+			spread += PI / 8
+			reload_time += 1
+		if upgrade["name"] == "Starburst":
+			bullets_per_shot += 50
+			spread = 2 * PI
+			bullet_damage *= 0.2
 	health = max_health
 	ammo = max_ammo
 	bullet_cooldown_timer.wait_time = fire_delay
 	reload_timer.wait_time = reload_time
+	# Do basic upgrades first.
+	
+		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

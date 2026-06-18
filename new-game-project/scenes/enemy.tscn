@@ -55,4 +55,3 @@ one_shot = true
 shape = SubResource("CircleShape2D_5uy6h")
 
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
-[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_body_entered"]

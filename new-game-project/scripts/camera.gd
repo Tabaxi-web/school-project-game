@@ -13,7 +13,7 @@ func _process(delta: float) -> void:
 	position.x = shake_strength * randf_range(-1, 1) * stress
 	position.y = shake_strength * randf_range(-1, 1) * stress
 	# Multiplicatively decrease stress
-	stress *= 0.8
+	stress *= 0.8 * delta
 	pass
 func shake(strength):
 	# Increase stress to a max of 1

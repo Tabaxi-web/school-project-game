@@ -38,16 +38,13 @@ func _process(delta: float) -> void:
 			if body == player:
 				cooling_down = true
 				player.take_damage(attack_damage)
-				set_deferred("attack_area.monitoring", false)
 				attack_timer.start()
 	else:
 		pass
 
+
 func take_damage(damage: float) -> void:
 	health -= damage
-	
-
-
 func _on_attack_timer_timeout() -> void:
 	print("recovered")
 	cooling_down = false

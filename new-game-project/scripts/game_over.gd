@@ -11,3 +11,6 @@ func _on_options_button_down() -> void:
 
 func _on_quit_button_down() -> void:
 	get_tree().quit()
+
+func _ready() -> void:
+	Globals.reset_all_globals()
