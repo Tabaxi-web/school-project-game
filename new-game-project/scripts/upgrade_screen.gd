@@ -20,7 +20,7 @@ func _ready() -> void:
 		upgrades_amount = len(Globals.potential_common_upgrades) + len(Globals.potential_rare_upgrades)
 	while i < upgrades_amount:
 		var upgrade: Dictionary
-		if randf() < 0.1 and len(Globals.potential_rare_upgrades) > 0:
+		if (randf() < 0.1 and len(Globals.potential_rare_upgrades) > 0) or len(Globals.potential_common_upgrades) < 1:
 			upgrade = Globals.potential_rare_upgrades[randi_range(0, len(Globals.potential_rare_upgrades) - 1)]
 		else:
 			upgrade = Globals.potential_common_upgrades[randi_range(0, len(Globals.potential_common_upgrades) - 1)]
@@ -58,7 +58,7 @@ func _process(delta: float) -> void:
 				Globals.potential_common_upgrades.erase(current_card.upgrade)
 			elif current_card.upgrade.rarity == "Rare":
 				Globals.potential_rare_upgrades.erase(current_card.upgrade)
-			get_tree().change_scene_to_file("res://scenes/main_game.tscn")
+			Globals.next_wave()
 		for child in upgrade_card_carousel.get_children():
 			if child == current_card:
 				child.modulate.a = 1

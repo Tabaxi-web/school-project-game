@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://dhbr0nqs0hcwl"]
 
 [ext_resource type="Script" uid="uid://c5vdyea3r56mw" path="res://scripts/bullet.gd" id="1_mkf8s"]
+[ext_resource type="PackedScene" uid="uid://5eh8nh380s3u" path="res://scenes/damage_text.tscn" id="2_y25gk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mkf8s"]
 size = Vector2(10, 10)
 
 [node name="Bullet" type="Area2D" unique_id=1580603616]
 script = ExtResource("1_mkf8s")
+damage_text = ExtResource("2_y25gk")
 
 [node name="SpriteContainer" type="Node2D" parent="." unique_id=2132887117]
 

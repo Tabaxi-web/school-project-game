@@ -125,18 +125,13 @@ ammo_label = NodePath("../UIMain/VBoxContainer/HBoxContainer/PanelContainer2/VBo
 wave_timer_label = NodePath("../UIMain/VBoxContainer/VBoxContainer/WaveTimer")
 bullet_scene = ExtResource("5_ipu61")
 
-[node name="Enemy" parent="." unique_id=735976769 instance=ExtResource("6_ygxny")]
-position = Vector2(495, 257)
-max_health = 1000.0
-
 [node name="TileMapLayer" parent="." unique_id=833659972 instance=ExtResource("7_70vka")]
 metadata/_edit_lock_ = true
 
 [node name="CameraWrapper" type="Node2D" parent="." unique_id=1752083070]
 
 [node name="Camera2D" type="Camera2D" parent="CameraWrapper" unique_id=1433920973]
-position_smoothing_enabled = true
-position_smoothing_speed = 100.0
+position_smoothing_speed = 10.0
 script = ExtResource("4_2l77h")
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=73507951 node_paths=PackedStringArray("playable_area")]

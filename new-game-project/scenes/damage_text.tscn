@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://5eh8nh380s3u"]
+
+[ext_resource type="Script" uid="uid://b8pklu2r7m23h" path="res://scripts/damage_number.gd" id="1_6p0u7"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_vpxen"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_d4jm4"]
+font = ExtResource("2_vpxen")
+font_size = 11
+font_color = Color(0, 1, 0, 1)
+outline_size = 3
+outline_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[node name="DamageText" type="Node2D" unique_id=1909979390 node_paths=PackedStringArray("label")]
+z_index = 90
+script = ExtResource("1_6p0u7")
+init_velocity_y = -5.0
+gravity = 50.0
+label = NodePath("Label")
+
+[node name="Label" type="Label" parent="." unique_id=1176835796]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "XXX!!"
+label_settings = SubResource("LabelSettings_d4jm4")
+horizontal_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=1882056144]
+wait_time = 0.6
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
