@@ -3,12 +3,15 @@
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_s3esy"]
 [ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="2_0rdsr"]
 [ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_d2op2"]
+[ext_resource type="Script" uid="uid://mpcunwtyr2x0" path="res://scripts/upgrade_icon_indicator.gd" id="3_5cypo"]
 [ext_resource type="PackedScene" uid="uid://jwhplx2e7ai4" path="res://scenes/player.tscn" id="4_0rdsr"]
 [ext_resource type="Script" uid="uid://dgsf273nfwce5" path="res://scripts/camera.gd" id="4_2l77h"]
+[ext_resource type="PackedScene" uid="uid://b5vloxwjeulvc" path="res://scenes/upgrade_icon.tscn" id="4_o6v7o"]
 [ext_resource type="PackedScene" uid="uid://dhbr0nqs0hcwl" path="res://scenes/bullet.tscn" id="5_ipu61"]
 [ext_resource type="PackedScene" uid="uid://ck8hmgdyfno0b" path="res://scenes/enemy.tscn" id="6_ygxny"]
 [ext_resource type="PackedScene" uid="uid://ckpyr6w0x03wo" path="res://scenes/tiles_main_game.tscn" id="7_70vka"]
 [ext_resource type="Script" uid="uid://ccbtsxl1ys0io" path="res://scripts/wave_manager.gd" id="9_2l77h"]
+[ext_resource type="PackedScene" uid="uid://d1ehyiuirawx2" path="res://scenes/enemy_ranged.tscn" id="10_nqdth"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0rdsr"]
 font = ExtResource("2_d2op2")
@@ -52,11 +55,16 @@ theme_override_constants/separation = 167
 alignment = 1
 
 [node name="PanelContainer" type="PanelContainer" parent="UIMain/VBoxContainer/HBoxContainer" unique_id=467102156]
+custom_minimum_size = Vector2(300, 75)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_0rdsr")
 
-[node name="Label" type="Label" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer" unique_id=161223200]
-custom_minimum_size = Vector2(300, 75)
+[node name="FlowContainer" type="FlowContainer" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer" unique_id=563135814]
+layout_mode = 2
+script = ExtResource("3_5cypo")
+texture_rect_prefab = ExtResource("4_o6v7o")
+
+[node name="Label" type="Label" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer/FlowContainer" unique_id=161223200]
 layout_mode = 2
 text = "Upgrades:"
 label_settings = SubResource("LabelSettings_0rdsr")
@@ -119,7 +127,7 @@ max_ammo = 6
 fire_delay = 0.75
 bullets_per_shot = 1
 spread = 0.0
-bullet_damage = 750.0
+bullet_damage = 1000.0
 health_label = NodePath("../UIMain/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Health")
 ammo_label = NodePath("../UIMain/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Ammo")
 wave_timer_label = NodePath("../UIMain/VBoxContainer/VBoxContainer/WaveTimer")
@@ -131,13 +139,14 @@ metadata/_edit_lock_ = true
 [node name="CameraWrapper" type="Node2D" parent="." unique_id=1752083070]
 
 [node name="Camera2D" type="Camera2D" parent="CameraWrapper" unique_id=1433920973]
+zoom = Vector2(0.75, 0.75)
 position_smoothing_speed = 10.0
 script = ExtResource("4_2l77h")
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=73507951 node_paths=PackedStringArray("playable_area")]
 script = ExtResource("9_2l77h")
 enemy_scene = ExtResource("6_ygxny")
+ranged_enemy_scene = ExtResource("10_nqdth")
 playable_area = NodePath("../Bounds")
 area_headway = 0.5
-
-[node name="IntermissionTimer" type="Timer" parent="WaveManager" unique_id=242145921]
+ranged_enemy_chance = 0.2

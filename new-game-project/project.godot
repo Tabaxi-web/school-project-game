@@ -25,6 +25,10 @@ Globals="*uid://cyilawu7ge6ak"
 window/size/borderless=true
 window/stretch/mode="canvas_items"
 
+[editor]
+
+movie_writer/movie_file="/Users/louisdenyer/DT/school-project-game/playtest_prototype.avi"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/flowerwall_crt/plugin.cfg")

@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://clnord4orqk48"]
+
+[ext_resource type="Script" uid="uid://c5vdyea3r56mw" path="res://scripts/bullet.gd" id="1_qx7rs"]
+[ext_resource type="PackedScene" uid="uid://5eh8nh380s3u" path="res://scenes/damage_text.tscn" id="2_38r62"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mkf8s"]
+size = Vector2(10, 10)
+
+[node name="EnemyBullet" type="Area2D" unique_id=1580603616]
+script = ExtResource("1_qx7rs")
+damage_text = ExtResource("2_38r62")
+allied = false
+
+[node name="SpriteContainer" type="Node2D" parent="." unique_id=2132887117]
+
+[node name="ColorRect2" type="ColorRect" parent="SpriteContainer" unique_id=568207627]
+offset_left = -7.0
+offset_top = -7.0
+offset_right = 7.0
+offset_bottom = 7.0
+color = Color(0, 1, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="SpriteContainer" unique_id=1794925699]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+offset_right = 5.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1598676264]
+shape = SubResource("RectangleShape2D_mkf8s")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -141,7 +141,7 @@ func _process(delta: float) -> void:
 func _on_bullet_cooldown_timeout() -> void:
 	shooting = false
 func take_damage(damage: float) -> void:
-	camera.shake(0.3)
+	camera.shake(0.4)
 	health -= damage
 
 
@@ -173,7 +173,7 @@ func _check_upgrades(upgrade) -> void:
 		bullets_per_shot = 1
 		spread = 0
 		fire_delay = 0.01
-		bullet_damage /= 0.1
+		bullet_damage /= 10
 		max_ammo *= 50
 	if upgrade["name"] == "Minesweeper":
 		bullets_per_shot = 1

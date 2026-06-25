@@ -4,6 +4,7 @@
 [ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="2_igsks"]
 [ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="3_33rkj"]
 [ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="4_sav2r"]
+[ext_resource type="Texture2D" uid="uid://c1oc8ut7xwj8s" path="res://assets/icons/Buckshot_Icon.png" id="5_igsks"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ewre8"]
 font = ExtResource("3_33rkj")
@@ -13,6 +14,10 @@ font_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_fhkdb"]
 font = ExtResource("3_33rkj")
 font_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_33rkj"]
+content_margin_top = 20.0
+content_margin_bottom = 20.0
 
 [sub_resource type="LabelSettings" id="LabelSettings_ou5bx"]
 font = ExtResource("3_33rkj")
@@ -27,12 +32,13 @@ font = ExtResource("3_33rkj")
 font_size = 12
 font_color = Color(0, 1, 0, 1)
 
-[node name="Upgrade 1" type="VBoxContainer" unique_id=1448093152 node_paths=PackedStringArray("number_label", "upgrade_name_label", "upgrade_description_label")]
+[node name="Upgrade 1" type="VBoxContainer" unique_id=1448093152 node_paths=PackedStringArray("number_label", "upgrade_name_label", "upgrade_description_label", "texture_rect")]
 theme_override_constants/separation = 0
 script = ExtResource("1_0hv3p")
 number_label = NodePath("Header/HeaderVBox/NumberOf3")
 upgrade_name_label = NodePath("Body/BodyVbox/UpgradeName")
 upgrade_description_label = NodePath("Body/BodyVbox/UpgradeDescription")
+texture_rect = NodePath("Body/BodyVbox/IconContainer/TextureRect")
 
 [node name="Header" type="PanelContainer" parent="." unique_id=767731405]
 custom_minimum_size = Vector2(275, 100)
@@ -67,6 +73,13 @@ layout_mode = 2
 [node name="IconContainer" type="PanelContainer" parent="Body/BodyVbox" unique_id=1181801874]
 custom_minimum_size = Vector2(0, 175)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_33rkj")
+
+[node name="TextureRect" type="TextureRect" parent="Body/BodyVbox/IconContainer" unique_id=253033403]
+layout_mode = 2
+texture = ExtResource("5_igsks")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="UpgradeName" type="Label" parent="Body/BodyVbox" unique_id=974976630]
 layout_mode = 2

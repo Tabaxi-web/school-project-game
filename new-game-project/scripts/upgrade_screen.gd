@@ -34,6 +34,8 @@ func _ready() -> void:
 		upgrade_card.upgrade_description = upgrade["description"]
 		upgrade_card.upgrade_number = i
 		upgrade_card.upgrade = upgrade
+		if upgrade["icon_path"]  != null:
+			upgrade_card.texture_rect.texture = load(upgrade["icon_path"])
 		upgrade_card_carousel.add_child(upgrade_card)
 		upgrade_cards.append(upgrade_card)
 	

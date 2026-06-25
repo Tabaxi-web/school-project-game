@@ -7,6 +7,7 @@ extends VBoxContainer
 @export var upgrade_name := ""
 @export var upgrade_description := ""
 @export var upgrade: Dictionary
+@export var texture_rect: TextureRect
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	number_label.text = str(upgrade_number) + " of 3"

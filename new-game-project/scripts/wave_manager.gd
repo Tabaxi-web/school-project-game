@@ -7,8 +7,10 @@ var percent_enemies_left: float
 var intermission := false
 var in_wave := false
 @export var enemy_scene: PackedScene
+@export var ranged_enemy_scene: PackedScene
 @export var playable_area: Control
 @export var area_headway: float
+@export var ranged_enemy_chance := 0.4
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -28,10 +30,16 @@ func _process(delta: float) -> void:
 	if not in_wave:
 		wave_enemies_amount = ((Globals.wave - 1) * 7) + 2
 		for i in range(wave_enemies_amount):
-			var enemy = enemy_scene.instantiate()
-			enemy.position = get_point_in_playable_area(playable_area, area_headway)
-			enemies.append(enemy)
-			add_sibling(enemy)
+			if randf() < ranged_enemy_chance:
+				var enemy = ranged_enemy_scene.instantiate()
+				enemy.position = get_point_in_playable_area(playable_area, area_headway)
+				enemies.append(enemy)
+				add_sibling(enemy)
+			else:
+				var enemy = enemy_scene.instantiate()
+				enemy.position = get_point_in_playable_area(playable_area, area_headway)
+				enemies.append(enemy)
+				add_sibling(enemy)
 		in_wave = true
 	enemies_left = len(enemies)
 	if enemies_left < 1:

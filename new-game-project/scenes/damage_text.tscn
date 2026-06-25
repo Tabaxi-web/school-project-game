@@ -16,6 +16,7 @@ script = ExtResource("1_6p0u7")
 init_velocity_y = -5.0
 gravity = 50.0
 label = NodePath("Label")
+stopping_velocity = 1.0
 
 [node name="Label" type="Label" parent="." unique_id=1176835796]
 anchors_preset = 8

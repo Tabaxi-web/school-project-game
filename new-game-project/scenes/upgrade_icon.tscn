@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b5vloxwjeulvc"]
+
+[ext_resource type="Texture2D" uid="uid://c1oc8ut7xwj8s" path="res://assets/icons/Buckshot_Icon.png" id="1_ark8d"]
+
+[node name="UpgradeIcon" type="TextureRect" unique_id=1584984029]
+custom_minimum_size = Vector2(50, 0)
+texture = ExtResource("1_ark8d")
+expand_mode = 3
+stretch_mode = 5

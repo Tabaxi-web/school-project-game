@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://d1ehyiuirawx2"]
+
+[ext_resource type="Script" uid="uid://bowukemim6i34" path="res://scripts/enemy.gd" id="1_wotfd"]
+[ext_resource type="PackedScene" uid="uid://clnord4orqk48" path="res://scenes/enemy_bullet.tscn" id="2_5wlyj"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_24171"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="3_5wlyj"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="4_iutvh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7p1mj"]
+size = Vector2(40, 40)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5uy6h"]
+radius = 46.0
+
+[node name="RangedEnemy" type="CharacterBody2D" unique_id=327760210 node_paths=PackedStringArray("health_bar", "attack_area", "attack_timer") groups=["Enemies"]]
+script = ExtResource("1_wotfd")
+max_health = 5000.0
+health_bar = NodePath("ProgressBar")
+attack_area = NodePath("AttackArea")
+attack_timer = NodePath("AttackTimer")
+attack_damage = 10
+ranged_stopping_distance = 500.0
+friction_coeff = 1.0
+ranged = true
+bullet_prefab = ExtResource("2_5wlyj")
+bullet_damage = 20.0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=474384095]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 1, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="ColorRect" unique_id=2015600249]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 37.0
+offset_bottom = 37.0
+color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=853074630]
+shape = SubResource("RectangleShape2D_7p1mj")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1256333450]
+offset_left = -41.0
+offset_top = -46.0
+offset_right = 41.0
+offset_bottom = -27.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_24171")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = ExtResource("3_5wlyj")
+theme_override_styles/fill = ExtResource("4_iutvh")
+max_value = 1.0
+
+[node name="AttackTimer" type="Timer" parent="." unique_id=457615208]
+one_shot = true
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=1026126448]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=42534489]
+shape = SubResource("CircleShape2D_5uy6h")
+
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
