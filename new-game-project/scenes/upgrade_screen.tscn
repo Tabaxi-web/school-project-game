@@ -3,6 +3,7 @@
 [ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="1_3vsiv"]
 [ext_resource type="Script" uid="uid://dlawjskpwdoo4" path="res://scripts/upgrade_screen.gd" id="1_qtyd3"]
 [ext_resource type="PackedScene" uid="uid://c7cucfte4udu" path="res://scenes/upgrade_card.tscn" id="2_qtyd3"]
+[ext_resource type="PackedScene" uid="uid://df7mw1otn5utr" path="res://scenes/upgrade_card_placeholder.tscn" id="3_1ogmj"]
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="3_5x7eg"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_pin3n"]
@@ -18,6 +19,7 @@ font_color = Color(0, 1, 0, 1)
 [node name="Node2D" type="Node2D" unique_id=1418396062 node_paths=PackedStringArray("upgrade_card_carousel")]
 script = ExtResource("1_qtyd3")
 upgrade_card_prefab = ExtResource("2_qtyd3")
+upgrade_holder_prefab = ExtResource("3_1ogmj")
 upgrade_card_carousel = NodePath("UIMain/VBoxContainer/UpgradeCarousel")
 
 [node name="UIMain" type="CanvasLayer" parent="." unique_id=1587092731]

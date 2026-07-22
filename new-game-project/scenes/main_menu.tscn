@@ -100,5 +100,5 @@ text = "Quit"
 
 [connection signal="timeout" from="Label/Timer" to="Label" method="_on_timer_timeout"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_down"]
-[connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_down"]
+[connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/OptionsButton" to="." method="_on_options_button_button_down"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_down"]

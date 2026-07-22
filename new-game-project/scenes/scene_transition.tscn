@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://cnw0j55bnoidp"]
+
+[ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_2sgj6"]
+[ext_resource type="Script" uid="uid://1kqpwgyhdnjn" path="res://scripts/new_scene_transition_manager.gd" id="1_hgfgv"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_hgfgv"]
+[ext_resource type="Script" uid="uid://bhx1ypl7fgttv" path="res://scripts/transition_text.gd" id="4_hgfgv"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ooyqd"]
+font = ExtResource("2_hgfgv")
+font_size = 20
+font_color = Color(0, 1, 0, 0.2)
+
+[sub_resource type="LabelSettings" id="LabelSettings_non66"]
+font = ExtResource("2_hgfgv")
+font_size = 24
+font_color = Color(0, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_hgfgv"]
+font = ExtResource("2_hgfgv")
+font_size = 24
+font_color = Color(0, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_85h84"]
+font = ExtResource("2_hgfgv")
+font_size = 12
+font_color = Color(0, 1, 0, 1)
+
+[node name="Node2D" type="Node2D" unique_id=737516326 node_paths=PackedStringArray("wave_number_label", "upgrade_label")]
+script = ExtResource("1_hgfgv")
+wave_number_label = NodePath("HBoxContainer/FloorNumber")
+upgrade_label = NodePath("HBoxContainer/UpgradeIndicator")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1493752096]
+layer = 105
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer" unique_id=649421762]
+z_index = 105
+position = Vector2(575.99994, 323.99997)
+scale = Vector2(0.59999996, 0.59999996)
+texture = ExtResource("1_2sgj6")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1141563830]
+anchor_mode = 0
+
+[node name="Label" type="Label" parent="." unique_id=1139845837 node_paths=PackedStringArray("transition_manager")]
+offset_right = 1152.0
+offset_bottom = 101.0
+text = "VGhlIEZpdG5lc3NHcmFt4oSiIFBhY2VyIFRlc3QgaXMgYSBtdWx0aXN0YWdlIGFlcm9iaWMgY2FwYWNpdHkgdGVzdCB0aGF0IHByb2dyZXNzaXZlbHkgZ2V0cyBtb3JlIGRpZmZpY3VsdCBhcyBpdCBjb250aW51ZXMuIFRoZSAyMCBtZXRlciBwYWNlciB0ZXN0IHdpbGwgYmVnaW4gaW4gMzAgc2Vjb25kcy4gTGluZSB1cCBhdCB0aGUgc3RhcnQuIFRoZSBydW5uaW5nIHNwZWVkIHN0YXJ0cyBzbG93bHksIGJ1dCBnZXRzIGZhc3RlciBlYWNoIG1pbnV0ZSBhZnRlciB5b3UgaGVhciB0aGlzIHNpZ25hbC4gW2JlZXBdIEEgc2luZ2xlIGxhcCBzaG91bGQgYmUgY29tcGxldGVkIGVhY2ggdGltZSB5b3UgaGVhciB0aGlzIHNvdW5kLiBbZGluZ10gUmVtZW1iZXIgdG8gcnVuIGluIGEgc3RyYWlnaHQgbGluZSwgYW5kIHJ1biBhcyBsb25nIGFzIHBvc3NpYmxlLiBUaGUgc2Vjb25kIHRpbWUgeW91IGZhaWwgdG8gY29tcGxldGUgYSBsYXAgYmVmb3JlIHRoZSBzb3VuZCwgeW91ciB0ZXN0IGlzIG92ZXIuIFRoZSB0ZXN0IHdpbGwgYmVnaW4gb24gdGhlIHdvcmQgc3RhcnQuIE9uIHlvdXIgbWFyaywgZ2V0IHJlYWR5LCBzdGFydC4=VGhlIEZpdG5lc3NHcmFt4oSiIFBhY2VyIFRlc3QgaXMgYSBtdWx0aXN0YWdlIGFlcm9iaWMgY2FwYWNpdHkgdGVzdCB0aGF0IHByb2dyZXNzaXZlbHkgZ2V0cyBtb3JlIGRpZmZpY3VsdCBhcyBpdCBjb250aW51ZXMuIFRoZSAyMCBtZXRlciBwYWNlciB0ZXN0IHdpbGwgYmVnaW4gaW4gMzAgc2Vjb25kcy4gTGluZSB1cCBhdCB0aGUgc3RhcnQuIFRoZSBydW5uaW5nIHNwZWVkIHN0YXJ0cyBzbG93bHksIGJ1dCBnZXRzIGZhc3RlciBlYWNoIG1pbnV0ZSBhZnRlciB5b3UgaGVhciB0aGlzIHNpZ25hbC4gW2JlZXBdIEEgc2luZ2xlIGxhcCBzaG91bGQgYmUgY29tcGxldGVkIGVhY2ggdGltZSB5b3UgaGVhciB0aGlzIHNvdW5kLiBbZGluZ10gUmVtZW1iZXIgdG8gcnVuIGluIGEgc3RyYWlnaHQgbGluZSwgYW5kIHJ1biBhcyBsb25nIGFzIHBvc3NpYmxlLiBUaGUgc2Vjb25kIHRpbWUgeW91IGZhaWwgdG8gY29tcGxldGUgYSBsYXAgYmVmb3JlIHRoZSBzb3VuZCwgeW91ciB0ZXN0IGlzIG92ZXIuIFRoZSB0ZXN0IHdpbGwgYmVnaW4gb24gdGhlIHdvcmQgc3RhcnQuIE9uIHlvdXIgbWFyaywgZ2V0IHJlYWR5LCBzdGFydC4="
+label_settings = SubResource("LabelSettings_ooyqd")
+horizontal_alignment = 3
+autowrap_mode = 1
+justification_flags = 171
+script = ExtResource("4_hgfgv")
+transition_manager = NodePath("..")
+text_length = 5000
+
+[node name="Timer" type="Timer" parent="Label" unique_id=1471335019]
+wait_time = 3.0
+autostart = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=985149212]
+offset_right = 1152.0
+offset_bottom = 648.0
+theme_override_constants/separation = 50
+alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="Label" type="Label" parent="HBoxContainer" unique_id=215473633]
+layout_mode = 2
+text = "Floor:"
+label_settings = SubResource("LabelSettings_non66")
+
+[node name="FloorNumber" type="Label" parent="HBoxContainer" unique_id=855127016]
+layout_mode = 2
+text = "0"
+label_settings = SubResource("LabelSettings_hgfgv")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UpgradeIndicator" type="Label" parent="HBoxContainer" unique_id=1236588101]
+visible = false
+layout_mode = 2
+text = "Upgrade!"
+label_settings = SubResource("LabelSettings_85h84")
+
+[connection signal="timeout" from="Label/Timer" to="Label" method="_on_timer_timeout"]

@@ -14,7 +14,7 @@ radius = 46.0
 
 [node name="RangedEnemy" type="CharacterBody2D" unique_id=327760210 node_paths=PackedStringArray("health_bar", "attack_area", "attack_timer") groups=["Enemies"]]
 script = ExtResource("1_wotfd")
-max_health = 5000.0
+max_health = 2000.0
 health_bar = NodePath("ProgressBar")
 attack_area = NodePath("AttackArea")
 attack_timer = NodePath("AttackTimer")

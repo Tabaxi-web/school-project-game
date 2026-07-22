@@ -8,3 +8,7 @@ func _on_quit_button_down() -> void:
 
 func _ready() -> void:
 	Globals.reset_all_globals()
+
+
+func _on_options_button_button_down() -> void:
+	pass

@@ -8,7 +8,8 @@ func _ready() -> void:
 			var icon_rect = texture_rect_prefab.instantiate()
 			icon_rect.texture = load(upgrade["icon_path"])
 			add_child(icon_rect)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+	for upgrade in Globals.rare_upgrades:
+		if upgrade["icon_path"] != null:
+			var icon_rect = texture_rect_prefab.instantiate()
+			icon_rect.texture = load(upgrade["icon_path"])
+			add_child(icon_rect)

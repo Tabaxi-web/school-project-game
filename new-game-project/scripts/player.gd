@@ -12,7 +12,15 @@ extends CharacterBody2D
 @export_category("Gameplay")
 @export var max_health := 100.0 ## The max health of the player.
 @export var wave_manager: Node2D ## The wave manager. Player talks to it for the UI.
+@export var dash_cooldown := 3.0
+@export var dash_timer: Timer
+@export var dash_strength := 500
+@export var dash_decay_strength := 1
+@export var dash_reload := false
+var dash_direction: Vector2
+var dash_power_left := 0
 var health: float
+var dash_on_cooldown := false
 
 # -- GUN VARS --
 @export_category("Gun")
@@ -29,6 +37,8 @@ var ammo: int # The player's current ammo.
 @export var bullet_damage := 30.0 ## Damage of the player's bullets.
 @export var crit_chance := 0.01
 @export var crit_damage := 3
+@export var homing_bullets := false
+@export var damage_falloff := 0.01 #falloff of the player's bullets
 # -- UI VARS --
 @export_category("User Interface")
 @export var bullet_cooldown_timer: Timer ## Timer that controls the player's fire rate.
@@ -39,7 +49,7 @@ var ammo: int # The player's current ammo.
 @export var bullet_scene: PackedScene ## Bullet scene to instantiate
 @onready var pivot := $Pivot # Pivot that the player's sprite rotates around
 @export var reloading_ui: Control ## UI for reloading.
-	
+@export var dashing_ui: Control
 func _retro_bar_render(number: float, maximum: float, length: int) -> String: #this is for the retro health bar system. It's int based currently.
 	var temp_string := "" #the return value
 	var ratio = number / maximum # calculates the ratio between the max and value
@@ -56,11 +66,14 @@ func _ready() -> void:
 	# Init gameplay variables.
 	for upgrade in Globals.upgrades:
 		_check_upgrades(upgrade)
+	for upgrade in Globals.rare_upgrades:
+		_check_upgrades(upgrade)
 	bullets_per_shot = clampi(bullets_per_shot, 1, 50)
 	health = max_health
 	ammo = max_ammo
 	bullet_cooldown_timer.wait_time = fire_delay
 	reload_timer.wait_time = reload_time
+	dash_timer.wait_time = dash_cooldown
 	# Do basic upgrades first.
 	
 		
@@ -81,7 +94,21 @@ func _process(delta: float) -> void:
 	else:
 		# Otherwise slow the player down.
 		velocity *= 1 - (friction * delta)
-	velocity = velocity.limit_length(max_speed) # Limit the player's speed.
+	if Input.is_action_just_pressed("movement_dash") and not dash_on_cooldown and not direction == Vector2.ZERO:
+		dash_timer.start()
+		dash_on_cooldown = true
+		dashing_ui.visible = true
+		dash_power_left = dash_strength
+		if dash_reload:
+			ammo = clamp(ammo + max_ammo / 2, 0, max_ammo)
+	if dash_power_left > 0:
+		dash_power_left -= delta * dash_decay_strength
+		
+	dash_power_left = clampf(dash_power_left, 0, INF)
+	if not dash_on_cooldown:
+		dash_direction = direction
+	velocity += dash_power_left * dash_direction
+	velocity = velocity.limit_length(max_speed + dash_power_left) # Limit the player's speed.
 	pivot.look_at(get_global_mouse_position())
 	move_and_slide() # Note to self: put movement logic BEFORE move_and_slide(). You dumbass.
 	
@@ -110,10 +137,15 @@ func _process(delta: float) -> void:
 			var new_bullet = bullet_scene.instantiate()
 			new_bullet.position = position
 			# Bullet Velocity is randomised based on both spread and itself!
-			new_bullet.speed = (bullet_velocity + (randf_range(-1, 1) * spread * (bullet_velocity / 5.0)))
+			if not homing_bullets:
+				new_bullet.speed = (bullet_velocity + (randf_range(-1, 1) * spread * (bullet_velocity / 5.0)))
+			else:
+				new_bullet.speed = bullet_velocity
 			new_bullet.damage = bullet_damage
 			new_bullet.crit_chance = crit_chance
 			new_bullet.crit_damage = crit_damage
+			new_bullet.homing = homing_bullets
+			new_bullet.damage_falloff_coefficient = damage_falloff
 			new_bullet.rotation = (pivot.rotation + (randf_range(-1, 1) * (spread/2)))
 			add_sibling(new_bullet)
 	
@@ -154,6 +186,7 @@ func _check_upgrades(upgrade) -> void:
 		bullets_per_shot *= 5
 		spread += PI / 8
 		reload_time += 1
+		damage_falloff += 0.05
 	if upgrade["name"] == "Commando I":
 		max_ammo *= 2.5
 		reload_time *= 0.7
@@ -165,10 +198,13 @@ func _check_upgrades(upgrade) -> void:
 	if upgrade["name"] == "Focus I":
 		spread /= 2
 		bullet_velocity /= 1.5
+		damage_falloff  -= 0.1
 	if upgrade["name"] == "Starburst":
-		bullets_per_shot += 50
+		bullets_per_shot += 5
 		spread = 2 * PI
-		bullet_damage *= 0.2
+		bullet_damage *= 0.7
+		homing_bullets = true
+		damage_falloff = 0
 	if upgrade["name"] == "Laserbeam":
 		bullets_per_shot = 1
 		spread = 0
@@ -180,3 +216,10 @@ func _check_upgrades(upgrade) -> void:
 		fire_delay = clampf(fire_delay, 0.5, 99)
 		bullet_velocity = 0
 		bullet_damage *= 20
+	if upgrade["name"] == "Commando II":
+		dash_reload = true
+
+
+func _on_dash_timer_timeout() -> void:
+	dash_on_cooldown = false
+	dashing_ui.visible = false

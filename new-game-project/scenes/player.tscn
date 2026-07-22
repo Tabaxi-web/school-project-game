@@ -11,7 +11,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ReloadingUI/Label:text")
+tracks/0/path = NodePath("VBoxContainer/ReloadingUI/Label:text")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -28,7 +28,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ReloadingUI/Label:text")
+tracks/0/path = NodePath("VBoxContainer/ReloadingUI/Label:text")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -47,21 +47,30 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_72e8q"]
 radius = 20.0
 
-[node name="Player" type="CharacterBody2D" unique_id=1669383909 node_paths=PackedStringArray("bullet_cooldown_timer", "reload_timer", "reloading_ui") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" unique_id=1669383909 node_paths=PackedStringArray("dash_timer", "bullet_cooldown_timer", "reload_timer", "reloading_ui", "dashing_ui") groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_3vyb7")
+friction = 10
+dash_timer = NodePath("DashTimer")
+dash_strength = 750
+dash_decay_strength = 1000
 bullet_cooldown_timer = NodePath("BulletCooldown")
 reload_timer = NodePath("ReloadTimer")
-reloading_ui = NodePath("ReloadingUI")
+reloading_ui = NodePath("VBoxContainer/ReloadingUI")
+dashing_ui = NodePath("VBoxContainer/DashCooldownUI")
 
-[node name="ReloadingUI" type="VBoxContainer" parent="." unique_id=49943623]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1155669150]
+offset_left = -50.0
+offset_top = -126.0
+offset_right = 50.0
+offset_bottom = -31.0
+alignment = 2
+
+[node name="ReloadingUI" type="VBoxContainer" parent="VBoxContainer" unique_id=49943623]
 visible = false
-offset_left = -58.0
-offset_top = -72.0
-offset_right = 58.0
-offset_bottom = -32.0
+layout_mode = 2
 
-[node name="Label" type="Label" parent="ReloadingUI" unique_id=1099217768]
+[node name="Label" type="Label" parent="VBoxContainer/ReloadingUI" unique_id=1099217768]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 theme_override_fonts/font = ExtResource("2_dqkch")
@@ -69,12 +78,12 @@ theme_override_font_sizes/font_size = 9
 text = "Reloading"
 horizontal_alignment = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="ReloadingUI/Label" unique_id=440791458]
-root_node = NodePath("../../..")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="VBoxContainer/ReloadingUI/Label" unique_id=440791458]
+root_node = NodePath("../../../..")
 libraries/ = SubResource("AnimationLibrary_fjrip")
 autoplay = &"reloading_text"
 
-[node name="ProgressBar" type="ProgressBar" parent="ReloadingUI" unique_id=1201914822 node_paths=PackedStringArray("reload_timer")]
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/ReloadingUI" unique_id=1201914822 node_paths=PackedStringArray("reload_timer")]
 custom_minimum_size = Vector2(0, 16.02)
 layout_mode = 2
 theme_override_styles/background = ExtResource("3_qlg0r")
@@ -84,7 +93,29 @@ show_percentage = false
 indeterminate = true
 editor_preview_indeterminate = false
 script = ExtResource("5_qlg0r")
-reload_timer = NodePath("../../ReloadTimer")
+reload_timer = NodePath("../../../ReloadTimer")
+
+[node name="DashCooldownUI" type="VBoxContainer" parent="VBoxContainer" unique_id=613896357]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/DashCooldownUI" unique_id=1588090318]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("2_dqkch")
+theme_override_font_sizes/font_size = 9
+text = "Dash CD"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="VBoxContainer/DashCooldownUI" unique_id=1765608568 node_paths=PackedStringArray("reload_timer")]
+custom_minimum_size = Vector2(0, 16.02)
+layout_mode = 2
+theme_override_styles/background = ExtResource("3_qlg0r")
+theme_override_styles/fill = ExtResource("4_tuyoq")
+max_value = 1.0
+show_percentage = false
+script = ExtResource("5_qlg0r")
+reload_timer = NodePath("../../../DashTimer")
 
 [node name="Pivot" type="Node2D" parent="." unique_id=726673081]
 
@@ -109,4 +140,7 @@ color = Color(0, 1, 0, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1286775]
 shape = SubResource("CircleShape2D_72e8q")
 
+[node name="DashTimer" type="Timer" parent="." unique_id=614263629]
+
 [connection signal="timeout" from="BulletCooldown" to="." method="_on_bullet_cooldown_timeout"]
+[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]

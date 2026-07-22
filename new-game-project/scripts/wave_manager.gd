@@ -28,11 +28,12 @@ func _process(delta: float) -> void:
 		if enemy == null:
 			enemies.erase(enemy)
 	if not in_wave:
-		wave_enemies_amount = ((Globals.wave - 1) * 7) + 2
+		wave_enemies_amount = ((Globals.wave - 1) * 3) + 2
 		for i in range(wave_enemies_amount):
 			if randf() < ranged_enemy_chance:
 				var enemy = ranged_enemy_scene.instantiate()
 				enemy.position = get_point_in_playable_area(playable_area, area_headway)
+				enemy.max_health = enemy.max_health + (Globals.wave - 1) * 50
 				enemies.append(enemy)
 				add_sibling(enemy)
 			else:
@@ -44,5 +45,5 @@ func _process(delta: float) -> void:
 	enemies_left = len(enemies)
 	if enemies_left < 1:
 		in_wave = false
-		Globals.intermission()
+		Globals.next_wave()
 	percent_enemies_left = (float(enemies_left) / float(wave_enemies_amount))

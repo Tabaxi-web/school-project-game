@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://df7mw1otn5utr"]
+
+[node name="Upgrade 1" type="Control" unique_id=832109403 groups=["Upgrade Card Holders"]]
+custom_minimum_size = Vector2(275, 450)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 275.0
+offset_bottom = 450.0

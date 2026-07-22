@@ -33,6 +33,7 @@ font_size = 12
 font_color = Color(0, 1, 0, 1)
 
 [node name="Upgrade 1" type="VBoxContainer" unique_id=1448093152 node_paths=PackedStringArray("number_label", "upgrade_name_label", "upgrade_description_label", "texture_rect")]
+custom_minimum_size = Vector2(275, 450)
 theme_override_constants/separation = 0
 script = ExtResource("1_0hv3p")
 number_label = NodePath("Header/HeaderVBox/NumberOf3")

@@ -2,9 +2,11 @@ extends Node
 
 var wave := 1
 var upgrades := []
+var rare_upgrades := []
+var upgrade_screen_how_often := 3
 var potential_common_upgrades_init_value := [
 	{"name": "Buckshot I", "rarity": "Common",
-	"description": "Increase spread, increase pellets per shot, increase reload time.",
+	"description": "Increase spread, increase pellets per shot, increase reload time, increase damage falloff, decrease damage.",
 	"icon_path": "res://assets/icons/Buckshot_Icon.png"},
 	{"name": "Gunner I", "rarity": "Common",
 	"description": "Increase fire-rate.",
@@ -22,20 +24,27 @@ var potential_common_upgrades_init_value := [
 	"description": "Increase crit damage by 50%.",
 	"icon_path": "res://assets/icons/Sharpshooter_Icon.png"},
 	{"name": "Focus I", "rarity": "Common",
-	"description": "Decrease spread and bullet velocity.",
-	"icon_path": "res://assets/icons/Focus_Icon.png"}
+	"description": "Decrease spread and bullet velocity. Decrease bullet damage falloff.",
+	"icon_path": "res://assets/icons/Focus_Icon.png",
+	"incompatible_upgrades": ["Starburst", "Laserbeam", "Minesweeper"]},
+	{"name": "Commando II", "rarity": "Common", "description": "Dashing reloads half your magazine.",
+	"icon_path": "res://assets/icons/Commando_Icon.png"},
+	#{"name": "Medic I", "rarity": "Common", "description": "Enemies have a chance to drop healing orbs."}
 ]
 var potential_common_upgrades := []
 var potential_rare_upgrades_init_value := [
 	{"name": "Starburst", "rarity": "Rare",
-	"description": "Spread becomes 360 degrees. Increase pellets per shot. Reduce damage.",
-	"icon_path": "res://assets/icon.svg"},
+	"description": "Spread becomes 360 degrees. Increase pellets per shot. Reduce damage. Bullets now home.",
+	"icon_path": "res://assets/icons/Starburst_Icon.png",
+	"incompatible_upgrades": ["Focus I", "Laserbeam", "Minesweeper"]},
 	{"name": "Laserbeam", "rarity": "Rare",
 	"description": "Vastly increaes firerate but drastically reduces damage. Only one bullet per shot.",
-	"icon_path": "res://assets/icon.svg"},
+	"icon_path": "res://assets/icons/Laserbeam_Icon.png",
+	"incompatible_upgrades": ["Focus I", "Starburst", "Minesweeper"]},
 	{"name": "Minesweeper", "rarity": "Rare",
 	"description": "Bullet velocity becomes zero. Increase damage. Only one bullet per shot.",
-	"icon_path": "res://assets/icon.svg"}
+	"icon_path": "res://assets/icons/Minesweeper_Icon.png",
+	"incompatible_upgrades": ["Focus I", "Laserbeam", "Starburst"]}
 ]
 var potential_rare_upgrades := []
 
@@ -56,7 +65,8 @@ func reset_all_globals() -> void:
 
 func next_wave() -> void:
 	wave += 1
-	get_tree().change_scene_to_file("res://scenes/main_game.tscn")
+	
+	get_tree().change_scene_to_file("res://scenes/scene_transition.tscn")
 
 func intermission() -> void:
 	if len(potential_common_upgrades) + len(potential_rare_upgrades) < 1:
