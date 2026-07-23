@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+# -- BTS VARS --
+@export var upgrade_folder_filepath := "res://resources/"
+@export var upgrade_file_extension := ".tres"
 # -- MOVEMENT VARS --
 @export_category("Movement")
 @export var camera_wrapper: Node2D ## The Wrapper of the camera, which follows the player.
@@ -22,6 +25,7 @@ var dash_power_left := 0
 var health: float
 var dash_on_cooldown := false
 
+
 # -- GUN VARS --
 @export_category("Gun")
 @export var max_ammo := 10 ## Max ammo. Self Explainatory.
@@ -36,9 +40,11 @@ var ammo: int # The player's current ammo.
 @export var reload_time := 2.0 ## Time it takes the player to reload.
 @export var bullet_damage := 30.0 ## Damage of the player's bullets.
 @export var crit_chance := 0.01
-@export var crit_damage := 3
+@export var crit_damage := 3.0
 @export var homing_bullets := false
 @export var damage_falloff := 0.01 #falloff of the player's bullets
+@export var muzzle_flash: PackedScene ## Muzzle Falsh Prefab
+@export var flash_point: Marker2D
 # -- UI VARS --
 @export_category("User Interface")
 @export var bullet_cooldown_timer: Timer ## Timer that controls the player's fire rate.
@@ -65,9 +71,9 @@ func _retro_bar_render(number: float, maximum: float, length: int) -> String: #t
 func _ready() -> void:
 	# Init gameplay variables.
 	for upgrade in Globals.upgrades:
-		_check_upgrades(upgrade)
+		_check_upgrades(upgrade["name"])
 	for upgrade in Globals.rare_upgrades:
-		_check_upgrades(upgrade)
+		_check_upgrades(upgrade["name"])
 	bullets_per_shot = clampi(bullets_per_shot, 1, 50)
 	health = max_health
 	ammo = max_ammo
@@ -132,7 +138,6 @@ func _process(delta: float) -> void:
 		ammo -= 1
 		bullet_cooldown_timer.start()
 		shooting = true
-		print("shooting")
 		for i in range(bullets_per_shot):
 			var new_bullet = bullet_scene.instantiate()
 			new_bullet.position = position
@@ -148,6 +153,12 @@ func _process(delta: float) -> void:
 			new_bullet.damage_falloff_coefficient = damage_falloff
 			new_bullet.rotation = (pivot.rotation + (randf_range(-1, 1) * (spread/2)))
 			add_sibling(new_bullet)
+		var flash = muzzle_flash.instantiate()
+		#flash.global_position = flash_point.global_position - redundant, prolly
+		flash_point.add_child(flash)
+		flash.emitting = true
+		await get_tree().create_timer(flash.lifetime).timeout
+		flash.queue_free()
 	
 	# Otherwise the same logic for auto and semi, but reloading, if the player has <1 ammo left.
 	elif ((ammo < 1\
@@ -178,46 +189,71 @@ func take_damage(damage: float) -> void:
 
 
 func _check_upgrades(upgrade) -> void:
-	if upgrade["name"] == "Hollow Point I":
-		bullet_damage *= 1.5
-	if upgrade["name"] == "Gunner I":
-		fire_delay *= 0.2
-	if upgrade["name"] == "Buckshot I":
-		bullets_per_shot *= 5
-		spread += PI / 8
-		reload_time += 1
-		damage_falloff += 0.05
-	if upgrade["name"] == "Commando I":
-		max_ammo *= 2.5
-		reload_time *= 0.7
-	if upgrade["name"] == "Sharpshooter I":
-		crit_chance += 0.09
-		bullet_velocity *= 1.2
-	if upgrade["name"] == "Sharpshooter II":
-		crit_damage += 0.5
-	if upgrade["name"] == "Focus I":
-		spread /= 2
-		bullet_velocity /= 1.5
-		damage_falloff  -= 0.1
-	if upgrade["name"] == "Starburst":
-		bullets_per_shot += 5
-		spread = 2 * PI
-		bullet_damage *= 0.7
-		homing_bullets = true
-		damage_falloff = 0
-	if upgrade["name"] == "Laserbeam":
-		bullets_per_shot = 1
-		spread = 0
-		fire_delay = 0.01
-		bullet_damage /= 10
-		max_ammo *= 50
-	if upgrade["name"] == "Minesweeper":
-		bullets_per_shot = 1
-		fire_delay = clampf(fire_delay, 0.5, 99)
-		bullet_velocity = 0
-		bullet_damage *= 20
-	if upgrade["name"] == "Commando II":
-		dash_reload = true
+	var loaded_upgrade: Upgrade
+	if not FileAccess.file_exists(upgrade_folder_filepath + upgrade.to_lower() + upgrade_file_extension):
+		push_warning("No upgrade found at filepath " + upgrade_folder_filepath + upgrade.to_lower() + upgrade_file_extension + "!!")
+	loaded_upgrade = load(upgrade_folder_filepath + upgrade.to_lower() + upgrade_file_extension)
+	for mod in loaded_upgrade.modified_attributes:
+		if mod.modified_attribute == Globals.player_attributes.FIRE_DELAY:
+			fire_delay += mod.modifier_bonus
+			fire_delay *= mod.modifier_multiplier
+			if mod.modifier_override:
+				fire_delay = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.SPREAD:
+			spread += mod.modifier_bonus
+			spread *= mod.modifier_multiplier
+			if mod.modifier_override:
+				spread = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.PELLETS:
+			bullets_per_shot += mod.modifier_bonus
+			bullets_per_shot *= mod.modifier_multiplier
+			if mod.modifier_override:
+				bullets_per_shot = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.FALLOFF:
+			damage_falloff += mod.modifier_bonus
+			damage_falloff *= mod.modifier_multiplier
+			if mod.modifier_override:
+				damage_falloff = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.RELOAD_TIME:
+			reload_time += mod.modifier_bonus
+			reload_time *= mod.modifier_multiplier
+			if mod.modifier_override:
+				reload_time = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.DAMAGE:
+			bullet_damage += mod.modifier_bonus
+			bullet_damage *= mod.modifier_multiplier
+			if mod.modifier_override:
+				bullet_damage = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.MAX_AMMO:
+			max_ammo += mod.modifier_bonus
+			max_ammo *= mod.modifier_multiplier
+			if mod.modifier_override:
+				max_ammo = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.CRIT_CHANCE:
+			crit_chance += mod.modifier_bonus
+			crit_chance *= mod.modifier_multiplier
+			if mod.modifier_override:
+				crit_chance = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.CRIT_DAMAGE:
+			crit_damage += mod.modifier_bonus
+			crit_damage *= mod.modifier_multiplier
+			if mod.modifier_override:
+				crit_damage = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.HOMING:
+			homing_bullets = mod.modifier_bool
+		
+		if mod.modified_attribute == Globals.player_attributes.DASH_RELOAD:
+			dash_reload = mod.modifier_bool
+	pass
 
 
 func _on_dash_timer_timeout() -> void:

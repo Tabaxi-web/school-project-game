@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://1jhg1psiws20"]
+
+[sub_resource type="Curve" id="Curve_24171"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.744099, 0.0, 0, 0]
+point_count = 2
+
+[node name="CPUParticles2D" type="CPUParticles2D" unique_id=2073140589]
+emitting = false
+amount = 100
+lifetime = 0.15000000000000002
+one_shot = true
+explosiveness = 0.8
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 500.0
+initial_velocity_max = 500.0
+angular_velocity_min = -20.0
+angular_velocity_max = 20.0
+linear_accel_min = -5.0
+scale_amount_min = 5.0
+scale_amount_max = 10.0
+scale_amount_curve = SubResource("Curve_24171")
+color = Color(0, 1, 0, 1)

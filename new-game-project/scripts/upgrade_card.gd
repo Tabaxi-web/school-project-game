@@ -25,7 +25,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if get_tree().get_nodes_in_group("Upgrade Card Holders") != []:
 		holder = get_tree().get_nodes_in_group("Upgrade Card Holders")[holder_index]
-		print(upgrade_name_label.text + str(holder_index))
 	if prev_holder != holder:
 		var tween_thing = get_tree().create_tween()
 		tween_thing.tween_property(self, "global_position", holder.global_position, transport_time)

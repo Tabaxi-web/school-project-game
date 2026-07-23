@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="Upgrade" format=3 uid="uid://cxjq5mjp53tq4"]
+
+[ext_resource type="Script" uid="uid://ccs7lafi3v7nb" path="res://scripts/resource_scripts/attribute_modifier.gd" id="1_vmrq5"]
+[ext_resource type="Script" uid="uid://bgg2x5m5frerd" path="res://scripts/resource_scripts/upgrade.gd" id="2_rxngo"]
+
+[sub_resource type="Resource" id="Resource_vmrq5"]
+script = ExtResource("1_vmrq5")
+modifier_bonus = 0.524
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_rxngo"]
+script = ExtResource("1_vmrq5")
+modified_attribute = 1
+modifier_bonus = 5.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_74tcg"]
+script = ExtResource("1_vmrq5")
+modified_attribute = 2
+modifier_bonus = -0.04
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_llbrt"]
+script = ExtResource("1_vmrq5")
+modified_attribute = 3
+modifier_bonus = 1.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[resource]
+script = ExtResource("2_rxngo")
+modified_attributes = Array[ExtResource("1_vmrq5")]([SubResource("Resource_vmrq5"), SubResource("Resource_rxngo"), SubResource("Resource_74tcg"), SubResource("Resource_llbrt")])
+metadata/_custom_type_script = "uid://bgg2x5m5frerd"

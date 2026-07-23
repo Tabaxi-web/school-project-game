@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="Upgrade" format=3 uid="uid://4r5u2mpxna08"]
+
+[ext_resource type="Script" uid="uid://ccs7lafi3v7nb" path="res://scripts/resource_scripts/attribute_modifier.gd" id="1_8h87u"]
+[ext_resource type="Script" uid="uid://bgg2x5m5frerd" path="res://scripts/resource_scripts/upgrade.gd" id="2_et2ch"]
+
+[sub_resource type="Resource" id="Resource_8h87u"]
+script = ExtResource("1_8h87u")
+modified_attribute = 9
+modifier_bool = true
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_et2ch"]
+script = ExtResource("1_8h87u")
+modified_attribute = 5
+modifier_multiplier = 0.5
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_drs7a"]
+script = ExtResource("1_8h87u")
+modifier_bonus = 6.283
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_tef1g"]
+script = ExtResource("1_8h87u")
+modified_attribute = 1
+modifier_bonus = 3.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[resource]
+script = ExtResource("2_et2ch")
+modified_attributes = Array[ExtResource("1_8h87u")]([SubResource("Resource_8h87u"), SubResource("Resource_et2ch"), SubResource("Resource_drs7a"), SubResource("Resource_tef1g")])
+metadata/_custom_type_script = "uid://bgg2x5m5frerd"

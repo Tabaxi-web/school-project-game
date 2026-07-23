@@ -57,12 +57,12 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed("movement_right"):
 			for child in upgrade_cards:
 				if child.holder_index == 0:
-					child.holder_index = len(upgrade_cards) -1
+					child.holder_index = len(upgrade_cards) - 1
 				else:
 					child.holder_index -= 1
 		if Input.is_action_just_pressed("movement_left"):
 			for child in upgrade_cards:
-				if child.holder_index == len(upgrade_cards) -1:
+				if child.holder_index == len(upgrade_cards) - 1:
 					child.holder_index = 0
 				else:
 					child.holder_index += 1

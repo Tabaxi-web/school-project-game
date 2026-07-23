@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Upgrade" format=3 uid="uid://blxdiajbr48u1"]
+
+[ext_resource type="Script" uid="uid://ccs7lafi3v7nb" path="res://scripts/resource_scripts/attribute_modifier.gd" id="1_bwvj3"]
+[ext_resource type="Script" uid="uid://bgg2x5m5frerd" path="res://scripts/resource_scripts/upgrade.gd" id="2_fm6sc"]
+
+[sub_resource type="Resource" id="Resource_bwvj3"]
+script = ExtResource("1_bwvj3")
+modifier_multiplier = 0.5
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_fm6sc"]
+script = ExtResource("1_bwvj3")
+modified_attribute = 2
+modifier_bonus = -0.1
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[resource]
+script = ExtResource("2_fm6sc")
+modified_attributes = Array[ExtResource("1_bwvj3")]([SubResource("Resource_bwvj3"), SubResource("Resource_fm6sc")])
+metadata/_custom_type_script = "uid://bgg2x5m5frerd"

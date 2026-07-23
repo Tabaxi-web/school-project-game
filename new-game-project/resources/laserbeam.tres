@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="Upgrade" format=3 uid="uid://d0hi4tvm128od"]
+
+[ext_resource type="Script" uid="uid://ccs7lafi3v7nb" path="res://scripts/resource_scripts/attribute_modifier.gd" id="1_7hw23"]
+[ext_resource type="Script" uid="uid://bgg2x5m5frerd" path="res://scripts/resource_scripts/upgrade.gd" id="2_tkkqd"]
+
+[sub_resource type="Resource" id="Resource_7hw23"]
+script = ExtResource("1_7hw23")
+modified_attribute = 1
+modifier_override = true
+modifier_override_value = 1.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_tkkqd"]
+script = ExtResource("1_7hw23")
+modifier_override = true
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_4t6ym"]
+script = ExtResource("1_7hw23")
+modified_attribute = 4
+modifier_override = true
+modifier_override_value = 0.01
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_3c2gf"]
+script = ExtResource("1_7hw23")
+modified_attribute = 5
+modifier_multiplier = 0.01
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_q2q2p"]
+script = ExtResource("1_7hw23")
+modified_attribute = 6
+modifier_multiplier = 50.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[resource]
+script = ExtResource("2_tkkqd")
+modified_attributes = Array[ExtResource("1_7hw23")]([SubResource("Resource_7hw23"), SubResource("Resource_tkkqd"), SubResource("Resource_4t6ym"), SubResource("Resource_3c2gf"), SubResource("Resource_q2q2p")])
+metadata/_custom_type_script = "uid://bgg2x5m5frerd"

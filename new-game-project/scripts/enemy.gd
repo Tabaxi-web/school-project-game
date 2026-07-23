@@ -12,6 +12,7 @@ var player: CharacterBody2D
 @export var ranged_stopping_distance := 600.0 ## How close the enemy (if it is ranged) will stop
 @export var friction_coeff := 5.0 ## How much friction the movement of the enemy has
 @export var ranged := false ## Whether the enemy is ranged or not.
+@export var death_fx: PackedScene ## Death effect for the enemy
 # --- BULLET VARS: only important for ranged enemies ---
 @export var bullet_prefab: PackedScene ## Does not matter for melee enemies.
 @export var bullet_velocity := 500 ## Velocity of the player's bullets.
@@ -31,6 +32,11 @@ func _process(delta: float) -> void:
 		return
 	# Health handling.
 	if health <= 0:
+		var fx = death_fx.instantiate()
+		fx.global_position = position
+		add_sibling(fx)
+		fx.emitting = true
+		
 		queue_free()
 
 	# Movement.

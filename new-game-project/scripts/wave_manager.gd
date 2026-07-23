@@ -11,6 +11,9 @@ var in_wave := false
 @export var playable_area: Control
 @export var area_headway: float
 @export var ranged_enemy_chance := 0.4
+@export var wave_scaling_coefficient := 3
+@export var wave_scaling_bonus := 2
+@export var wave_health_scaling := 100
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -28,12 +31,12 @@ func _process(delta: float) -> void:
 		if enemy == null:
 			enemies.erase(enemy)
 	if not in_wave:
-		wave_enemies_amount = ((Globals.wave - 1) * 3) + 2
+		wave_enemies_amount = ((Globals.wave - 1) * wave_scaling_coefficient) + wave_scaling_bonus
 		for i in range(wave_enemies_amount):
 			if randf() < ranged_enemy_chance:
 				var enemy = ranged_enemy_scene.instantiate()
 				enemy.position = get_point_in_playable_area(playable_area, area_headway)
-				enemy.max_health = enemy.max_health + (Globals.wave - 1) * 50
+				enemy.max_health = enemy.max_health + (Globals.wave - 1) * wave_health_scaling
 				enemies.append(enemy)
 				add_sibling(enemy)
 			else:

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bowukemim6i34" path="res://scripts/enemy.gd" id="1_7p1mj"]
 [ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_5uy6h"]
+[ext_resource type="PackedScene" uid="uid://1jhg1psiws20" path="res://scenes/enemy_death_fx.tscn" id="2_c4w8v"]
 [ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="3_c4w8v"]
 [ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="4_xwavj"]
 
@@ -18,6 +19,7 @@ health_bar = NodePath("ProgressBar")
 max_speed = 100
 attack_area = NodePath("AttackArea")
 attack_timer = NodePath("AttackTimer")
+death_fx = ExtResource("2_c4w8v")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=474384095]
 anchors_preset = 8
