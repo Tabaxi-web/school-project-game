@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
 # -- BTS VARS --
-@export var upgrade_folder_filepath := "res://resources/"
-@export var upgrade_file_extension := ".tres"
+@export var upgrade_folder_filepath := "res://resources/" ## Where the upgrade logic will look for upgrade files
+@export var upgrade_file_extension := ".tres" ## this should be nothing but .tres, worth adding this variable just in case
 # -- MOVEMENT VARS --
 @export_category("Movement")
 @export var camera_wrapper: Node2D ## The Wrapper of the camera, which follows the player.
@@ -25,6 +25,10 @@ var dash_power_left := 0
 var health: float
 var dash_on_cooldown := false
 
+#-- SOUND VARS --
+@export_category("Sounds")
+@export var shoot_sound: AudioStream
+@export var hit_hurt_sound: AudioStream
 
 # -- GUN VARS --
 @export_category("Gun")
@@ -138,6 +142,7 @@ func _process(delta: float) -> void:
 		ammo -= 1
 		bullet_cooldown_timer.start()
 		shooting = true
+		_play_sound(shoot_sound)
 		for i in range(bullets_per_shot):
 			var new_bullet = bullet_scene.instantiate()
 			new_bullet.position = position
@@ -184,7 +189,8 @@ func _process(delta: float) -> void:
 func _on_bullet_cooldown_timeout() -> void:
 	shooting = false
 func take_damage(damage: float) -> void:
-	camera.shake(0.4)
+	_play_sound(hit_hurt_sound)
+	camera.shake(0.6)
 	health -= damage
 
 
@@ -259,3 +265,11 @@ func _check_upgrades(upgrade) -> void:
 func _on_dash_timer_timeout() -> void:
 	dash_on_cooldown = false
 	dashing_ui.visible = false
+
+func _play_sound(sound: AudioStream) -> void:
+	var player = AudioStreamPlayer.new()
+	add_child(player)
+	player.stream = sound
+	player.play()
+	await player.finished
+	player.queue_free()

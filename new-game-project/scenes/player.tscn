@@ -2,8 +2,10 @@
 
 [ext_resource type="Script" uid="uid://ctxxulmnei26i" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_dqkch"]
+[ext_resource type="AudioStream" uid="uid://baykoen0xluc0" path="res://assets/sounds/shoot.wav" id="2_fjrip"]
 [ext_resource type="PackedScene" uid="uid://basg1xk0vocr4" path="res://scenes/muzzle_flash.tscn" id="2_tuyoq"]
 [ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="3_qlg0r"]
+[ext_resource type="AudioStream" uid="uid://dynyvh7q6cggj" path="res://assets/sounds/hurt_sound.wav" id="3_smehm"]
 [ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="4_tuyoq"]
 [ext_resource type="Script" uid="uid://dc34i4a085b4g" path="res://scripts/reloading_bar.gd" id="5_qlg0r"]
 
@@ -55,6 +57,8 @@ friction = 10
 dash_timer = NodePath("DashTimer")
 dash_strength = 750
 dash_decay_strength = 1000
+shoot_sound = ExtResource("2_fjrip")
+hit_hurt_sound = ExtResource("3_smehm")
 muzzle_flash = ExtResource("2_tuyoq")
 flash_point = NodePath("Pivot/Flash Point")
 bullet_cooldown_timer = NodePath("BulletCooldown")

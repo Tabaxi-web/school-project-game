@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_24171"]
 [ext_resource type="PackedScene" uid="uid://1jhg1psiws20" path="res://scenes/enemy_death_fx.tscn" id="2_iutvh"]
 [ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="3_5wlyj"]
+[ext_resource type="AudioStream" uid="uid://bok7nqqcuq3fl" path="res://assets/sounds/enemy_death.wav" id="3_iutvh"]
 [ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="4_iutvh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7p1mj"]
@@ -24,6 +25,7 @@ ranged_stopping_distance = 500.0
 friction_coeff = 1.0
 ranged = true
 death_fx = ExtResource("2_iutvh")
+death_sfx = ExtResource("3_iutvh")
 bullet_prefab = ExtResource("2_5wlyj")
 bullet_damage = 20.0
 

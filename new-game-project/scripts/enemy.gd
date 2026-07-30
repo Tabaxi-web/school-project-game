@@ -13,6 +13,7 @@ var player: CharacterBody2D
 @export var friction_coeff := 5.0 ## How much friction the movement of the enemy has
 @export var ranged := false ## Whether the enemy is ranged or not.
 @export var death_fx: PackedScene ## Death effect for the enemy
+@export var death_sfx: AudioStream
 # --- BULLET VARS: only important for ranged enemies ---
 @export var bullet_prefab: PackedScene ## Does not matter for melee enemies.
 @export var bullet_velocity := 500 ## Velocity of the player's bullets.
@@ -32,6 +33,7 @@ func _process(delta: float) -> void:
 		return
 	# Health handling.
 	if health <= 0:
+		_play_sound(death_sfx)
 		var fx = death_fx.instantiate()
 		fx.global_position = position
 		add_sibling(fx)
@@ -91,3 +93,11 @@ func predictive_rotation(body) -> float:
 	var time := bullet_velocity / position.distance_to(body.position)
 	predicted_position = body.position + (body.velocity * time)
 	return (predicted_position - position).angle()
+
+func _play_sound(sound: AudioStream) -> void:
+	var player = AudioStreamPlayer.new()
+	add_sibling(player)
+	player.stream = sound
+	player.play()
+	await player.finished
+	player.queue_free()

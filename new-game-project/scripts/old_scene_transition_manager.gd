@@ -1,4 +1,9 @@
 extends Node2D
+# !!!
+# THIS IS AN OLD SCRIPT AND IS UNUSED, DO NOT MARK. 
+# !!!
+
+
 
 @export var old_wave_label: Label
 @export var new_wave_label: Label

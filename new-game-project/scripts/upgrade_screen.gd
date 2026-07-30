@@ -7,6 +7,8 @@ extends Node2D
 @export var rare_rarity := 0.1
 @export var upgrade_cards: Array
 @export var non_selected_transparency := 0.3
+@export var cycle_sound: AudioStream
+@export var select_sound: AudioStream
 var upgrades_this_time := []
 var chance_index := 0.0
 var current_card: Control
@@ -55,19 +57,21 @@ func _process(delta: float) -> void:
 			if card.holder_index == round(upgrades_amount / 2):
 				current_card = card
 		if Input.is_action_just_pressed("movement_right"):
+			_play_sound(cycle_sound)
 			for child in upgrade_cards:
 				if child.holder_index == 0:
 					child.holder_index = len(upgrade_cards) - 1
 				else:
 					child.holder_index -= 1
 		if Input.is_action_just_pressed("movement_left"):
+			_play_sound(cycle_sound)
 			for child in upgrade_cards:
 				if child.holder_index == len(upgrade_cards) - 1:
 					child.holder_index = 0
 				else:
 					child.holder_index += 1
 		if Input.is_action_just_pressed("ui_accept"):
-			
+			_play_sound(select_sound)
 			if current_card.upgrade.rarity == "Common":
 				Globals.potential_common_upgrades.erase(current_card.upgrade)
 				Globals.upgrades.append(current_card.upgrade)
@@ -83,6 +87,7 @@ func _process(delta: float) -> void:
 					for rare_upgrade in Globals.potential_rare_upgrades:
 						if rare_upgrade["name"] == incomp_upgrade_name:
 							Globals.potential_rare_upgrades.erase(rare_upgrade)
+			await get_tree().create_timer(0.2).timeout
 			Globals.next_wave()
 		for child in upgrade_cards:
 			if child == current_card:
@@ -90,3 +95,11 @@ func _process(delta: float) -> void:
 			else:
 				child.modulate.a = non_selected_transparency
 		
+
+func _play_sound(sound: AudioStream) -> void:
+	var player = AudioStreamPlayer.new()
+	add_child(player)
+	player.stream = sound
+	player.play()
+	await player.finished
+	player.queue_free()

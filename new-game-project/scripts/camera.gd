@@ -17,5 +17,5 @@ func _process(delta: float) -> void:
 	stress *= decay * delta
 func shake(strength):
 	# Increase stress to a max of 1
-	stress = clampf(stress + strength, 0, 3)
+	stress = clampf(stress + strength, 0, 1)
 	

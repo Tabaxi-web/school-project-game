@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://c7cucfte4udu" path="res://scenes/upgrade_card.tscn" id="2_qtyd3"]
 [ext_resource type="PackedScene" uid="uid://df7mw1otn5utr" path="res://scenes/upgrade_card_placeholder.tscn" id="3_1ogmj"]
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="3_5x7eg"]
+[ext_resource type="AudioStream" uid="uid://bqspsvgdrt5cn" path="res://assets/sounds/cursor_move.wav" id="4_ald31"]
+[ext_resource type="AudioStream" uid="uid://ch5d4q5j7lwmo" path="res://assets/sounds/cursor_select.wav" id="5_viwe2"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_pin3n"]
 font = ExtResource("1_3vsiv")
@@ -21,6 +23,8 @@ script = ExtResource("1_qtyd3")
 upgrade_card_prefab = ExtResource("2_qtyd3")
 upgrade_holder_prefab = ExtResource("3_1ogmj")
 upgrade_card_carousel = NodePath("UIMain/VBoxContainer/UpgradeCarousel")
+cycle_sound = ExtResource("4_ald31")
+select_sound = ExtResource("5_viwe2")
 
 [node name="UIMain" type="CanvasLayer" parent="." unique_id=1587092731]
 
