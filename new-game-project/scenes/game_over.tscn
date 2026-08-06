@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://c5xuhnlclxrk5" path="res://scripts/game_over.gd" id="1_v3hpu"]
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="2_irg28"]
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="3_2jtsn"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="3_2jtsn"]
 [ext_resource type="Script" uid="uid://dsty8d6pbkof" path="res://scripts/evil_ahh_text.gd" id="4_8bugq"]
-[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="5_wawo4"]
-[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="6_56v3a"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/UI/DullBox.tres" id="5_wawo4"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/UI/BrightBox.tres" id="6_56v3a"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_fu7sn"]
 font = ExtResource("3_2jtsn")

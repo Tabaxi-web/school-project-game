@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://5eh8nh380s3u"]
 
 [ext_resource type="Script" uid="uid://b8pklu2r7m23h" path="res://scripts/damage_number.gd" id="1_6p0u7"]
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_vpxen"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="2_vpxen"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_d4jm4"]
 font = ExtResource("2_vpxen")

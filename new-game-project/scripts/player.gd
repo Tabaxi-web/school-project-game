@@ -10,7 +10,9 @@ extends CharacterBody2D
 @export var max_speed := 500.0 ## The length of velocity is limited to this value.
 @export var acceleration := 3000.0 ## Controls the acceleration of the player.
 @export var friction := 30 ## Velocity is multiplied by (1 - this * delta). The higher, the more friction.
-
+@export var eyes_sprite: Sprite2D # Eye sprite
+@export var eyes_move_dist: float #Influences how far the eyes move
+@export var eyes_angle_quantisation := PI/8 ## how much the eyes snap, in RADIANS.
 # -- GAMEPLAY VARS --
 @export_category("Gameplay")
 @export var max_health := 100.0 ## The max health of the player.
@@ -20,11 +22,16 @@ extends CharacterBody2D
 @export var dash_strength := 500
 @export var dash_decay_strength := 1
 @export var dash_reload := false
+@export var lifesteal := 0.0 ## Percentage of damage to heal
 var dash_direction: Vector2
 var dash_power_left := 0
 var health: float
 var dash_on_cooldown := false
-
+@export var immunity_time: float # The amount of time in s that the play is immune for after getting hit.
+@export var immunity_timer: Timer # The timer responsible for the above.
+@export var eyes_image_normal: Texture2D # Normal eyes.
+@export var eyes_image_hurt: Texture2D # Hurt eyes.
+@export var immune := false
 #-- SOUND VARS --
 @export_category("Sounds")
 @export var shoot_sound: AudioStream
@@ -85,7 +92,8 @@ func _ready() -> void:
 	reload_timer.wait_time = reload_time
 	dash_timer.wait_time = dash_cooldown
 	# Do basic upgrades first.
-	
+	immunity_timer.wait_time = immunity_time
+	eyes_sprite.texture = eyes_image_normal
 		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -104,6 +112,10 @@ func _process(delta: float) -> void:
 	else:
 		# Otherwise slow the player down.
 		velocity *= 1 - (friction * delta)
+	# Give the eyes some movement by offsetting based on the look vector and an assigned length with quantisaton!
+	var eyes_angle = (get_global_mouse_position() - position).normalized().angle()
+	eyes_angle = snapped(eyes_angle, eyes_angle_quantisation)
+	eyes_sprite.position = eyes_move_dist * Vector2.from_angle(eyes_angle)
 	if Input.is_action_just_pressed("movement_dash") and not dash_on_cooldown and not direction == Vector2.ZERO:
 		dash_timer.start()
 		dash_on_cooldown = true
@@ -186,12 +198,19 @@ func _process(delta: float) -> void:
 		@warning_ignore("narrowing_conversion")
 		ammo = (max_ammo * (1 - (reload_timer.time_left / reload_time)))
 # Stop shooting when done shooting.
+
 func _on_bullet_cooldown_timeout() -> void:
 	shooting = false
+
 func take_damage(damage: float) -> void:
+	if immune:
+		return
 	_play_sound(hit_hurt_sound)
 	camera.shake(0.6)
 	health -= damage
+	immunity_timer.start()
+	immune = true
+	eyes_sprite.texture = eyes_image_hurt
 
 
 func _check_upgrades(upgrade) -> void:
@@ -259,6 +278,27 @@ func _check_upgrades(upgrade) -> void:
 		
 		if mod.modified_attribute == Globals.player_attributes.DASH_RELOAD:
 			dash_reload = mod.modifier_bool
+		
+		if mod.modified_attribute == Globals.player_attributes.MAX_HP:
+			max_health += mod.modifier_bonus
+			max_health *= mod.modifier_multiplier
+			if mod.modifier_override:
+				max_health = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.HEALING_ORBS:
+			Globals.healing_orbs = mod.modifier_bool
+		
+		if mod.modified_attribute == Globals.player_attributes.HEALING_ORBS_AMOUNT:
+			Globals.healing_orbs_amount += mod.modifier_bonus
+			Globals.healing_orbs_amount *= mod.modifier_multiplier
+			if mod.modifier_override:
+				Globals.healing_orbs_amount = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.HEALING_ORBS_CHANCE:
+			Globals.healing_orbs_chance += mod.modifier_bonus
+			Globals.healing_orbs_chance *= mod.modifier_multiplier
+			if mod.modifier_override:
+				Globals.healing_orbs_chance = mod.modifier_override_value
 	pass
 
 
@@ -273,3 +313,8 @@ func _play_sound(sound: AudioStream) -> void:
 	player.play()
 	await player.finished
 	player.queue_free()
+
+
+func _on_immunity_timer_timeout() -> void:
+	immune = false
+	eyes_sprite.texture = eyes_image_normal

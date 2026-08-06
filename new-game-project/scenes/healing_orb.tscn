@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://qci7mxpvejbu"]
+
+[ext_resource type="Texture2D" uid="uid://dsj3fhnh5r7qb" path="res://assets/health_orb.png" id="1_8ag8x"]
+[ext_resource type="Script" uid="uid://bulkny5bt51gv" path="res://scripts/healing_orb.gd" id="1_tm2na"]
+[ext_resource type="PackedScene" uid="uid://dvluon7yb6720" path="res://scenes/health_burst.tscn" id="2_ktwia"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ijtd6"]
+radius = 13.0
+
+[sub_resource type="Curve" id="Curve_ijtd6"]
+_data = [Vector2(0, 1), 0.0, -0.7697371, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="healing_orb" type="Node2D" unique_id=891371088]
+script = ExtResource("1_tm2na")
+burst_fx = ExtResource("2_ktwia")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1849150741]
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("1_8ag8x")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1524463065]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=551887723]
+shape = SubResource("CircleShape2D_ijtd6")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="Area2D" unique_id=1039153728]
+z_index = -20
+amount = 20
+lifetime = 0.2
+gravity = Vector2(0, 0)
+scale_amount_min = 10.0
+scale_amount_max = 10.0
+scale_amount_curve = SubResource("Curve_ijtd6")
+color = Color(0, 1, 0, 1)
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]

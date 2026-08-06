@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="Upgrade" format=3 uid="uid://d27t1jckrpy3i"]
+
+[ext_resource type="Script" uid="uid://ccs7lafi3v7nb" path="res://scripts/resource_scripts/attribute_modifier.gd" id="1_ae0vq"]
+[ext_resource type="Script" uid="uid://bgg2x5m5frerd" path="res://scripts/resource_scripts/upgrade.gd" id="2_wv1o8"]
+
+[sub_resource type="Resource" id="Resource_rsyvu"]
+script = ExtResource("1_ae0vq")
+modified_attribute = 11
+modifier_bonus = 20.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_ochnl"]
+script = ExtResource("1_ae0vq")
+modified_attribute = 13
+modifier_bool = true
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_sqmt3"]
+script = ExtResource("1_ae0vq")
+modified_attribute = 15
+modifier_override = true
+modifier_override_value = 0.15
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[resource]
+script = ExtResource("2_wv1o8")
+modified_attributes = Array[ExtResource("1_ae0vq")]([SubResource("Resource_rsyvu"), SubResource("Resource_ochnl"), SubResource("Resource_sqmt3")])
+metadata/_custom_type_script = "uid://bgg2x5m5frerd"

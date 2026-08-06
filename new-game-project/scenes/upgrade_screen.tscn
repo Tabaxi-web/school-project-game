@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cder5ela3m3no"]
 
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="1_3vsiv"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="1_3vsiv"]
 [ext_resource type="Script" uid="uid://dlawjskpwdoo4" path="res://scripts/upgrade_screen.gd" id="1_qtyd3"]
 [ext_resource type="PackedScene" uid="uid://c7cucfte4udu" path="res://scenes/upgrade_card.tscn" id="2_qtyd3"]
 [ext_resource type="PackedScene" uid="uid://df7mw1otn5utr" path="res://scenes/upgrade_card_placeholder.tscn" id="3_1ogmj"]

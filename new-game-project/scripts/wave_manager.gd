@@ -11,9 +11,12 @@ var in_wave := false
 @export var playable_area: Control
 @export var area_headway: float
 @export var ranged_enemy_chance := 0.4
-@export var wave_scaling_coefficient := 3
+@export var wave_scaling_coefficient := 5
 @export var wave_scaling_bonus := 2
 @export var wave_health_scaling := 100
+@export var time_between_enemies_min := 2.0
+@export var time_between_enemies_max := 3.5
+@export var wave_time_between_enemies_coefficient := 0.1
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass
@@ -30,8 +33,13 @@ func _process(delta: float) -> void:
 	for enemy in enemies:
 		if enemy == null:
 			enemies.erase(enemy)
+			enemies_left -= 1
 	if not in_wave:
+		in_wave = true
 		wave_enemies_amount = ((Globals.wave - 1) * wave_scaling_coefficient) + wave_scaling_bonus
+		enemies_left = wave_enemies_amount
+		time_between_enemies_max -= (wave_time_between_enemies_coefficient * Globals.wave)
+		time_between_enemies_min -= (wave_time_between_enemies_coefficient * Globals.wave)
 		for i in range(wave_enemies_amount):
 			if randf() < ranged_enemy_chance:
 				var enemy = ranged_enemy_scene.instantiate()
@@ -44,8 +52,8 @@ func _process(delta: float) -> void:
 				enemy.position = get_point_in_playable_area(playable_area, area_headway)
 				enemies.append(enemy)
 				add_sibling(enemy)
-		in_wave = true
-	enemies_left = len(enemies)
+			await get_tree().create_timer(randf_range(time_between_enemies_min, time_between_enemies_max)).timeout
+		
 	if enemies_left < 1:
 		in_wave = false
 		Globals.next_wave()

@@ -2,12 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_8ln24"]
 [ext_resource type="Script" uid="uid://c8mmi8o8vgke2" path="res://scripts/main_menu.gd" id="1_rtw2f"]
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_rtw2f"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="2_rtw2f"]
 [ext_resource type="AudioStream" uid="uid://bqspsvgdrt5cn" path="res://assets/sounds/cursor_move.wav" id="2_tbmy8"]
 [ext_resource type="AudioStream" uid="uid://ch5d4q5j7lwmo" path="res://assets/sounds/cursor_select.wav" id="3_jk1qb"]
 [ext_resource type="Script" uid="uid://dsty8d6pbkof" path="res://scripts/evil_ahh_text.gd" id="3_oa1go"]
-[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="4_tbmy8"]
-[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="5_jk1qb"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/UI/DullBox.tres" id="4_tbmy8"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/UI/BrightBox.tres" id="5_jk1qb"]
+[ext_resource type="Texture2D" uid="uid://rrtcu8d0wah3" path="res://assets/UI/Handle.png" id="9_5dd4i"]
+[ext_resource type="Texture2D" uid="uid://4umnivf0mu3b" path="res://assets/UI/Tick.png" id="10_lgwnu"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_fu7sn"]
 font = ExtResource("2_rtw2f")
@@ -19,10 +21,29 @@ font = ExtResource("2_rtw2f")
 font_size = 50
 font_color = Color(0, 1, 0, 1)
 
-[node name="Node2D" type="Node2D" unique_id=343072824]
+[sub_resource type="LabelSettings" id="LabelSettings_ijtd6"]
+font = ExtResource("2_rtw2f")
+font_color = Color(0, 1, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_flqon"]
+bg_color = Color(0.06666667, 0.13333334, 0.06666667, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0, 1, 0, 1)
+expand_margin_top = 2.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tbmy8"]
+
+[node name="Node2D" type="Node2D" unique_id=343072824 node_paths=PackedStringArray("options_menu", "master_slider", "music_slider")]
 script = ExtResource("1_rtw2f")
 hover_sound = ExtResource("2_tbmy8")
 select_sound = ExtResource("3_jk1qb")
+options_menu = NodePath("Options Menu")
+master_slider = NodePath("Options Menu/HBoxContainer/VBoxContainer/HBoxContainer/HSlider")
+music_slider = NodePath("Options Menu/HBoxContainer/VBoxContainer/HBoxContainer2/HSlider")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1411437698]
 layer = 105
@@ -62,8 +83,7 @@ alignment = 1
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer" unique_id=1034951821]
 layout_mode = 2
-text = "Something other 
-than game name"
+text = "Haunted Sector"
 label_settings = SubResource("LabelSettings_7vrkn")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=196708771]
@@ -103,6 +123,83 @@ theme_override_styles/pressed = ExtResource("4_tbmy8")
 theme_override_styles/hover = ExtResource("5_jk1qb")
 text = "Quit"
 
+[node name="Options Menu" type="PanelContainer" parent="." unique_id=910295104]
+visible = false
+offset_left = 144.0
+offset_right = 1015.0
+offset_bottom = 648.0
+theme_override_styles/panel = ExtResource("4_tbmy8")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Options Menu" unique_id=622037328]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Options Menu/HBoxContainer" unique_id=2099295707]
+layout_mode = 2
+theme_override_constants/separation = 33
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Options Menu/HBoxContainer/VBoxContainer" unique_id=2036460450]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Options Menu/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1066364529]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Master Volume: "
+label_settings = SubResource("LabelSettings_ijtd6")
+
+[node name="HSlider" type="HSlider" parent="Options Menu/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1799999356]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+theme_override_icons/grabber = ExtResource("9_5dd4i")
+theme_override_icons/grabber_highlight = ExtResource("9_5dd4i")
+theme_override_icons/grabber_disabled = ExtResource("9_5dd4i")
+theme_override_icons/tick = ExtResource("10_lgwnu")
+theme_override_styles/slider = SubResource("StyleBoxFlat_flqon")
+theme_override_styles/grabber_area = SubResource("StyleBoxEmpty_tbmy8")
+max_value = 1.0
+step = 0.1
+value = 1.0
+tick_count = 10
+ticks_on_borders = true
+ticks_position = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Options Menu/HBoxContainer/VBoxContainer" unique_id=547746774]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Options Menu/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1960688247]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+text = "Music Volume: "
+label_settings = SubResource("LabelSettings_ijtd6")
+
+[node name="HSlider" type="HSlider" parent="Options Menu/HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=119938058]
+custom_minimum_size = Vector2(200, 30)
+layout_mode = 2
+theme_override_icons/grabber = ExtResource("9_5dd4i")
+theme_override_icons/grabber_highlight = ExtResource("9_5dd4i")
+theme_override_icons/grabber_disabled = ExtResource("9_5dd4i")
+theme_override_icons/tick = ExtResource("10_lgwnu")
+theme_override_styles/slider = SubResource("StyleBoxFlat_flqon")
+theme_override_styles/grabber_area = SubResource("StyleBoxEmpty_tbmy8")
+max_value = 1.0
+step = 0.1
+value = 1.0
+tick_count = 10
+ticks_on_borders = true
+ticks_position = 2
+
+[node name="ReturnButton" type="Button" parent="Options Menu/HBoxContainer/VBoxContainer" unique_id=890824992]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 1, 0, 1)
+theme_override_colors/font_hover_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+theme_override_fonts/font = ExtResource("2_rtw2f")
+theme_override_styles/normal = ExtResource("4_tbmy8")
+theme_override_styles/pressed = ExtResource("4_tbmy8")
+theme_override_styles/hover = ExtResource("5_jk1qb")
+text = "Return"
+
 [connection signal="timeout" from="Label/Timer" to="Label" method="_on_timer_timeout"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/PlayButton" to="." method="_on_play_button_down"]
 [connection signal="mouse_entered" from="HBoxContainer/VBoxContainer/VBoxContainer/PlayButton" to="." method="_on_button_hover"]
@@ -110,3 +207,5 @@ text = "Quit"
 [connection signal="mouse_entered" from="HBoxContainer/VBoxContainer/VBoxContainer/OptionsButton" to="." method="_on_button_hover"]
 [connection signal="button_down" from="HBoxContainer/VBoxContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_down"]
 [connection signal="mouse_entered" from="HBoxContainer/VBoxContainer/VBoxContainer/QuitButton" to="." method="_on_button_hover"]
+[connection signal="drag_ended" from="Options Menu/HBoxContainer/VBoxContainer/HBoxContainer/HSlider" to="." method="_on_slider_drag_ended"]
+[connection signal="pressed" from="Options Menu/HBoxContainer/VBoxContainer/ReturnButton" to="." method="_on_return_button_pressed"]

@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_2sgj6"]
 [ext_resource type="Script" uid="uid://1kqpwgyhdnjn" path="res://scripts/new_scene_transition_manager.gd" id="1_hgfgv"]
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_hgfgv"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="2_hgfgv"]
 [ext_resource type="Script" uid="uid://bhx1ypl7fgttv" path="res://scripts/transition_text.gd" id="4_hgfgv"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ooyqd"]

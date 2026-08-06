@@ -1,24 +1,34 @@
 extends Node
+# This is an autoload singleton that persists between scenes.
+var master_volume := 0.8
+var music_volume := 0.8
+var master_bus_name := "Master"
+var music_bus_name := "Music"
+var wave := 1 # Wave number.
 
-var wave := 1
-var upgrades := []
-var rare_upgrades := []
-var upgrade_screen_how_often := 3
+var upgrades := [] # An array of dictionaries that define upgrades the player has.
+var rare_upgrades := [] # ditto, but the rares.
+var upgrade_screen_how_often := 3 # Every n waves the player will get an upgrade.
+
 enum upgrade_ids {BUCKSHOT1, GUNNER1, HOLLOWPT1, COMMANDO1, SHARPSHT1, SHARPSHT2, FOCUS1, COMMANDO2,
-STRBURST, LSRBEAM, SWEEPER}
+STRBURST, LSRBEAM, SWEEPER, MEDIC1} # ENUM ids for each upgrade.
 enum player_attributes {SPREAD, PELLETS, FALLOFF, RELOAD_TIME, FIRE_DELAY, DAMAGE,
-MAX_AMMO, CRIT_CHANCE, CRIT_DAMAGE, HOMING, DASH_RELOAD}
-var potential_common_upgrades_init_value := [
+MAX_AMMO, CRIT_CHANCE, CRIT_DAMAGE, HOMING, DASH_RELOAD, MAX_HP, LIFESTEAL, 
+HEALING_ORBS, HEALING_ORBS_AMOUNT, HEALING_ORBS_CHANCE} # ENUM IDS for all attributes that can be upgraded
+
+var healing_orbs := true
+var healing_orbs_amount := 20.0
+var healing_orbs_chance := 0.05
+
+var potential_common_upgrades_init_value := [ # The pool of common upgrades that the player starts with
 	
 	{"id": upgrade_ids.BUCKSHOT1, "name": "Buckshot I", "rarity": "Common",
 	"description": "Increase spread, increase pellets per shot, increase reload time, increase damage falloff, decrease damage.",
-	"icon_path": "res://assets/icons/Buckshot_Icon.png",
-	"spread": "+PI/8", "pellets_per_shot": "+5", "damage_falloff": "+0.05", "reload_time": "+1"},
+	"icon_path": "res://assets/icons/Buckshot_Icon.png"},
 	
 	{"id": upgrade_ids.GUNNER1, "name": "Gunner I", "rarity": "Common",
 	"description": "Increase fire-rate.",
-	"icon_path": "res://assets/icons/Gunner_Icon.png",
-	"fire_rate": ""},
+	"icon_path": "res://assets/icons/Gunner_Icon.png"},
 	
 	{"id": upgrade_ids.HOLLOWPT1, "name": "Hollow Point I", "rarity": "Common",
 	"description": "Increase damage per bullet.",
@@ -43,10 +53,14 @@ var potential_common_upgrades_init_value := [
 	
 	{"id": upgrade_ids.COMMANDO2, "name": "Commando II", "rarity": "Common", "description": "Dashing reloads half your magazine.",
 	"icon_path": "res://assets/icons/Commando_Icon.png"},
-	#{"name": "Medic I", "rarity": "Common", "description": "Enemies have a chance to drop healing orbs."}
+	
+	{"id": upgrade_ids.MEDIC1,"name": "Medic I", "rarity": "Common", "description": "Increased Max HP. Enemies have a chance to drop healing orbs.",
+	"icon_path": "res://assets/icons/Medic_Icon.png"}
 ]
-var potential_common_upgrades := []
-var potential_rare_upgrades_init_value := [
+var potential_common_upgrades := [] # Initialised to the above variable on game start, taken from so the player can't get two upgrades twice.
+
+
+var potential_rare_upgrades_init_value := [ # Ditto but rare
 	{"id": upgrade_ids.STRBURST, "name": "Starburst", "rarity": "Rare",
 	"description": "Spread becomes 360 degrees. Increase pellets per shot. Reduce damage. Bullets now home.",
 	"icon_path": "res://assets/icons/Starburst_Icon.png",
@@ -60,30 +74,32 @@ var potential_rare_upgrades_init_value := [
 	"icon_path": "res://assets/icons/Minesweeper_Icon.png",
 	"incompatible_upgrades": ["Focus I", "Laserbeam", "Starburst"]}
 ]
-var potential_rare_upgrades := []
-
+var potential_rare_upgrades := [] # Ditto again.
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	reset_all_globals()
+	reset_all_globals() # Inits all variables
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+## Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	var master_bus_index = AudioServer.get_bus_index(master_bus_name)
+	AudioServer.set_bus_volume_linear(master_bus_index, master_volume)
+	var music_bus_index = AudioServer.get_bus_index(master_bus_name)
+	AudioServer.set_bus_volume_linear(music_bus_index, music_volume)
 
-func reset_all_globals() -> void:
+func reset_all_globals() -> void: # Used to reset game state on death.
 	wave = 1
 	upgrades = []
 	potential_common_upgrades = potential_common_upgrades_init_value
 	potential_rare_upgrades = potential_rare_upgrades_init_value
 
-func next_wave() -> void:
+func next_wave() -> void: # What it says on the tin.
 	wave += 1
 	
 	get_tree().change_scene_to_file("res://scenes/scene_transition.tscn")
 
-func intermission() -> void:
+func intermission() -> void: # Triggered upon entering the shop
 	if len(potential_common_upgrades) + len(potential_rare_upgrades) < 1:
-		next_wave()
+		next_wave() # Just skip it if there are no upgrades left.
 	else:
 		get_tree().change_scene_to_file("res://scenes/upgrade_screen.tscn")

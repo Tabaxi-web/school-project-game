@@ -1,52 +1,35 @@
 [gd_scene format=3 uid="uid://ck8hmgdyfno0b"]
 
 [ext_resource type="Script" uid="uid://bowukemim6i34" path="res://scripts/enemy.gd" id="1_7p1mj"]
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_5uy6h"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="2_5uy6h"]
 [ext_resource type="PackedScene" uid="uid://1jhg1psiws20" path="res://scenes/enemy_death_fx.tscn" id="2_c4w8v"]
-[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="3_c4w8v"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/UI/DullBox.tres" id="3_c4w8v"]
 [ext_resource type="AudioStream" uid="uid://bok7nqqcuq3fl" path="res://assets/sounds/enemy_death.wav" id="3_xwavj"]
-[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/BrightBox.tres" id="4_xwavj"]
+[ext_resource type="PackedScene" uid="uid://qci7mxpvejbu" path="res://scenes/healing_orb.tscn" id="4_ipns3"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/UI/BrightBox.tres" id="4_xwavj"]
+[ext_resource type="Texture2D" uid="uid://bm7w7cmf32ik4" path="res://assets/enemy_body.png.png" id="7_nenq2"]
+[ext_resource type="Texture2D" uid="uid://bqlornhhjnwkf" path="res://assets/enemy_eyes.png" id="8_md484"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7p1mj"]
-size = Vector2(40, 40)
+[sub_resource type="CircleShape2D" id="CircleShape2D_md484"]
+radius = 25.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5uy6h"]
 radius = 46.0
 
-[node name="Enemy" type="CharacterBody2D" unique_id=327760210 node_paths=PackedStringArray("health_bar", "attack_area", "attack_timer") groups=["Enemies"]]
+[node name="Enemy" type="CharacterBody2D" unique_id=327760210 node_paths=PackedStringArray("health_bar", "attack_area", "attack_timer", "eyes_sprite") groups=["Enemies"]]
 script = ExtResource("1_7p1mj")
 max_health = 3000.0
 health_bar = NodePath("ProgressBar")
-max_speed = 100
 attack_area = NodePath("AttackArea")
 attack_timer = NodePath("AttackTimer")
+attack_damage = 20
 death_fx = ExtResource("2_c4w8v")
 death_sfx = ExtResource("3_xwavj")
-
-[node name="ColorRect" type="ColorRect" parent="." unique_id=474384095]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 1, 0, 1)
-
-[node name="ColorRect" type="ColorRect" parent="ColorRect" unique_id=2015600249]
-layout_mode = 0
-offset_left = 3.0
-offset_top = 3.0
-offset_right = 37.0
-offset_bottom = 37.0
-color = Color(0.06666667, 0.13333334, 0.06666667, 1)
+eyes_sprite = NodePath("Eyes")
+healing_orb_prefab = ExtResource("4_ipns3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=853074630]
-shape = SubResource("RectangleShape2D_7p1mj")
+shape = SubResource("CircleShape2D_md484")
 
 [node name="ProgressBar" type="ProgressBar" parent="." unique_id=1256333450]
 offset_left = -41.0
@@ -67,5 +50,14 @@ one_shot = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=42534489]
 shape = SubResource("CircleShape2D_5uy6h")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=6934913]
+scale = Vector2(1.5625, 1.5625)
+texture = ExtResource("7_nenq2")
+
+[node name="Eyes" type="Sprite2D" parent="." unique_id=86745902]
+position = Vector2(-9.313226e-08, 1.8626451e-07)
+scale = Vector2(2.0703127, 2.0703127)
+texture = ExtResource("8_md484")
 
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]

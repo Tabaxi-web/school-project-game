@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://wvnp3fck6aty"]
 
 [ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_s3esy"]
-[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/DullBox.tres" id="2_0rdsr"]
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/pixChicago.ttf" id="2_d2op2"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/UI/DullBox.tres" id="2_0rdsr"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="2_d2op2"]
 [ext_resource type="Script" uid="uid://mpcunwtyr2x0" path="res://scripts/upgrade_icon_indicator.gd" id="3_5cypo"]
 [ext_resource type="PackedScene" uid="uid://jwhplx2e7ai4" path="res://scenes/player.tscn" id="4_0rdsr"]
 [ext_resource type="Script" uid="uid://dgsf273nfwce5" path="res://scripts/camera.gd" id="4_2l77h"]
