@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://ckpyr6w0x03wo" path="res://scenes/tiles_main_game.tscn" id="7_70vka"]
 [ext_resource type="Script" uid="uid://ccbtsxl1ys0io" path="res://scripts/wave_manager.gd" id="9_2l77h"]
 [ext_resource type="PackedScene" uid="uid://d1ehyiuirawx2" path="res://scenes/enemy_ranged.tscn" id="10_nqdth"]
+[ext_resource type="PackedScene" uid="uid://cder5ela3m3no" path="res://scenes/upgrade_screen.tscn" id="13_wjob3"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0rdsr"]
 font = ExtResource("2_d2op2")
@@ -20,6 +21,13 @@ font_color = Color(0, 1, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_ipu61"]
 font = ExtResource("2_d2op2")
 font_color = Color(0, 1, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ijtd6"]
+font = ExtResource("2_d2op2")
+font_size = 59
+font_color = Color(0, 1, 0, 1)
+outline_size = 20
+outline_color = Color(0.06666667, 0.13333334, 0.06666667, 1)
 
 [node name="Node2D" type="Node2D" unique_id=567899002]
 
@@ -32,9 +40,12 @@ position = Vector2(576, 323.99997)
 scale = Vector2(0.59999996, 0.59999996)
 texture = ExtResource("1_s3esy")
 
-[node name="UIMain" type="CanvasLayer" parent="." unique_id=901089649]
+[node name="UIMain" type="CanvasLayer" parent="." unique_id=901089649 groups=["UI"]]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UIMain" unique_id=1276612143]
+[node name="RoundUI" type="CanvasLayer" parent="UIMain" unique_id=1983819046]
+layer = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMain/RoundUI" unique_id=1276612143]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -49,58 +60,80 @@ grow_vertical = 2
 pivot_offset_ratio = Vector2(0.5, 0.5)
 theme_override_constants/separation = 414
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UIMain/VBoxContainer" unique_id=1194119633]
+[node name="HBoxContainer" type="HBoxContainer" parent="UIMain/RoundUI/VBoxContainer" unique_id=1194119633]
 layout_mode = 2
 theme_override_constants/separation = 167
 alignment = 1
 
-[node name="PanelContainer" type="PanelContainer" parent="UIMain/VBoxContainer/HBoxContainer" unique_id=467102156]
+[node name="PanelContainer" type="PanelContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer" unique_id=467102156]
 custom_minimum_size = Vector2(300, 75)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_0rdsr")
 
-[node name="FlowContainer" type="FlowContainer" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer" unique_id=563135814]
+[node name="FlowContainer" type="FlowContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer" unique_id=563135814]
 layout_mode = 2
 script = ExtResource("3_5cypo")
 texture_rect_prefab = ExtResource("4_o6v7o")
 
-[node name="Label" type="Label" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer/FlowContainer" unique_id=161223200]
+[node name="Label" type="Label" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer/FlowContainer" unique_id=161223200]
 layout_mode = 2
 text = "Upgrades:"
 label_settings = SubResource("LabelSettings_0rdsr")
 
-[node name="PanelContainer2" type="PanelContainer" parent="UIMain/VBoxContainer/HBoxContainer" unique_id=1446255789]
+[node name="PanelContainer2" type="PanelContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer" unique_id=1446255789]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
 theme_override_styles/panel = ExtResource("2_0rdsr")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer2" unique_id=1273237430]
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2" unique_id=1273237430]
 layout_mode = 2
 
-[node name="Health" type="Label" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer" unique_id=1005762909]
+[node name="Health" type="Label" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer" unique_id=1005762909]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Health:"
 label_settings = SubResource("LabelSettings_0rdsr")
 
-[node name="Ammo" type="Label" parent="UIMain/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer" unique_id=1074795868]
+[node name="Ammo" type="Label" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer" unique_id=1074795868]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 text = "Ammo:"
 label_settings = SubResource("LabelSettings_0rdsr")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UIMain/VBoxContainer" unique_id=965771155]
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMain/RoundUI/VBoxContainer" unique_id=965771155]
 layout_mode = 2
 
-[node name="WaveTimerTitle" type="Label" parent="UIMain/VBoxContainer/VBoxContainer" unique_id=1419288544]
+[node name="WaveTimerTitle" type="Label" parent="UIMain/RoundUI/VBoxContainer/VBoxContainer" unique_id=1419288544]
 layout_mode = 2
 text = "Enemies Left:"
 label_settings = SubResource("LabelSettings_ipu61")
 horizontal_alignment = 1
 
-[node name="WaveTimer" type="Label" parent="UIMain/VBoxContainer/VBoxContainer" unique_id=695971040]
+[node name="WaveTimer" type="Label" parent="UIMain/RoundUI/VBoxContainer/VBoxContainer" unique_id=695971040]
 layout_mode = 2
 label_settings = SubResource("LabelSettings_ipu61")
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UIMain" unique_id=645743373]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -388.0
+offset_top = -284.0
+offset_right = 388.0
+offset_bottom = 284.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme_override_constants/separation = 414
+alignment = 1
+
+[node name="Label" type="Label" parent="UIMain/VBoxContainer" unique_id=25321812]
+layout_mode = 2
+text = "WAVE X"
+label_settings = SubResource("LabelSettings_ijtd6")
 horizontal_alignment = 1
 
 [node name="Bounds" type="Control" parent="." unique_id=92915165]
@@ -120,33 +153,37 @@ polygon = PackedVector2Array(0, 0, 0, 5000, 5000, 5000, 5000, 0)
 
 [node name="Player" parent="." unique_id=1669383909 node_paths=PackedStringArray("camera_wrapper", "camera", "wave_manager", "health_label", "ammo_label", "wave_timer_label") instance=ExtResource("4_0rdsr")]
 collision_mask = 3
-camera_wrapper = NodePath("../CameraWrapper")
-camera = NodePath("../CameraWrapper/Camera2D")
+camera_wrapper = NodePath("../Camera2D")
+camera = NodePath("../Camera2D")
 wave_manager = NodePath("../WaveManager")
 max_ammo = 15
 fire_delay = 0.4
 bullets_per_shot = 1
 spread = 0.0
 bullet_damage = 1100.0
-health_label = NodePath("../UIMain/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Health")
-ammo_label = NodePath("../UIMain/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Ammo")
-wave_timer_label = NodePath("../UIMain/VBoxContainer/VBoxContainer/WaveTimer")
+health_label = NodePath("../UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Health")
+ammo_label = NodePath("../UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Ammo")
+wave_timer_label = NodePath("../UIMain/RoundUI/VBoxContainer/VBoxContainer/WaveTimer")
 bullet_scene = ExtResource("5_ipu61")
 
 [node name="TileMapLayer" parent="." unique_id=833659972 instance=ExtResource("7_70vka")]
 metadata/_edit_lock_ = true
 
-[node name="CameraWrapper" type="Node2D" parent="." unique_id=1752083070]
-
-[node name="Camera2D" type="Camera2D" parent="CameraWrapper" unique_id=1433920973]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1433920973]
 zoom = Vector2(0.75, 0.75)
-position_smoothing_speed = 10.0
+position_smoothing_enabled = true
+position_smoothing_speed = 30.0
 script = ExtResource("4_2l77h")
 
-[node name="WaveManager" type="Node2D" parent="." unique_id=73507951 node_paths=PackedStringArray("playable_area")]
+[node name="WaveManager" type="Node2D" parent="." unique_id=73507951 node_paths=PackedStringArray("playable_area", "player", "wave_title_label", "round_ui")]
 script = ExtResource("9_2l77h")
 enemy_scene = ExtResource("6_ygxny")
 ranged_enemy_scene = ExtResource("10_nqdth")
 playable_area = NodePath("../Bounds")
 area_headway = 0.5
 ranged_enemy_chance = 0.2
+player = NodePath("../Player")
+wave_title_label = NodePath("../UIMain/VBoxContainer/Label")
+upgrade_scene = ExtResource("13_wjob3")
+round_ui = NodePath("../UIMain/RoundUI")
+wave_title_impact_time = 1.5

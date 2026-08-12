@@ -20,6 +20,9 @@ var healing_orbs := true
 var healing_orbs_amount := 20.0
 var healing_orbs_chance := 0.05
 
+signal start_wave
+signal upgrade_screen
+
 var potential_common_upgrades_init_value := [ # The pool of common upgrades that the player starts with
 	
 	{"id": upgrade_ids.BUCKSHOT1, "name": "Buckshot I", "rarity": "Common",
@@ -78,6 +81,7 @@ var potential_rare_upgrades := [] # Ditto again.
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	reset_all_globals() # Inits all variables
+	
 
 
 ## Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -95,11 +99,13 @@ func reset_all_globals() -> void: # Used to reset game state on death.
 
 func next_wave() -> void: # What it says on the tin.
 	wave += 1
-	
-	get_tree().change_scene_to_file("res://scenes/scene_transition.tscn")
+	if wave % upgrade_screen_how_often == 0:
+		intermission()
+	else:
+		start_wave.emit()
 
 func intermission() -> void: # Triggered upon entering the shop
 	if len(potential_common_upgrades) + len(potential_rare_upgrades) < 1:
 		next_wave() # Just skip it if there are no upgrades left.
 	else:
-		get_tree().change_scene_to_file("res://scenes/upgrade_screen.tscn")
+		upgrade_screen.emit()

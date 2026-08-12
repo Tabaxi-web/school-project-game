@@ -174,7 +174,7 @@ scale = Vector2(1.5833336, 1.5833336)
 script = ExtResource("13_f1ej7")
 
 [node name="Sprite2D" type="Sprite2D" parent="ArrowContainer" unique_id=1556197736]
-position = Vector2(29.052628, -0.6315764)
+position = Vector2(175, 0)
 scale = Vector2(0.32, 0.5)
 texture = ExtResource("14_oprun")
 

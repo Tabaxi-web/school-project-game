@@ -2,7 +2,7 @@ extends FlowContainer
 @export var texture_rect_prefab: PackedScene
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func _refresh() -> void:
 	for upgrade in Globals.upgrades:
 		if upgrade["icon_path"] != null:
 			var icon_rect = texture_rect_prefab.instantiate()
@@ -13,3 +13,9 @@ func _ready() -> void:
 			var icon_rect = texture_rect_prefab.instantiate()
 			icon_rect.texture = load(upgrade["icon_path"])
 			add_child(icon_rect)
+func _ready() -> void:
+	call_deferred("_start")
+
+func _start() -> void:
+	_refresh()
+	Globals.start_wave.connect(_refresh)

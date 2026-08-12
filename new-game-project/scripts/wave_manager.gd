@@ -4,7 +4,7 @@ var wave_enemies_amount: int
 var enemies: Array
 var enemies_left: int
 var percent_enemies_left: float
-var intermission := false
+var intermission := true
 var in_wave := false
 @export var enemy_scene: PackedScene
 @export var ranged_enemy_scene: PackedScene
@@ -17,9 +17,16 @@ var in_wave := false
 @export var time_between_enemies_min := 2.0
 @export var time_between_enemies_max := 3.5
 @export var wave_time_between_enemies_coefficient := 0.1
+@export var player: Node2D
+@export var wave_title_label: Label
+@export var upgrade_scene: PackedScene
+@export var round_ui: CanvasLayer
+@export var wave_title_impact_time: float
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass
+	Globals.start_wave.connect(_begin_wave)
+	Globals.upgrade_screen.connect(_upgrade_screen_make)
+	_begin_wave()
 # For this function to work the playable area MUST be centred at (0,0)
 func get_point_in_playable_area(area: Control, headway: float) -> Vector2:
 	var new_vector = Vector2(0,0)
@@ -34,8 +41,9 @@ func _process(delta: float) -> void:
 		if enemy == null:
 			enemies.erase(enemy)
 			enemies_left -= 1
-	if not in_wave:
+	if not in_wave and not intermission:
 		in_wave = true
+		
 		wave_enemies_amount = ((Globals.wave - 1) * wave_scaling_coefficient) + wave_scaling_bonus
 		enemies_left = wave_enemies_amount
 		time_between_enemies_max -= (wave_time_between_enemies_coefficient * Globals.wave)
@@ -54,7 +62,28 @@ func _process(delta: float) -> void:
 				add_sibling(enemy)
 			await get_tree().create_timer(randf_range(time_between_enemies_min, time_between_enemies_max)).timeout
 		
-	if enemies_left < 1:
+	if enemies_left < 1 and not intermission:
+		intermission = true
 		in_wave = false
+		player.frozen = true
 		Globals.next_wave()
 	percent_enemies_left = (float(enemies_left) / float(wave_enemies_amount))
+
+func _begin_wave() -> void:
+	wave_title_label.visible = true
+	wave_title_label.text = "WAVE  "
+	await get_tree().create_timer(wave_title_impact_time).timeout
+	wave_title_label.text = "WAVE " + str(Globals.wave)
+	await get_tree().create_timer(wave_title_impact_time).timeout
+	wave_title_label.visible = false
+	round_ui.visible = true
+	intermission = false
+	player.frozen = false
+	
+func _upgrade_screen_make() -> void:
+	round_ui.visible = false
+	wave_title_label.visible = true
+	wave_title_label.text = "UPGRADE"
+	await get_tree().create_timer(wave_title_impact_time).timeout
+	wave_title_label.visible = false
+	round_ui.get_parent().add_child(upgrade_scene.instantiate())

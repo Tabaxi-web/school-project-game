@@ -78,6 +78,7 @@ func _process(delta: float) -> void:
 			elif current_card.upgrade.rarity == "Rare":
 				Globals.potential_rare_upgrades.erase(current_card.upgrade)
 				Globals.rare_upgrades.append(current_card.upgrade)
+			get_tree().get_first_node_in_group("Player").check_upgrade(current_card.upgrade["name"])
 			# Handle incompatible upgrades.
 			if "incompatible_upgrades" in current_card.upgrade:
 				for incomp_upgrade_name in current_card.upgrade["incompatible_upgrades"]:
@@ -89,6 +90,7 @@ func _process(delta: float) -> void:
 							Globals.potential_rare_upgrades.erase(rare_upgrade)
 			await get_tree().create_timer(0.2).timeout
 			Globals.next_wave()
+			queue_free()
 		for child in upgrade_cards:
 			if child == current_card:
 				child.modulate.a = 1

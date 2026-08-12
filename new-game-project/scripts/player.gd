@@ -3,6 +3,7 @@ extends CharacterBody2D
 # -- BTS VARS --
 @export var upgrade_folder_filepath := "res://resources/" ## Where the upgrade logic will look for upgrade files
 @export var upgrade_file_extension := ".tres" ## this should be nothing but .tres, worth adding this variable just in case
+@export var frozen := false ## Pauses player logic during upgrade screen. Stops the process
 # -- MOVEMENT VARS --
 @export_category("Movement")
 @export var camera_wrapper: Node2D ## The Wrapper of the camera, which follows the player.
@@ -80,24 +81,30 @@ func _retro_bar_render(number: float, maximum: float, length: int) -> String: #t
 
 
 func _ready() -> void:
-	# Init gameplay variables.
-	for upgrade in Globals.upgrades:
-		_check_upgrades(upgrade["name"])
-	for upgrade in Globals.rare_upgrades:
-		_check_upgrades(upgrade["name"])
 	bullets_per_shot = clampi(bullets_per_shot, 1, 50)
 	health = max_health
 	ammo = max_ammo
+	_refresh()
+	Globals.start_wave.connect(_refresh)
+	
+func _refresh() -> void: # This runs at the start of each wave.
+		# Init gameplay variables.
+	## This bit that is commented out was when the scene was reloaded. No need now.
+	#for upgrade in Globals.upgrades:
+		#_check_upgrades(upgrade["name"])
+	#for upgrade in Globals.rare_upgrades:
+		#_check_upgrades(upgrade["name"])
 	bullet_cooldown_timer.wait_time = fire_delay
 	reload_timer.wait_time = reload_time
 	dash_timer.wait_time = dash_cooldown
 	# Do basic upgrades first.
 	immunity_timer.wait_time = immunity_time
 	eyes_sprite.texture = eyes_image_normal
-		
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if frozen: 
+		return
 	#Camera logic. Note the camera and player start CENTERED at 0,0.
 	camera_wrapper.position = position
 	#movement
@@ -213,11 +220,11 @@ func take_damage(damage: float) -> void:
 	eyes_sprite.texture = eyes_image_hurt
 
 
-func _check_upgrades(upgrade) -> void:
+func check_upgrade(upgrade_name) -> void:
 	var loaded_upgrade: Upgrade
-	if not FileAccess.file_exists(upgrade_folder_filepath + upgrade.to_lower() + upgrade_file_extension):
-		push_warning("No upgrade found at filepath " + upgrade_folder_filepath + upgrade.to_lower() + upgrade_file_extension + "!!")
-	loaded_upgrade = load(upgrade_folder_filepath + upgrade.to_lower() + upgrade_file_extension)
+	if not FileAccess.file_exists(upgrade_folder_filepath + upgrade_name.to_lower() + upgrade_file_extension):
+		push_warning("No upgrade found at filepath " + upgrade_folder_filepath + upgrade_name.to_lower() + upgrade_file_extension + "!!")
+	loaded_upgrade = load(upgrade_folder_filepath + upgrade_name.to_lower() + upgrade_file_extension)
 	for mod in loaded_upgrade.modified_attributes:
 		if mod.modified_attribute == Globals.player_attributes.FIRE_DELAY:
 			fire_delay += mod.modifier_bonus
