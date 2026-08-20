@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cgvfaqbakyfua"]
+
+[sub_resource type="Curve" id="Curve_ijtd6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.7459954, 0.8035264), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="CPUParticles2D" type="CPUParticles2D" unique_id=550254606]
+emitting = false
+amount = 30
+lifetime = 0.33
+one_shot = true
+explosiveness = 1.0
+emission_shape = 6
+emission_ring_inner_radius = 0.8
+emission_ring_radius = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 251.08
+initial_velocity_max = 251.08
+linear_accel_min = -9.52
+linear_accel_max = -9.52
+scale_amount_min = 5.0
+scale_amount_max = 5.0
+scale_amount_curve = SubResource("Curve_ijtd6")
+color = Color(0, 1, 0, 1)

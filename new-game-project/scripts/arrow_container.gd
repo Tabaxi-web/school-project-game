@@ -20,7 +20,6 @@ func _process(delta: float) -> void:
 	if is_instance_valid(target):
 		look_at(target.global_position)
 		
-		print(clampf(global_position.distance_to(target.global_position) / arrow_min_distance_coeff, 0, arrow_distance_max))
 		sprite_target_position.x = clampf(global_position.distance_to(target.global_position) / arrow_min_distance_coeff, 0, arrow_distance_max)
 		sprite.modulate.a = clampf(position.distance_to(target.position) * transparency_coefficient, min_transparency, max_transparency)
 	sprite.position.x = lerp(sprite_target_position.x, sprite.position.x, 0.1)

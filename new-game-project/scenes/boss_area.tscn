@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bv6jh42brqnlw"]
+
+[ext_resource type="Script" uid="uid://dd11xsuetiiyp" path="res://scripts/summoner_area_bullet.gd" id="1_jwms0"]
+[ext_resource type="PackedScene" uid="uid://cgvfaqbakyfua" path="res://scenes/summoner_explosion.tscn" id="2_b0sfd"]
+[ext_resource type="AudioStream" uid="uid://bretfb5ygrc0t" path="res://assets/sounds/summoner_explosion.wav" id="3_v2cks"]
+[ext_resource type="Texture2D" uid="uid://dyul7yxxl32yg" path="res://assets/Circle.png" id="4_dy3gr"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ijtd6"]
+radius = 32.0
+
+[node name="summon" type="Area2D" unique_id=1580603616 node_paths=PackedStringArray("indicator_circle", "progress_circle")]
+script = ExtResource("1_jwms0")
+lifetime = 1.0
+allied = false
+indicator_circle = NodePath("SpriteContainer/BG")
+progress_circle = NodePath("SpriteContainer/indicator")
+area_scale = 5.0
+explosion_prefab = ExtResource("2_b0sfd")
+explosion_sound = ExtResource("3_v2cks")
+
+[node name="SpriteContainer" type="Node2D" parent="." unique_id=2132887117]
+
+[node name="BG" type="Sprite2D" parent="SpriteContainer" unique_id=1980161017]
+modulate = Color(1, 1, 1, 0.14901961)
+texture = ExtResource("4_dy3gr")
+
+[node name="indicator" type="Sprite2D" parent="SpriteContainer" unique_id=578215426]
+modulate = Color(1, 1, 1, 0.32156864)
+texture = ExtResource("4_dy3gr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1598676264]
+shape = SubResource("CircleShape2D_ijtd6")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1278321697]

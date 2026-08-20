@@ -26,7 +26,13 @@ modified_attribute = 1
 modifier_bonus = 3.0
 metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
 
+[sub_resource type="Resource" id="Resource_sp04v"]
+script = ExtResource("1_8h87u")
+modified_attribute = 2
+modifier_multiplier = 0.3
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
 [resource]
 script = ExtResource("2_et2ch")
-modified_attributes = Array[ExtResource("1_8h87u")]([SubResource("Resource_8h87u"), SubResource("Resource_et2ch"), SubResource("Resource_drs7a"), SubResource("Resource_tef1g")])
+modified_attributes = Array[ExtResource("1_8h87u")]([SubResource("Resource_8h87u"), SubResource("Resource_et2ch"), SubResource("Resource_drs7a"), SubResource("Resource_tef1g"), SubResource("Resource_sp04v")])
 metadata/_custom_type_script = "uid://bgg2x5m5frerd"

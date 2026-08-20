@@ -17,7 +17,7 @@ metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
 [sub_resource type="Resource" id="Resource_74tcg"]
 script = ExtResource("1_vmrq5")
 modified_attribute = 2
-modifier_bonus = 0.04
+modifier_bonus = 0.02
 metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
 
 [sub_resource type="Resource" id="Resource_llbrt"]
@@ -32,7 +32,13 @@ modified_attribute = 4
 modifier_bonus = 0.1
 metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
 
+[sub_resource type="Resource" id="Resource_sp04v"]
+script = ExtResource("1_vmrq5")
+modified_attribute = 5
+modifier_multiplier = 0.6
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
 [resource]
 script = ExtResource("2_rxngo")
-modified_attributes = Array[ExtResource("1_vmrq5")]([SubResource("Resource_vmrq5"), SubResource("Resource_rxngo"), SubResource("Resource_74tcg"), SubResource("Resource_llbrt"), SubResource("Resource_0t344")])
+modified_attributes = Array[ExtResource("1_vmrq5")]([SubResource("Resource_vmrq5"), SubResource("Resource_rxngo"), SubResource("Resource_74tcg"), SubResource("Resource_llbrt"), SubResource("Resource_0t344"), SubResource("Resource_sp04v")])
 metadata/_custom_type_script = "uid://bgg2x5m5frerd"

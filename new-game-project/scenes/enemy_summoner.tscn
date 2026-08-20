@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://b7f6nvkmwk4hc"]
+
+[ext_resource type="Script" uid="uid://be76ih68r0pid" path="res://scripts/summoner_enemy.gd" id="1_to2bi"]
+[ext_resource type="PackedScene" uid="uid://1jhg1psiws20" path="res://scenes/enemy_death_fx.tscn" id="2_nv714"]
+[ext_resource type="AudioStream" uid="uid://bok7nqqcuq3fl" path="res://assets/sounds/enemy_death.wav" id="3_lpodb"]
+[ext_resource type="PackedScene" uid="uid://qci7mxpvejbu" path="res://scenes/healing_orb.tscn" id="4_0s0df"]
+[ext_resource type="PackedScene" uid="uid://bnosyrqv134r1" path="res://scenes/summoner_area.tscn" id="5_to2bi"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="6_xjofa"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/UI/DullBox.tres" id="7_6wr4o"]
+[ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/UI/BrightBox.tres" id="8_10ee0"]
+[ext_resource type="Texture2D" uid="uid://c3mubeu0x30o5" path="res://assets/summoner_enemy_body.png" id="9_to2bi"]
+[ext_resource type="Texture2D" uid="uid://bqlornhhjnwkf" path="res://assets/enemy_eyes.png" id="10_y3g5p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ijtd6"]
+radius = 25.179358
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5uy6h"]
+radius = 46.0
+
+[node name="SummonerEnemy" type="CharacterBody2D" unique_id=327760210 node_paths=PackedStringArray("health_bar", "attack_timer", "eyes_sprite") groups=["Enemies"]]
+script = ExtResource("1_to2bi")
+max_health = 6000.0
+health_bar = NodePath("ProgressBar")
+attack_timer = NodePath("AttackTimer")
+friction_coeff = 1.0
+death_fx = ExtResource("2_nv714")
+death_sfx = ExtResource("3_lpodb")
+eyes_sprite = NodePath("Eyes")
+healing_orb_prefab = ExtResource("4_0s0df")
+bullet_prefab = ExtResource("5_to2bi")
+bullet_damage = 50.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=853074630]
+shape = SubResource("CircleShape2D_ijtd6")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1256333450]
+offset_left = -41.0
+offset_top = -46.0
+offset_right = 41.0
+offset_bottom = -27.0
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+theme_override_fonts/font = ExtResource("6_xjofa")
+theme_override_font_sizes/font_size = 8
+theme_override_styles/background = ExtResource("7_6wr4o")
+theme_override_styles/fill = ExtResource("8_10ee0")
+max_value = 1.0
+
+[node name="AttackTimer" type="Timer" parent="." unique_id=457615208]
+wait_time = 7.5
+one_shot = true
+
+[node name="AttackArea" type="Area2D" parent="." unique_id=1026126448]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea" unique_id=42534489]
+shape = SubResource("CircleShape2D_5uy6h")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=878531871]
+scale = Vector2(1.5625, 1.5625)
+texture = ExtResource("9_to2bi")
+
+[node name="Eyes" type="Sprite2D" parent="." unique_id=1488697729]
+position = Vector2(-9.313226e-08, 1.8626451e-07)
+scale = Vector2(2.0703127, 2.0703127)
+texture = ExtResource("10_y3g5p")
+
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]

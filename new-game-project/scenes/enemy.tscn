@@ -7,7 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://bok7nqqcuq3fl" path="res://assets/sounds/enemy_death.wav" id="3_xwavj"]
 [ext_resource type="PackedScene" uid="uid://qci7mxpvejbu" path="res://scenes/healing_orb.tscn" id="4_ipns3"]
 [ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/UI/BrightBox.tres" id="4_xwavj"]
-[ext_resource type="Texture2D" uid="uid://bm7w7cmf32ik4" path="res://assets/enemy_body.png.png" id="7_nenq2"]
+[ext_resource type="Texture2D" uid="uid://cbtu58j37kw63" path="res://assets/melee_enemy_body.png.png" id="8_ipns3"]
 [ext_resource type="Texture2D" uid="uid://bqlornhhjnwkf" path="res://assets/enemy_eyes.png" id="8_md484"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_md484"]
@@ -53,7 +53,7 @@ shape = SubResource("CircleShape2D_5uy6h")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=6934913]
 scale = Vector2(1.5625, 1.5625)
-texture = ExtResource("7_nenq2")
+texture = ExtResource("8_ipns3")
 
 [node name="Eyes" type="Sprite2D" parent="." unique_id=86745902]
 position = Vector2(-9.313226e-08, 1.8626451e-07)

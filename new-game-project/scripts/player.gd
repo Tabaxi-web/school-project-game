@@ -23,6 +23,7 @@ extends CharacterBody2D
 @export var dash_strength := 500
 @export var dash_decay_strength := 1
 @export var dash_reload := false
+@export var hurt_camera_shake := 0.6
 @export var lifesteal := 0.0 ## Percentage of damage to heal
 var dash_direction: Vector2
 var dash_power_left := 0
@@ -37,7 +38,8 @@ var dash_on_cooldown := false
 @export_category("Sounds")
 @export var shoot_sound: AudioStream
 @export var hit_hurt_sound: AudioStream
-
+@export var dash_sound: AudioStream
+@export var reload_sound: AudioStream
 # -- GUN VARS --
 @export_category("Gun")
 @export var max_ammo := 10 ## Max ammo. Self Explainatory.
@@ -57,6 +59,10 @@ var ammo: int # The player's current ammo.
 @export var damage_falloff := 0.01 #falloff of the player's bullets
 @export var muzzle_flash: PackedScene ## Muzzle Falsh Prefab
 @export var flash_point: Marker2D
+@export var gun_damage_per_wave := 1.05 ## Amount the player's gun damage will be multiplied by each wave.
+@export var burst_shots := 1 ## One by default. This is a normal weapon.
+@export var burst_timer: Timer
+@export var burst_delay := 0.075
 # -- UI VARS --
 @export_category("User Interface")
 @export var bullet_cooldown_timer: Timer ## Timer that controls the player's fire rate.
@@ -100,6 +106,8 @@ func _refresh() -> void: # This runs at the start of each wave.
 	# Do basic upgrades first.
 	immunity_timer.wait_time = immunity_time
 	eyes_sprite.texture = eyes_image_normal
+	bullet_damage *= gun_damage_per_wave
+	burst_timer.wait_time = burst_delay
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -127,6 +135,7 @@ func _process(delta: float) -> void:
 		dash_timer.start()
 		dash_on_cooldown = true
 		dashing_ui.visible = true
+		Globals.play_sound(dash_sound)
 		dash_power_left = dash_strength
 		if dash_reload:
 			ammo = clamp(ammo + max_ammo / 2, 0, max_ammo)
@@ -161,28 +170,34 @@ func _process(delta: float) -> void:
 		ammo -= 1
 		bullet_cooldown_timer.start()
 		shooting = true
-		_play_sound(shoot_sound)
-		for i in range(bullets_per_shot):
-			var new_bullet = bullet_scene.instantiate()
-			new_bullet.position = position
-			# Bullet Velocity is randomised based on both spread and itself!
-			if not homing_bullets:
-				new_bullet.speed = (bullet_velocity + (randf_range(-1, 1) * spread * (bullet_velocity / 5.0)))
-			else:
-				new_bullet.speed = bullet_velocity
-			new_bullet.damage = bullet_damage
-			new_bullet.crit_chance = crit_chance
-			new_bullet.crit_damage = crit_damage
-			new_bullet.homing = homing_bullets
-			new_bullet.damage_falloff_coefficient = damage_falloff
-			new_bullet.rotation = (pivot.rotation + (randf_range(-1, 1) * (spread/2)))
-			add_sibling(new_bullet)
-		var flash = muzzle_flash.instantiate()
-		#flash.global_position = flash_point.global_position - redundant, prolly
-		flash_point.add_child(flash)
-		flash.emitting = true
-		await get_tree().create_timer(flash.lifetime).timeout
-		flash.queue_free()
+		
+		# Repeat per burst.
+		for n in range(burst_shots):
+			Globals.play_sound(shoot_sound)
+			# repeat per pellet.
+			for i in range(bullets_per_shot):
+				var new_bullet = bullet_scene.instantiate()
+				new_bullet.position = position
+				# Bullet Velocity is randomised based on both spread and itself!
+				if not homing_bullets:
+					new_bullet.speed = (bullet_velocity + (randf_range(-1, 1) * spread * (bullet_velocity / 5.0)))
+				else:
+					new_bullet.speed = bullet_velocity
+				new_bullet.damage = bullet_damage
+				new_bullet.crit_chance = crit_chance
+				new_bullet.crit_damage = crit_damage
+				new_bullet.homing = homing_bullets
+				new_bullet.damage_falloff_coefficient = damage_falloff
+				new_bullet.rotation = (pivot.rotation + (randf_range(-1, 1) * (spread/2)))
+				add_sibling(new_bullet)
+			var flash = muzzle_flash.instantiate()
+			#flash.global_position = flash_point.global_position - redundant, prolly
+			flash_point.add_child(flash)
+			flash.emitting = true
+			# If, and only if, this is a burst weapon, start the timer and wait for it.
+			if burst_shots > 1:
+				burst_timer.start()
+				await burst_timer.timeout
 	
 	# Otherwise the same logic for auto and semi, but reloading, if the player has <1 ammo left.
 	elif ((ammo < 1\
@@ -194,7 +209,7 @@ func _process(delta: float) -> void:
 		reloading = true
 		reload_timer.start()
 		reloading_ui.visible = true
-		
+		Globals.play_sound(reload_sound)
 		await reload_timer.timeout
 		reloading_ui.visible = false
 		reloading = false
@@ -212,8 +227,8 @@ func _on_bullet_cooldown_timeout() -> void:
 func take_damage(damage: float) -> void:
 	if immune:
 		return
-	_play_sound(hit_hurt_sound)
-	camera.shake(0.6)
+	Globals.play_sound(hit_hurt_sound)
+	camera.shake(hurt_camera_shake)
 	health -= damage
 	immunity_timer.start()
 	immune = true
@@ -306,6 +321,12 @@ func check_upgrade(upgrade_name) -> void:
 			Globals.healing_orbs_chance *= mod.modifier_multiplier
 			if mod.modifier_override:
 				Globals.healing_orbs_chance = mod.modifier_override_value
+		
+		if mod.modified_attribute == Globals.player_attributes.BURST_AMOUNT:
+			burst_shots += mod.modifier_bonus
+			burst_shots *= mod.modifier_multiplier
+			if mod.modifier_override:
+				burst_shots = mod.modifier_override_value
 	pass
 
 
@@ -313,13 +334,6 @@ func _on_dash_timer_timeout() -> void:
 	dash_on_cooldown = false
 	dashing_ui.visible = false
 
-func _play_sound(sound: AudioStream) -> void:
-	var player = AudioStreamPlayer.new()
-	add_child(player)
-	player.stream = sound
-	player.play()
-	await player.finished
-	player.queue_free()
 
 
 func _on_immunity_timer_timeout() -> void:

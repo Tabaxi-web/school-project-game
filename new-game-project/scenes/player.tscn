@@ -9,6 +9,8 @@
 [ext_resource type="AudioStream" uid="uid://dynyvh7q6cggj" path="res://assets/sounds/hurt_sound.wav" id="3_smehm"]
 [ext_resource type="StyleBox" uid="uid://cbbbp2a4h53mv" path="res://assets/UI/BrightBox.tres" id="4_tuyoq"]
 [ext_resource type="Script" uid="uid://dc34i4a085b4g" path="res://scripts/reloading_bar.gd" id="5_qlg0r"]
+[ext_resource type="AudioStream" uid="uid://b317frgxrp0wi" path="res://assets/sounds/dash.wav" id="6_a8ls1"]
+[ext_resource type="AudioStream" uid="uid://brvq7y2x55t4y" path="res://assets/sounds/reload.wav" id="7_qfm1y"]
 [ext_resource type="Texture2D" uid="uid://b0iyw4nicjrer" path="res://assets/player_body.png" id="9_ur7pv"]
 [ext_resource type="Texture2D" uid="uid://ccmp728l61dti" path="res://assets/Player_Eyes.png" id="10_y4r1p"]
 [ext_resource type="AudioStream" uid="uid://cici40wfu3ako" path="res://assets/sounds/music.mp3" id="12_3v2ag"]
@@ -56,7 +58,7 @@ _data = {
 [sub_resource type="CircleShape2D" id="CircleShape2D_72e8q"]
 radius = 20.0
 
-[node name="Player" type="CharacterBody2D" unique_id=1669383909 node_paths=PackedStringArray("eyes_sprite", "dash_timer", "immunity_timer", "flash_point", "bullet_cooldown_timer", "reload_timer", "reloading_ui", "dashing_ui") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" unique_id=1669383909 node_paths=PackedStringArray("eyes_sprite", "dash_timer", "immunity_timer", "flash_point", "burst_timer", "bullet_cooldown_timer", "reload_timer", "reloading_ui", "dashing_ui") groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_3vyb7")
 friction = 10
@@ -71,8 +73,11 @@ eyes_image_normal = ExtResource("10_y4r1p")
 eyes_image_hurt = ExtResource("3_d2wvv")
 shoot_sound = ExtResource("2_fjrip")
 hit_hurt_sound = ExtResource("3_smehm")
+dash_sound = ExtResource("6_a8ls1")
+reload_sound = ExtResource("7_qfm1y")
 muzzle_flash = ExtResource("2_tuyoq")
 flash_point = NodePath("Pivot/Flash Point")
+burst_timer = NodePath("BurstTimer")
 bullet_cooldown_timer = NodePath("BulletCooldown")
 reload_timer = NodePath("ReloadTimer")
 reloading_ui = NodePath("VBoxContainer/ReloadingUI")
@@ -177,6 +182,8 @@ script = ExtResource("13_f1ej7")
 position = Vector2(175, 0)
 scale = Vector2(0.32, 0.5)
 texture = ExtResource("14_oprun")
+
+[node name="BurstTimer" type="Timer" parent="." unique_id=64529060]
 
 [connection signal="timeout" from="BulletCooldown" to="." method="_on_bullet_cooldown_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]

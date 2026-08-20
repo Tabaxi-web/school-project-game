@@ -1,4 +1,7 @@
 extends Area2D
+
+## fork of the bullet script for AOE attacks.
+
 var speed: float # Speed of the bullet, assigned by player on instantiation
 var damage: float # Ditto for damage
 var crit_chance: float # Ditto for crit chance
@@ -7,7 +10,8 @@ var crit_damage: float # Ditto for crit damage
 @export var lifetime := 5.0 ## lifetime of the bullet
 @export var allied := true ## Whether the bullet is allied with the player or not
 @export var homing := false ## Whether the bullet homes, like in starburst.
-@export var damage_falloff_coefficient := 0.01 ## How much to reduce the damage by as the bullet travels
+@export var damage_falloff_coefficient := 0.005
+@export var damage_falloff_coeffecient_2 := 0.0001 ## How much to reduce the damage by as the bullet travels
 var target: Node2D # Only relevant for homing bullets. Defines the target.
 var lifetime_timer: SceneTreeTimer # The timer that defines how long a bullet is "alive"
 @export var acquisition_time_ratio := 0.9 ## How fast the homing bullets will lock on
@@ -46,7 +50,7 @@ func _process(delta: float) -> void:
 	# Put some spin on it for fun
 	$SpriteContainer.rotation += (speed * delta) * spin_coefficient
 	# Damage falloff. Clamps to 0 so no enemy healing.
-	damage = damage - (speed * (lifetime - lifetime_timer.time_left) * damage_falloff_coefficient)
+	damage = damage - (speed * (lifetime - lifetime_timer.time_left) * damage_falloff_coefficient * damage * delta)
 	damage = clampf(damage, 0, INF)
 
 

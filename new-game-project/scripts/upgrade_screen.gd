@@ -12,6 +12,13 @@ extends Node2D
 var upgrades_this_time := []
 var chance_index := 0.0
 var current_card: Control
+var upgrade_name_string := "name"
+var upgrade_description_string := "description"
+var upgrade_incompatible_upgrades := "incompatible_upgrades"
+var upgrade_icon := "icon_path"
+var common_tier := "Common"
+var uncommon_tier := "Rare"
+var wait_time := 0.2
 # Called when the node enters the scene tree for the first time.
 
 func _ready() -> void:
@@ -35,13 +42,13 @@ func _ready() -> void:
 		upgrades_this_time.append(upgrade)
 		i += 1
 		var upgrade_card = upgrade_card_prefab.instantiate()
-		upgrade_card.name = upgrade["name"]
-		upgrade_card.upgrade_name = upgrade["name"]
-		upgrade_card.upgrade_description = upgrade["description"]
+		upgrade_card.name = upgrade[upgrade_name_string]
+		upgrade_card.upgrade_name = upgrade[upgrade_name_string]
+		upgrade_card.upgrade_description = upgrade[upgrade_description_string]
 		upgrade_card.upgrade_number = i
 		upgrade_card.upgrade = upgrade
-		if upgrade["icon_path"]  != null:
-			upgrade_card.texture_rect.texture = load(upgrade["icon_path"])
+		if upgrade[upgrade_icon]  != null:
+			upgrade_card.texture_rect.texture = load(upgrade[upgrade_icon])
 		add_child(upgrade_card)
 		var holder = upgrade_holder_prefab.instantiate()
 		upgrade_card_carousel.add_child(holder)
@@ -57,38 +64,38 @@ func _process(delta: float) -> void:
 			if card.holder_index == round(upgrades_amount / 2):
 				current_card = card
 		if Input.is_action_just_pressed("movement_right"):
-			_play_sound(cycle_sound)
+			Globals.play_sound(cycle_sound)
 			for child in upgrade_cards:
 				if child.holder_index == 0:
 					child.holder_index = len(upgrade_cards) - 1
 				else:
 					child.holder_index -= 1
 		if Input.is_action_just_pressed("movement_left"):
-			_play_sound(cycle_sound)
+			Globals.play_sound(cycle_sound)
 			for child in upgrade_cards:
 				if child.holder_index == len(upgrade_cards) - 1:
 					child.holder_index = 0
 				else:
 					child.holder_index += 1
 		if Input.is_action_just_pressed("ui_accept"):
-			_play_sound(select_sound)
-			if current_card.upgrade.rarity == "Common":
+			Globals.play_sound(select_sound)
+			if current_card.upgrade.rarity == common_tier:
 				Globals.potential_common_upgrades.erase(current_card.upgrade)
 				Globals.upgrades.append(current_card.upgrade)
-			elif current_card.upgrade.rarity == "Rare":
+			elif current_card.upgrade.rarity == uncommon_tier:
 				Globals.potential_rare_upgrades.erase(current_card.upgrade)
 				Globals.rare_upgrades.append(current_card.upgrade)
-			get_tree().get_first_node_in_group("Player").check_upgrade(current_card.upgrade["name"])
+			get_tree().get_first_node_in_group("Player").check_upgrade(current_card.upgrade[upgrade_name_string])
 			# Handle incompatible upgrades.
-			if "incompatible_upgrades" in current_card.upgrade:
-				for incomp_upgrade_name in current_card.upgrade["incompatible_upgrades"]:
+			if upgrade_incompatible_upgrades in current_card.upgrade:
+				for incomp_upgrade_name in current_card.upgrade[upgrade_incompatible_upgrades]:
 					for common_upgrade in Globals.potential_common_upgrades:
-						if common_upgrade["name"] == incomp_upgrade_name:
+						if common_upgrade[upgrade_name_string] == incomp_upgrade_name:
 							Globals.potential_common_upgrades.erase(common_upgrade)
 					for rare_upgrade in Globals.potential_rare_upgrades:
-						if rare_upgrade["name"] == incomp_upgrade_name:
+						if rare_upgrade[upgrade_name_string] == incomp_upgrade_name:
 							Globals.potential_rare_upgrades.erase(rare_upgrade)
-			await get_tree().create_timer(0.2).timeout
+			await get_tree().create_timer(wait_time).timeout
 			Globals.next_wave()
 			queue_free()
 		for child in upgrade_cards:
@@ -97,11 +104,3 @@ func _process(delta: float) -> void:
 			else:
 				child.modulate.a = non_selected_transparency
 		
-
-func _play_sound(sound: AudioStream) -> void:
-	var player = AudioStreamPlayer.new()
-	add_child(player)
-	player.stream = sound
-	player.play()
-	await player.finished
-	player.queue_free()

@@ -1,31 +1,31 @@
-[gd_scene format=3 uid="uid://wvnp3fck6aty"]
+[gd_scene format=3 uid="uid://bkoq0qyy0qf5n"]
 
-[ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_s3esy"]
-[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/UI/DullBox.tres" id="2_0rdsr"]
-[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="2_d2op2"]
-[ext_resource type="Script" uid="uid://mpcunwtyr2x0" path="res://scripts/upgrade_icon_indicator.gd" id="3_5cypo"]
-[ext_resource type="PackedScene" uid="uid://jwhplx2e7ai4" path="res://scenes/player.tscn" id="4_0rdsr"]
-[ext_resource type="Script" uid="uid://dgsf273nfwce5" path="res://scripts/camera.gd" id="4_2l77h"]
-[ext_resource type="PackedScene" uid="uid://b5vloxwjeulvc" path="res://scenes/upgrade_icon.tscn" id="4_o6v7o"]
-[ext_resource type="PackedScene" uid="uid://dhbr0nqs0hcwl" path="res://scenes/bullet.tscn" id="5_ipu61"]
-[ext_resource type="PackedScene" uid="uid://ck8hmgdyfno0b" path="res://scenes/enemy.tscn" id="6_ygxny"]
-[ext_resource type="PackedScene" uid="uid://ckpyr6w0x03wo" path="res://scenes/tiles_main_game.tscn" id="7_70vka"]
-[ext_resource type="Script" uid="uid://ccbtsxl1ys0io" path="res://scripts/wave_manager.gd" id="9_2l77h"]
-[ext_resource type="PackedScene" uid="uid://d1ehyiuirawx2" path="res://scenes/enemy_ranged.tscn" id="10_nqdth"]
-[ext_resource type="PackedScene" uid="uid://cder5ela3m3no" path="res://scenes/upgrade_screen.tscn" id="13_wjob3"]
-[ext_resource type="PackedScene" uid="uid://b7f6nvkmwk4hc" path="res://scenes/enemy_summoner.tscn" id="14_8xp80"]
-[ext_resource type="PackedScene" uid="uid://d3aue0kvoq8gs" path="res://scenes/boss_enemy.tscn" id="15_sp04v"]
+[ext_resource type="Texture2D" uid="uid://nutd3l60t4pw" path="res://assets/exodus_cl_night.png" id="1_eo557"]
+[ext_resource type="StyleBox" uid="uid://b5lqy4ch60ynr" path="res://assets/UI/DullBox.tres" id="2_0e3nx"]
+[ext_resource type="Script" uid="uid://mpcunwtyr2x0" path="res://scripts/upgrade_icon_indicator.gd" id="3_1ichg"]
+[ext_resource type="PackedScene" uid="uid://b5vloxwjeulvc" path="res://scenes/upgrade_icon.tscn" id="4_15d4k"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="5_cqpr2"]
+[ext_resource type="PackedScene" uid="uid://jwhplx2e7ai4" path="res://scenes/player.tscn" id="6_8oqeg"]
+[ext_resource type="PackedScene" uid="uid://dhbr0nqs0hcwl" path="res://scenes/bullet.tscn" id="7_tnii8"]
+[ext_resource type="PackedScene" uid="uid://ckpyr6w0x03wo" path="res://scenes/tiles_main_game.tscn" id="8_5653l"]
+[ext_resource type="Script" uid="uid://dgsf273nfwce5" path="res://scripts/camera.gd" id="9_nq52l"]
+[ext_resource type="Script" uid="uid://ccbtsxl1ys0io" path="res://scripts/wave_manager.gd" id="10_36wox"]
+[ext_resource type="PackedScene" uid="uid://ck8hmgdyfno0b" path="res://scenes/enemy.tscn" id="11_wmsb4"]
+[ext_resource type="PackedScene" uid="uid://d1ehyiuirawx2" path="res://scenes/enemy_ranged.tscn" id="12_cd0wo"]
+[ext_resource type="PackedScene" uid="uid://b7f6nvkmwk4hc" path="res://scenes/enemy_summoner.tscn" id="13_xoq4j"]
+[ext_resource type="PackedScene" uid="uid://cder5ela3m3no" path="res://scenes/upgrade_screen.tscn" id="14_ydv7u"]
+[ext_resource type="PackedScene" uid="uid://d3aue0kvoq8gs" path="res://scenes/boss_enemy.tscn" id="15_0e3nx"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0rdsr"]
-font = ExtResource("2_d2op2")
+font = ExtResource("5_cqpr2")
 font_color = Color(0, 1, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ipu61"]
-font = ExtResource("2_d2op2")
+font = ExtResource("5_cqpr2")
 font_color = Color(0, 1, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ijtd6"]
-font = ExtResource("2_d2op2")
+font = ExtResource("5_cqpr2")
 font_size = 59
 font_color = Color(0, 1, 0, 1)
 outline_size = 20
@@ -40,7 +40,7 @@ layer = 105
 z_index = 105
 position = Vector2(576, 323.99997)
 scale = Vector2(0.59999996, 0.59999996)
-texture = ExtResource("1_s3esy")
+texture = ExtResource("1_eo557")
 
 [node name="UIMain" type="CanvasLayer" parent="." unique_id=901089649 groups=["UI"]]
 
@@ -70,12 +70,12 @@ alignment = 1
 [node name="PanelContainer" type="PanelContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer" unique_id=467102156]
 custom_minimum_size = Vector2(300, 75)
 layout_mode = 2
-theme_override_styles/panel = ExtResource("2_0rdsr")
+theme_override_styles/panel = ExtResource("2_0e3nx")
 
 [node name="FlowContainer" type="FlowContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer" unique_id=563135814]
 layout_mode = 2
-script = ExtResource("3_5cypo")
-texture_rect_prefab = ExtResource("4_o6v7o")
+script = ExtResource("3_1ichg")
+texture_rect_prefab = ExtResource("4_15d4k")
 
 [node name="Label" type="Label" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer/FlowContainer" unique_id=161223200]
 layout_mode = 2
@@ -85,7 +85,7 @@ label_settings = SubResource("LabelSettings_0rdsr")
 [node name="PanelContainer2" type="PanelContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer" unique_id=1446255789]
 custom_minimum_size = Vector2(0, 75)
 layout_mode = 2
-theme_override_styles/panel = ExtResource("2_0rdsr")
+theme_override_styles/panel = ExtResource("2_0e3nx")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2" unique_id=1273237430]
 layout_mode = 2
@@ -153,9 +153,8 @@ position = Vector2(-2500, -2500)
 build_mode = 1
 polygon = PackedVector2Array(0, 0, 0, 5000, 5000, 5000, 5000, 0)
 
-[node name="Player" parent="." unique_id=1669383909 node_paths=PackedStringArray("camera_wrapper", "camera", "wave_manager", "health_label", "ammo_label", "wave_timer_label") instance=ExtResource("4_0rdsr")]
+[node name="Player" parent="." unique_id=1669383909 node_paths=PackedStringArray("camera_wrapper", "camera", "wave_manager", "health_label", "ammo_label", "wave_timer_label") instance=ExtResource("6_8oqeg")]
 collision_mask = 3
-frozen = true
 camera_wrapper = NodePath("../Camera2D")
 camera = NodePath("../Camera2D")
 wave_manager = NodePath("../WaveManager")
@@ -164,35 +163,39 @@ fire_delay = 0.4
 bullets_per_shot = 1
 spread = 0.0
 bullet_damage = 1100.0
-damage_falloff = 0.002
 health_label = NodePath("../UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Health")
 ammo_label = NodePath("../UIMain/RoundUI/VBoxContainer/HBoxContainer/PanelContainer2/VBoxContainer/Ammo")
 wave_timer_label = NodePath("../UIMain/RoundUI/VBoxContainer/VBoxContainer/WaveTimer")
-bullet_scene = ExtResource("5_ipu61")
+bullet_scene = ExtResource("7_tnii8")
 
-[node name="TileMapLayer" parent="." unique_id=833659972 instance=ExtResource("7_70vka")]
+[node name="TileMapLayer" parent="." unique_id=833659972 instance=ExtResource("8_5653l")]
 metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1433920973]
 zoom = Vector2(0.75, 0.75)
 position_smoothing_enabled = true
 position_smoothing_speed = 30.0
-script = ExtResource("4_2l77h")
+script = ExtResource("9_nq52l")
 
 [node name="WaveManager" type="Node2D" parent="." unique_id=73507951 node_paths=PackedStringArray("playable_area", "player", "wave_title_label", "round_ui")]
-script = ExtResource("9_2l77h")
-enemy_scene = ExtResource("6_ygxny")
-ranged_enemy_scene = ExtResource("10_nqdth")
-summoner_enemy_scene = ExtResource("14_8xp80")
+script = ExtResource("10_36wox")
+enemy_scene = ExtResource("11_wmsb4")
+ranged_enemy_scene = ExtResource("12_cd0wo")
+summoner_enemy_scene = ExtResource("13_xoq4j")
 playable_area = NodePath("../Bounds")
 area_headway = 0.5
+wave_scaling_coefficient = 0
+wave_scaling_bonus = 1
 wave_health_scaling = 200
 time_between_enemies_min = 1.5
 time_between_enemies_max = 3.0
 wave_time_between_enemies_coefficient = 0.25
 player = NodePath("../Player")
 wave_title_label = NodePath("../UIMain/VBoxContainer/Label")
-upgrade_scene = ExtResource("13_wjob3")
+upgrade_scene = ExtResource("14_ydv7u")
 round_ui = NodePath("../UIMain/RoundUI")
 wave_title_impact_time = 1.5
-boss_enemy_scene = ExtResource("15_sp04v")
+
+[node name="Boss" parent="." unique_id=327760210 instance=ExtResource("15_0e3nx")]
+position = Vector2(241, 557)
+max_health = 50000.0

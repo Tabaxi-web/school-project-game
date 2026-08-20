@@ -11,10 +11,10 @@ var rare_upgrades := [] # ditto, but the rares.
 var upgrade_screen_how_often := 3 # Every n waves the player will get an upgrade.
 
 enum upgrade_ids {BUCKSHOT1, GUNNER1, HOLLOWPT1, COMMANDO1, SHARPSHT1, SHARPSHT2, FOCUS1, COMMANDO2,
-STRBURST, LSRBEAM, SWEEPER, MEDIC1} # ENUM ids for each upgrade.
+STRBURST, LSRBEAM, SWEEPER, MEDIC1, GUNNER2, BURST1, BURST2, } # ENUM ids for each upgrade.
 enum player_attributes {SPREAD, PELLETS, FALLOFF, RELOAD_TIME, FIRE_DELAY, DAMAGE,
 MAX_AMMO, CRIT_CHANCE, CRIT_DAMAGE, HOMING, DASH_RELOAD, MAX_HP, LIFESTEAL, 
-HEALING_ORBS, HEALING_ORBS_AMOUNT, HEALING_ORBS_CHANCE} # ENUM IDS for all attributes that can be upgraded
+HEALING_ORBS, HEALING_ORBS_AMOUNT, HEALING_ORBS_CHANCE, BURST_AMOUNT, BURST_DELAY} # ENUM IDS for all attributes that can be upgraded
 
 var healing_orbs := true
 var healing_orbs_amount := 20.0
@@ -31,6 +31,10 @@ var potential_common_upgrades_init_value := [ # The pool of common upgrades that
 	
 	{"id": upgrade_ids.GUNNER1, "name": "Gunner I", "rarity": "Common",
 	"description": "Increase fire-rate.",
+	"icon_path": "res://assets/icons/Gunner_Icon.png"},
+	
+	{"id": upgrade_ids.GUNNER2, "name": "Gunner II", "rarity": "Common",
+	"description": "Increase fire-rate and spread.",
 	"icon_path": "res://assets/icons/Gunner_Icon.png"},
 	
 	{"id": upgrade_ids.HOLLOWPT1, "name": "Hollow Point I", "rarity": "Common",
@@ -58,7 +62,16 @@ var potential_common_upgrades_init_value := [ # The pool of common upgrades that
 	"icon_path": "res://assets/icons/Commando_Icon.png"},
 	
 	{"id": upgrade_ids.MEDIC1,"name": "Medic I", "rarity": "Common", "description": "Increased Max HP. Enemies have a chance to drop healing orbs.",
-	"icon_path": "res://assets/icons/Medic_Icon.png"}
+	"icon_path": "res://assets/icons/Medic_Icon.png"},
+	
+	{"id": upgrade_ids.BURST1, "name": "Burst I", "rarity": "Common",
+	"description": "Increases burst volley by 2. Decreases fire rate.",
+	"icon_path": "res://assets/icons/Burst_Icon.png"},
+	
+	{"id": upgrade_ids.BURST2, "name": "Burst II", "rarity": "Common",
+	"description": "Increases burst volley by 1. Increase damage slightly.",
+	"icon_path": "res://assets/icons/Burst_Icon.png"},
+	
 ]
 var potential_common_upgrades := [] # Initialised to the above variable on game start, taken from so the player can't get two upgrades twice.
 
@@ -109,3 +122,11 @@ func intermission() -> void: # Triggered upon entering the shop
 		next_wave() # Just skip it if there are no upgrades left.
 	else:
 		upgrade_screen.emit()
+
+func play_sound(sound: AudioStream) -> void: # Generic sound player. Instantiates an audio stream then destroys it once its done.
+	var player = AudioStreamPlayer.new()
+	add_sibling(player) # Note it's instantiated as a sibling, so it will persist between scenes.
+	player.stream = sound
+	player.play()
+	await player.finished
+	player.queue_free()

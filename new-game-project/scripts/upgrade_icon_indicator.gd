@@ -3,6 +3,10 @@ extends FlowContainer
 
 # Called when the node enters the scene tree for the first time.
 func _refresh() -> void:
+	for child in get_children():
+		if child.get_index() == 0:
+			continue
+		child.queue_free()
 	for upgrade in Globals.upgrades:
 		if upgrade["icon_path"] != null:
 			var icon_rect = texture_rect_prefab.instantiate()
