@@ -5,13 +5,13 @@ var music_volume := 0.8
 var master_bus_name := "Master"
 var music_bus_name := "Music"
 var wave := 1 # Wave number.
-
+var winning_wave := 14
 var upgrades := [] # An array of dictionaries that define upgrades the player has.
 var rare_upgrades := [] # ditto, but the rares.
 var upgrade_screen_how_often := 3 # Every n waves the player will get an upgrade.
 
 enum upgrade_ids {BUCKSHOT1, GUNNER1, HOLLOWPT1, COMMANDO1, SHARPSHT1, SHARPSHT2, FOCUS1, COMMANDO2,
-STRBURST, LSRBEAM, SWEEPER, MEDIC1, GUNNER2, BURST1, BURST2, } # ENUM ids for each upgrade.
+STRBURST, LSRBEAM, SWEEPER, MEDIC1, GUNNER2, BURST1, BURST2, SLAMMER} # ENUM ids for each upgrade.
 enum player_attributes {SPREAD, PELLETS, FALLOFF, RELOAD_TIME, FIRE_DELAY, DAMAGE,
 MAX_AMMO, CRIT_CHANCE, CRIT_DAMAGE, HOMING, DASH_RELOAD, MAX_HP, LIFESTEAL, 
 HEALING_ORBS, HEALING_ORBS_AMOUNT, HEALING_ORBS_CHANCE, BURST_AMOUNT, BURST_DELAY} # ENUM IDS for all attributes that can be upgraded
@@ -88,7 +88,12 @@ var potential_rare_upgrades_init_value := [ # Ditto but rare
 	{"id": upgrade_ids.SWEEPER, "name": "Minesweeper", "rarity": "Rare",
 	"description": "Bullet velocity becomes zero. Increase damage. Only one bullet per shot.",
 	"icon_path": "res://assets/icons/Minesweeper_Icon.png",
-	"incompatible_upgrades": ["Focus I", "Laserbeam", "Starburst"]}
+	"incompatible_upgrades": ["Focus I", "Laserbeam", "Starburst"]},
+	{"id": upgrade_ids.SLAMMER, "name": "Slamfire", "rarity": "Rare",
+	"description": "Light 'em up!",
+	"icon_path": "res://assets/icons/Minesweeper_Icon.png",
+	"incompatible_upgrades": ["Focus I", "Laserbeam", "Starburst"]},
+	
 ]
 var potential_rare_upgrades := [] # Ditto again.
 # Called when the node enters the scene tree for the first time.
@@ -111,6 +116,8 @@ func reset_all_globals() -> void: # Used to reset game state on death.
 	potential_rare_upgrades = potential_rare_upgrades_init_value
 
 func next_wave() -> void: # What it says on the tin.
+	if wave == winning_wave:
+		get_tree().change_scene_to_file("res://scenes/win_screen.tscn")
 	wave += 1
 	if wave % upgrade_screen_how_often == 0:
 		intermission()
@@ -118,6 +125,7 @@ func next_wave() -> void: # What it says on the tin.
 		start_wave.emit()
 
 func intermission() -> void: # Triggered upon entering the shop
+
 	if len(potential_common_upgrades) + len(potential_rare_upgrades) < 1:
 		next_wave() # Just skip it if there are no upgrades left.
 	else:

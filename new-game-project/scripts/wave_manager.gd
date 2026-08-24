@@ -76,6 +76,7 @@ func _process(delta: float) -> void:
 			enemy.position = Vector2.ZERO
 			enemies.append(enemy)
 			add_sibling(enemy)
+			enemies_left = 1
 		
 	if enemies_left < 1 and not intermission:
 		intermission = true

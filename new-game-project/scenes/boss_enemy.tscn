@@ -21,7 +21,7 @@ radius = 46.0
 [node name="Boss" type="CharacterBody2D" unique_id=327760210 node_paths=PackedStringArray("health_bar", "attack_area", "attack_timer", "eyes_sprite") groups=["Enemies"]]
 scale = Vector2(3.5, 3.5)
 script = ExtResource("1_7vxfr")
-max_health = 50000.0
+max_health = 200000.0
 health_bar = NodePath("ProgressBar")
 attack_area = NodePath("AttackArea")
 attack_timer = NodePath("AttackTimer")

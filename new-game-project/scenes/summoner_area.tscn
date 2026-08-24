@@ -10,7 +10,7 @@ radius = 32.0
 
 [node name="summon" type="Area2D" unique_id=1580603616 node_paths=PackedStringArray("indicator_circle", "progress_circle")]
 script = ExtResource("3_07eax")
-lifetime = 2.5
+lifetime = 1.0
 allied = false
 indicator_circle = NodePath("SpriteContainer/BG")
 progress_circle = NodePath("SpriteContainer/indicator")

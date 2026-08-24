@@ -1,0 +1,58 @@
+[gd_resource type="Resource" script_class="Upgrade" format=3 uid="uid://d2xnfq6gx6wej"]
+
+[ext_resource type="Script" uid="uid://ccs7lafi3v7nb" path="res://scripts/resource_scripts/attribute_modifier.gd" id="1_jgog4"]
+[ext_resource type="Script" uid="uid://bgg2x5m5frerd" path="res://scripts/resource_scripts/upgrade.gd" id="2_nb88l"]
+
+[sub_resource type="Resource" id="Resource_x56ny"]
+script = ExtResource("1_jgog4")
+modifier_bonus = 0.524
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_u8bc7"]
+script = ExtResource("1_jgog4")
+modified_attribute = 1
+modifier_bonus = 3.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_jtbu8"]
+script = ExtResource("1_jgog4")
+modified_attribute = 2
+modifier_bonus = 0.02
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_fhkki"]
+script = ExtResource("1_jgog4")
+modified_attribute = 3
+modifier_bonus = 1.0
+modifier_multiplier = 2.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_5lnqr"]
+script = ExtResource("1_jgog4")
+modified_attribute = 4
+modifier_bonus = 0.1
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_x2gl0"]
+script = ExtResource("1_jgog4")
+modified_attribute = 5
+modifier_multiplier = 0.6
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_jgog4"]
+script = ExtResource("1_jgog4")
+modified_attribute = 6
+modifier_override = true
+modifier_override_value = 1.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[sub_resource type="Resource" id="Resource_nb88l"]
+script = ExtResource("1_jgog4")
+modified_attribute = 16
+modifier_bonus = 12.0
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
+[resource]
+script = ExtResource("2_nb88l")
+modified_attributes = Array[ExtResource("1_jgog4")]([SubResource("Resource_x56ny"), SubResource("Resource_u8bc7"), SubResource("Resource_jtbu8"), SubResource("Resource_fhkki"), SubResource("Resource_5lnqr"), SubResource("Resource_x2gl0"), SubResource("Resource_jgog4"), SubResource("Resource_nb88l")])
+metadata/_custom_type_script = "uid://bgg2x5m5frerd"

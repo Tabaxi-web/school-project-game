@@ -50,6 +50,7 @@ theme_override_styles/fill = ExtResource("4_iutvh")
 max_value = 1.0
 
 [node name="AttackTimer" type="Timer" parent="." unique_id=457615208]
+wait_time = 2.0
 one_shot = true
 
 [node name="AttackArea" type="Area2D" parent="." unique_id=1026126448]
