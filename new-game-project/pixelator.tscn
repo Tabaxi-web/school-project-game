@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bgm3rfyuirau2"]
+
+[ext_resource type="Shader" uid="uid://cy2u3reu8iebp" path="res://shaders/pixelator.gdshader" id="1_aneih"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ijtd6"]
+shader = ExtResource("1_aneih")
+shader_parameter/texture_mode = 1
+shader_parameter/quantize_size = 0
+shader_parameter/snap_to_world = false
+shader_parameter/limit_subpixels = true
+
+[node name="Pixelator" type="CanvasLayer" unique_id=742520352]
+layer = 2
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=234312542]
+material = SubResource("ShaderMaterial_ijtd6")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

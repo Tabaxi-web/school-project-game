@@ -26,52 +26,64 @@ var in_wave := false
 @export var wave_title_impact_time: float
 @export var boss_enemy_scene: PackedScene
 @export var boss_wave := 13
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Globals.start_wave.connect(_begin_wave)
 	Globals.upgrade_screen.connect(_upgrade_screen_make)
 	_begin_wave()
+
+
 # For this function to work the playable area MUST be centred at (0,0)
 func get_point_in_playable_area(area: Control, headway: float) -> Vector2:
 	var new_vector = Vector2(0,0)
 	new_vector.x = randf_range(-headway, headway) * (area.size.x/2)
 	new_vector.y = randf_range(-headway, headway) * (area.size.y/2)
 	return new_vector
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 # Important note. Waves are handled by the Globals autoload singleton. This just handles
 # the spawning of enemies.
 func _process(delta: float) -> void:
+	
 	for enemy in enemies:
+		# if the enemy is leaving an empty space in the enemies array after it dies, remove it.
 		if enemy == null:
 			enemies.erase(enemy)
 			enemies_left -= 1
-	if not in_wave and not intermission:
+	
+	if not in_wave and not intermission: # Start the wave if it hasn't started yet.
 		in_wave = true
-		if not Globals.wave == boss_wave:
+		if not Globals.wave == boss_wave: # If not a boss wave...
+			# Determine the wave enemies amount and initialise other spawning vars.
 			wave_enemies_amount = ((Globals.wave - 1) * wave_scaling_coefficient) + wave_scaling_bonus
 			enemies_left = wave_enemies_amount
 			time_between_enemies_max -= (wave_time_between_enemies_coefficient * Globals.wave)
 			time_between_enemies_min -= (wave_time_between_enemies_coefficient * Globals.wave)
-			for i in range(wave_enemies_amount):
-				if randf() < ranged_enemy_chance:
+			for i in range(wave_enemies_amount): # for all the enemy slots in the wave...
+				if randf() < ranged_enemy_chance: # maybe do ranged.
 					var enemy = ranged_enemy_scene.instantiate()
 					enemy.position = get_point_in_playable_area(playable_area, area_headway)
 					enemy.max_health = enemy.max_health + (Globals.wave) * wave_health_scaling
 					enemies.append(enemy)
 					add_sibling(enemy)
-				elif randf() < summoner_enemy_chance:
+				elif randf() < summoner_enemy_chance: #  Maybe do summoner.
 					var enemy = summoner_enemy_scene.instantiate()
 					enemy.position = get_point_in_playable_area(playable_area, area_headway)
 					enemy.max_health = enemy.max_health + (Globals.wave) * wave_health_scaling
 					enemies.append(enemy)
 					add_sibling(enemy)
-				else:
+				else: # Otherwise melee.
 					var enemy = enemy_scene.instantiate()
 					enemy.position = get_point_in_playable_area(playable_area, area_headway)
 					enemies.append(enemy)
 					add_sibling(enemy)
+				# Wait a little between enemies.
 				await get_tree().create_timer(randf_range(time_between_enemies_min, time_between_enemies_max)).timeout
 		else:
+			# Boss wave! Spawn the boss in.
 			var enemy = boss_enemy_scene.instantiate()
 			enemy.position = Vector2.ZERO
 			enemies.append(enemy)
@@ -85,7 +97,12 @@ func _process(delta: float) -> void:
 		Globals.next_wave()
 	percent_enemies_left = (float(enemies_left) / float(wave_enemies_amount))
 
+
 func _begin_wave() -> void:
+	
+	if Globals.wave == boss_wave + 1:
+		get_tree().change_scene_to_file("res://scenes/win_screen.tscn")
+		return
 	wave_title_label.visible = true
 	wave_title_label.text = "WAVE  "
 	await get_tree().create_timer(wave_title_impact_time).timeout
@@ -95,7 +112,10 @@ func _begin_wave() -> void:
 	round_ui.visible = true
 	intermission = false
 	player.frozen = false
-	
+	# If the player is out of bounds, teleport them into bounds.
+	if not playable_area.get_rect().has_point(player.position):
+		player.position = Vector2.ZERO
+
 func _upgrade_screen_make() -> void:
 	round_ui.visible = false
 	wave_title_label.visible = true

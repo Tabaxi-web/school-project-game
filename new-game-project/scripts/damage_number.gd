@@ -6,6 +6,8 @@ extends Node2D
 @export var label: Label
 @export var stopping_velocity := 5.0
 var velocity_y
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# Give it some random velocity on instantiation

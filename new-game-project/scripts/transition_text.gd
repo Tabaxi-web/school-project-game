@@ -7,6 +7,7 @@ extends Label
 @export var transition_manager: Node2D
 @export var text_length := 10000
 var prev_wave_number := 0
+
 # Generate a string of random letters of a certain length.	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

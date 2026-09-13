@@ -12,9 +12,15 @@ extends VBoxContainer
 @export var holder_index: int
 @export var transport_time := 0.25
 var prev_holder: Control
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	number_label.text = str(upgrade_number) + " of 3"
+	# Basically just init all labels.
+	var temp_text := "" # fancy little roman numerals thing.
+	for i in range(upgrade_number):
+		temp_text += "I"
+	number_label.text = temp_text
 	upgrade_name_label.text = upgrade_name
 	
 	upgrade_description_label.text = upgrade_description
@@ -23,6 +29,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# Tween position to an upgrade card holder for the smooth movement effect.
 	if get_tree().get_nodes_in_group("Upgrade Card Holders") != []:
 		holder = get_tree().get_nodes_in_group("Upgrade Card Holders")[holder_index]
 	if prev_holder != holder:

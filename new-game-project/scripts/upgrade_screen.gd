@@ -1,10 +1,10 @@
 extends Node2D
 
-@export var upgrades_amount := 3
+@export var upgrades_amount := 3 ## Amount of upgrades per wave, at base.
 @export var upgrade_card_prefab: PackedScene
 @export var upgrade_holder_prefab: PackedScene
 @export var upgrade_card_carousel: HBoxContainer
-@export var rare_rarity := 0.1
+@export var rare_rarity := 0.1 
 @export var upgrade_cards: Array
 @export var non_selected_transparency := 0.3
 @export var cycle_sound: AudioStream
@@ -21,6 +21,7 @@ var uncommon_tier := "Rare"
 var wait_time := 0.2
 # Called when the node enters the scene tree for the first time.
 
+
 func _ready() -> void:
 	var i := 0
 	# If there are no upgrades left, give up!
@@ -28,19 +29,27 @@ func _ready() -> void:
 		push_error("No upgrades left!!")
 		get_tree().call_deferred("quit")
 	# If there are less than upgrades_amount upgrades, generatate less
-	if len(Globals.potential_common_upgrades) + len(Globals.potential_rare_upgrades) < upgrades_amount:
-		upgrades_amount = len(Globals.potential_common_upgrades) + len(Globals.potential_rare_upgrades)
+	if len(Globals.potential_common_upgrades) +\
+	 len(Globals.potential_rare_upgrades) < upgrades_amount:
+		upgrades_amount = len(Globals.potential_common_upgrades) +\
+		 len(Globals.potential_rare_upgrades)
 	# While loop so it doesn't have to increment by 1, it only increments if an upgrade is selected
+	# to be shown.
 	while i < upgrades_amount:
 		var upgrade: Dictionary
-		if (randf() < rare_rarity and len(Globals.potential_rare_upgrades) > 0) or len(Globals.potential_common_upgrades) < 1:
-			upgrade = Globals.potential_rare_upgrades[randi_range(0, len(Globals.potential_rare_upgrades) - 1)]
+		# Create a rare if it rolls randomly or if there are no commons left.
+		if (randf() < rare_rarity and len(Globals.potential_rare_upgrades) > 0) or\
+		 len(Globals.potential_common_upgrades) < 1:
+			upgrade = Globals.potential_rare_upgrades[randi_range(0, 
+			len(Globals.potential_rare_upgrades) - 1)]
 		else:
-			upgrade = Globals.potential_common_upgrades[randi_range(0, len(Globals.potential_common_upgrades) - 1)]
+			upgrade = Globals.potential_common_upgrades[randi_range(0, 
+			len(Globals.potential_common_upgrades) - 1)]
 		if upgrade in upgrades_this_time: 
 			continue
 		upgrades_this_time.append(upgrade)
 		i += 1
+		# Initialise a card.
 		var upgrade_card = upgrade_card_prefab.instantiate()
 		upgrade_card.name = upgrade[upgrade_name_string]
 		upgrade_card.upgrade_name = upgrade[upgrade_name_string]
@@ -54,38 +63,47 @@ func _ready() -> void:
 		upgrade_card_carousel.add_child(holder)
 		holder.add_to_group("Upgrade_Card_Holders")
 		upgrade_card.holder_index = i - 1
-		
 		upgrade_cards.append(upgrade_card)
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	# Move cards left and right.
 		for card in upgrade_cards:
-			if card.holder_index == round(upgrades_amount / 2):
+			# this ROUGHLY gets the card in the middle.
+			if card.holder_index == round(upgrades_amount / 2): 
 				current_card = card
-		if Input.is_action_just_pressed("movement_right"):
+		if Input.is_action_just_pressed("movement_right"): # For all the upgrades, move them
+			#right one inthe holders.
 			Globals.play_sound(cycle_sound)
 			for child in upgrade_cards:
 				if child.holder_index == 0:
 					child.holder_index = len(upgrade_cards) - 1
 				else:
 					child.holder_index -= 1
-		if Input.is_action_just_pressed("movement_left"):
+		if Input.is_action_just_pressed("movement_left"):  # For all the upgrades, move them
+			# left one in the holders.
 			Globals.play_sound(cycle_sound)
 			for child in upgrade_cards:
 				if child.holder_index == len(upgrade_cards) - 1:
 					child.holder_index = 0
 				else:
 					child.holder_index += 1
+					
 		if Input.is_action_just_pressed("ui_accept"):
+			# Select the current upgrades.
 			Globals.play_sound(select_sound)
+			# Remove the card from potential upgrades and add it to upgrades.
 			if current_card.upgrade.rarity == common_tier:
 				Globals.potential_common_upgrades.erase(current_card.upgrade)
 				Globals.upgrades.append(current_card.upgrade)
 			elif current_card.upgrade.rarity == uncommon_tier:
 				Globals.potential_rare_upgrades.erase(current_card.upgrade)
 				Globals.rare_upgrades.append(current_card.upgrade)
-			get_tree().get_first_node_in_group("Player").check_upgrade(current_card.upgrade[upgrade_name_string])
+			
+			# Make the player do the upgrade logic.
+			get_tree().get_first_node_in_group("Player").\
+			check_upgrade(current_card.upgrade[upgrade_name_string])
 			# Handle incompatible upgrades.
 			if upgrade_incompatible_upgrades in current_card.upgrade:
 				for incomp_upgrade_name in current_card.upgrade[upgrade_incompatible_upgrades]:
@@ -95,9 +113,11 @@ func _process(delta: float) -> void:
 					for rare_upgrade in Globals.potential_rare_upgrades:
 						if rare_upgrade[upgrade_name_string] == incomp_upgrade_name:
 							Globals.potential_rare_upgrades.erase(rare_upgrade)
+			# Wait a little before the next wave.
 			await get_tree().create_timer(wait_time).timeout
 			Globals.next_wave()
 			queue_free()
+		# highlight the current card.
 		for child in upgrade_cards:
 			if child == current_card:
 				child.modulate.a = 1

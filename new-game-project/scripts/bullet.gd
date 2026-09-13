@@ -19,11 +19,15 @@ var lifetime_timer: SceneTreeTimer # The timer that defines how long a bullet is
 @export var homing_spawn_speed_divisor := 10.0 ## Drifts the bullet at a speed divided by this when spawning homing.
 @export var homing_speed_power := 1.5 ## Exponent for time alive component of the homing bullet's speed
 @export var spin_coefficient := 0.1 ## Whee!
+@export var font_size := 15
+@export var crit_font_size := 25
+
 func _ready() -> void:
 	# Destroy the bullet after its lifetime is up
 	if homing:
 		# if the bullet is homing, make it grab a target upon spawning
 		target = _homing_acquire()
+	# This kills the bullet after its lifetime is done. 
 	lifetime_timer = get_tree().create_timer(lifetime)
 	await lifetime_timer.timeout
 	queue_free()
@@ -31,26 +35,29 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	# Move the bullet along
 	if len(get_tree().get_nodes_in_group("Enemies")) == 0:
-		#destroy the bullet if no enemies are alive.
+		#destroy the bullet if no enemies are alive. Len never < 0
 		queue_free()
 	if homing and is_instance_valid(target):
 		# Make the homing bullet drift a little before locking on.
 		if lifetime_timer.time_left / lifetime > acquisition_time_ratio:
 			move_local_x((speed * delta) / homing_spawn_speed_divisor)
 		else:
-			# Disgusting line of code. In a nutshell, exponentially increase speed towards an enemy relative to how long the bullet is alive times speed.
-			position += (pow((1 + acquisition_time_ratio) - (lifetime_timer.time_left / lifetime), homing_speed_power)) * delta * global_position.direction_to(target.position) * speed
+			# Disgusting line of code. In a nutshell, exponentially increase speed towards an enemy 
+			# relative to how long the bullet is alive times speed.
+			position += (pow((1 + acquisition_time_ratio) - (lifetime_timer.time_left / lifetime),
+			homing_speed_power)) * delta * global_position.direction_to(target.position) * speed
 	elif homing:
 		# If the bullet has no target as a homing bullet, acquire a new one.
 		target = _homing_acquire()
 	else:
+		# Move the bullet along
 		move_local_x(speed * delta)
 	# Put some spin on it for fun
 	$SpriteContainer.rotation += (speed * delta) * spin_coefficient
 	# Damage falloff. Clamps to 0 so no enemy healing.
-	damage = damage - (speed * (lifetime - lifetime_timer.time_left) * damage_falloff_coefficient * damage * delta)
+	damage = damage - (speed * (lifetime - lifetime_timer.time_left) *\
+	damage_falloff_coefficient * damage * delta)
 	damage = clampf(damage, 0, INF)
 
 
@@ -62,6 +69,7 @@ func _on_body_entered(body: Node2D) -> void:
 			var new_damage_text = damage_text.instantiate()
 			new_damage_text.position = body.position
 			new_damage_text.label.text = str(round(damage * crit_damage)) + "!!!"
+			new_damage_text.label.add_theme_font_size_override("font_size", crit_font_size)
 			add_sibling(new_damage_text)
 		else:
 			body.take_damage(damage)
@@ -69,16 +77,19 @@ func _on_body_entered(body: Node2D) -> void:
 			var new_damage_text = damage_text.instantiate()
 			new_damage_text.position = body.position
 			new_damage_text.label.text = str(round(damage))
-			new_damage_text.label.add_theme_font_size_override("font_size", 15)
+			new_damage_text.label.add_theme_font_size_override("font_size", font_size)
 			add_sibling(new_damage_text)
 		# Destroy if not piercing.
 		queue_free()
 	elif body.is_in_group("Player") and not allied:
+		# More simple logic for a player being hit.
 		body.take_damage(damage)
 		queue_free()
 
+
 func _homing_acquire() -> Node2D:
-	# Simple iterative function which finds the closest enemy. Enemy bullets will never be homing so no player compatibility needed.
+	# Simple iterative function which finds the closest enemy. 
+	# Enemy bullets will never be homing so no player compatibility needed.
 	var min_distance := INF
 	var new_target: Node2D
 	for node in get_tree().get_nodes_in_group("Enemies"):

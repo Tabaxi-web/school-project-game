@@ -9,7 +9,13 @@ modified_attribute = 8
 modifier_multiplier = 2.0
 metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
 
+[sub_resource type="Resource" id="Resource_tgs7a"]
+script = ExtResource("1_hrpn2")
+modified_attribute = 7
+modifier_bonus = 0.1
+metadata/_custom_type_script = "uid://ccs7lafi3v7nb"
+
 [resource]
 script = ExtResource("2_n3w6c")
-modified_attributes = Array[ExtResource("1_hrpn2")]([SubResource("Resource_hrpn2")])
+modified_attributes = Array[ExtResource("1_hrpn2")]([SubResource("Resource_hrpn2"), SubResource("Resource_tgs7a")])
 metadata/_custom_type_script = "uid://bgg2x5m5frerd"

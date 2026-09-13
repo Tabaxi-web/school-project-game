@@ -3,12 +3,13 @@ extends CharacterBody2D
 var health: float
 var player: CharacterBody2D
 @export var health_bar : ProgressBar ## Health bar progressbar.
+@export var health_tween_time := 0.2
 var acceleration := 50.0 ## Acceleration of the movement.
 var max_speed := 200.0 ## Max speed.
-@export var base_max_speed := 200.0
-@export var dashing_max_speed := 600.0
-@export var base_acceleration := 50.0
-@export var dashing_acceleration := 5.0
+@export var base_max_speed := 200.0 ## Max speed in ranged and areas phase
+@export var dashing_max_speed := 600.0 ## Max speed while charging
+@export var base_acceleration := 50.0 ## Acceleration normally
+@export var dashing_acceleration := 5.0 ## Acceleration while dashing. Keep low.
 @export var attack_area : Area2D ## Area for the melee attacks of the enemy.
 @export var attack_timer: Timer ## Cooldown timer for melee attacks
 @export var attack_damage := 5 ## How much damage melee attacks do
@@ -16,13 +17,13 @@ var max_speed := 200.0 ## Max speed.
 @export var friction_coeff := 5.0 ## How much friction the movement of the enemy has
 @export var ranged := false ## Whether the enemy is ranged or not.
 @export var death_fx: PackedScene ## Death effect for the enemy
-@export var death_sfx: AudioStream
+@export var death_sfx: AudioStream ## Bang boom pow
 @export var eyes_move_dist := 10.0 ## How far the eyes will sit from the centre.
 @export var eyes_sprite: Sprite2D ## The eyes sprite.
 @export var eyes_angle_quantisation := PI/8 ## how much the eyes snap, in RADIANS.
 @export var eyes_predictive_weight := 0.5 ## How weighted the projected path of the player is to where the enemy will look
-@export var healing_orb_prefab: PackedScene
-enum PHASES {RANGED, DASH, AREAS}
+@export var healing_orb_prefab: PackedScene ## The prefab for the healing orb drop
+enum PHASES {RANGED, DASH, AREAS} # An enum for the different phases.
 var phase: PHASES
 @export var starting_phase: PHASES
 @export var ranged_phase_attack_delay := 0.2
@@ -33,17 +34,21 @@ var phase: PHASES
 @export var bullet_damage := 30.0 ## Damage of the player's bullets.
 @export var area_prefab: PackedScene
 var cooling_down := false ## Whether the enemy is cooling down from an attack or not.
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	health = max_health
 	# Assign player.
 	for node in get_tree().get_nodes_in_group("Player"):
 		player = node
+	# Initialise phase and health.
 	health_bar.value = health / max_health
 	phase = starting_phase
 
 
 func _process(delta: float) -> void:
+	# If there's no player (which there should be), do nothing
 	if player == null:
 		return
 	# Health handling.
@@ -61,13 +66,8 @@ func _process(delta: float) -> void:
 		queue_free()
 	
 	#Look at the player.
-	var eyes_angle
-	if ranged:
-		# This weights the actual direction of the player vs where the enemy think they'll be
-		eyes_angle = lerp(predictive_rotation(player), position.direction_to(player.position).angle(), eyes_predictive_weight)
-	else:
-		# No need to do allat for melee enemies.
-		eyes_angle = position.direction_to(player.position).angle()
+	var eyes_angle: float
+	eyes_angle = position.direction_to(player.position).angle()
 	eyes_angle = snapped(eyes_angle, eyes_angle_quantisation)
 	eyes_sprite.position = eyes_move_dist * Vector2.from_angle(eyes_angle)
 	# Movement.
@@ -82,8 +82,8 @@ func _process(delta: float) -> void:
 	
 	move_and_slide()
 	
-	if phase == PHASES.DASH:
-		#basic melee attack.
+	if phase == PHASES.DASH: # Phase where the boss charges towards the player. 
+		#basic melee attack using get overlapping bodies. Starts a timer to provide a cooldown.
 		if not cooling_down:
 			for body in attack_area.get_overlapping_bodies():
 				if body == player:
@@ -91,7 +91,7 @@ func _process(delta: float) -> void:
 					player.take_damage(attack_damage)
 					attack_timer.start()
 					
-	if phase == PHASES.RANGED: 
+	if phase == PHASES.RANGED: # Shoot a bunch of bullets.
 		attack_timer.wait_time = ranged_phase_attack_delay
 		if not cooling_down:
 			# This bullet logic is about the same as the player's.
@@ -116,25 +116,31 @@ func _process(delta: float) -> void:
 		
 
 
-func take_damage(damage: float) -> void:
+func take_damage(damage: float) -> void: # Owie wowie.
 	var tween = get_tree().create_tween()
 	health -= damage
-	tween.tween_property(health_bar, "value", health / max_health, 0.2)
+	tween.tween_property(health_bar, "value", health / max_health, health_tween_time)
 	
+
 func _on_attack_timer_timeout() -> void:
 	cooling_down = false
 	
-func predictive_rotation(body) -> float: #lets the enemy know WHERE the player is gonna be.
+
+func predictive_rotation(body) -> float: #lets the enemy know WHERE the player is gonna be
+	# Uses some basic kinematics. Thanks, level 2 physics.
 	var predicted_position: Vector2
 	var time := bullet_velocity / position.distance_to(body.position)
 	predicted_position = body.position + (body.velocity * time)
 	return (predicted_position - position).angle()
 
+
 func predictive_position(body) -> Vector2:
 	var time := bullet_velocity / position.distance_to(body.position)
 	return body.position + (body.velocity * time)
 
+
 func _on_phase_timer_timeout() -> void:
+	# Arbitarily switch phase and phase stats, rotating between three
 	if phase == PHASES.DASH:
 		acceleration = base_acceleration
 		attack_timer.wait_time = area_phase_attack_delay

@@ -4,6 +4,8 @@ var player: CharacterBody2D
 @export var speed := 300
 @export var accel := 500
 @export var burst_fx: PackedScene # the health effect
+@export var burst_sfx: AudioStream
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	player = get_tree().get_first_node_in_group("Player")
@@ -22,5 +24,6 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 		burst.position = position
 		burst.emitting = true
 		add_sibling(burst)
+		Globals.play_sound(burst_sfx)
 		queue_free()
 		

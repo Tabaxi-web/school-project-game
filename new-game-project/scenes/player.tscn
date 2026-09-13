@@ -56,12 +56,11 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_72e8q"]
-radius = 20.0
+radius = 18.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1669383909 node_paths=PackedStringArray("eyes_sprite", "dash_timer", "immunity_timer", "flash_point", "burst_timer", "bullet_cooldown_timer", "reload_timer", "reloading_ui", "dashing_ui") groups=["Player"]]
 motion_mode = 1
 script = ExtResource("1_3vyb7")
-friction = 10
 eyes_sprite = NodePath("Eyes")
 eyes_move_dist = 10.0
 dash_timer = NodePath("DashTimer")

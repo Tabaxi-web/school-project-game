@@ -6,6 +6,7 @@ extends CharacterBody2D
 var health: float
 var player: CharacterBody2D
 @export var health_bar : ProgressBar ## Health bar progressbar.
+@export var health_tween_time := 0.2
 @export var acceleration := 50 ## Acceleration of the movement.
 @export var max_speed := 200 ## Max speed.
 @export var attack_timer: Timer ## Cooldown timer for melee attacks
@@ -25,6 +26,7 @@ var player: CharacterBody2D
 @export var attack_width := 50.0
 var cooling_down := false ## Whether the enemy is cooling down from an attack or not.
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	health = max_health
@@ -35,6 +37,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
+	# No player, don't do anything. 
 	if player == null:
 		return
 	# Health handling.
@@ -44,12 +47,13 @@ func _process(delta: float) -> void:
 		fx.global_position = position
 		add_sibling(fx)
 		fx.emitting = true
+		# Maybe drop a healing orb
 		if randf() < Globals.healing_orbs_chance and Globals.healing_orbs:
 			var orb = healing_orb_prefab.instantiate()
 			orb.global_position = global_position
 			add_sibling(orb)
 		queue_free()
-		
+	# Move towards the player if they are too far away.	
 	if position.distance_to(player.position) > stopping_distance:
 		velocity += delta * acceleration * (player.position - position)
 		velocity = velocity.limit_length(max_speed)
@@ -68,16 +72,12 @@ func _process(delta: float) -> void:
 		attack_timer.start()
 
 
-func take_damage(damage: float) -> void:
+func take_damage(damage: float) -> void: #ouch.
 	var tween = get_tree().create_tween()
 	health -= damage
-	tween.tween_property(health_bar, "value", health / max_health, 0.2)
+	tween.tween_property(health_bar, "value", health / max_health, health_tween_time)
+	
 	
 func _on_attack_timer_timeout() -> void:
-	cooling_down = false
+	cooling_down = false # Lets the enemy attack again.
 	
-func predictive_rotation(body) -> float:
-	var predicted_position: Vector2
-	var time := bullet_velocity / position.distance_to(body.position)
-	predicted_position = body.position + (body.velocity * time)
-	return (predicted_position - position).angle()

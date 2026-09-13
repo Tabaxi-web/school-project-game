@@ -1,5 +1,6 @@
 extends CharacterBody2D
 
+@warning_ignore("narrowing_conversion")
 # -- BTS VARS --
 @export var upgrade_folder_filepath := "res://resources/" ## Where the upgrade logic will look for upgrade files
 @export var upgrade_file_extension := ".tres" ## this should be nothing but .tres, worth adding this variable just in case
@@ -10,7 +11,7 @@ extends CharacterBody2D
 @export var camera: Camera2D ## Camera itself for shake effects.
 @export var max_speed := 500.0 ## The length of velocity is limited to this value.
 @export var acceleration := 3000.0 ## Controls the acceleration of the player.
-@export var friction := 30 ## Velocity is multiplied by (1 - this * delta). The higher, the more friction.
+@export var friction := 30.0 ## Velocity is multiplied by (1 - this * delta). The higher, the more friction.
 @export var eyes_sprite: Sprite2D # Eye sprite
 @export var eyes_move_dist: float #Influences how far the eyes move
 @export var eyes_angle_quantisation := PI/8 ## how much the eyes snap, in RADIANS.
@@ -23,8 +24,8 @@ extends CharacterBody2D
 @export var dash_strength := 500
 @export var dash_decay_strength := 1
 @export var dash_reload := false
+@export var dash_reload_coeff := 2
 @export var hurt_camera_shake := 0.6
-@export var lifesteal := 0.0 ## Percentage of damage to heal
 var dash_direction: Vector2
 var dash_power_left := 0
 var health: float
@@ -63,6 +64,7 @@ var ammo: int # The player's current ammo.
 @export var burst_shots := 1 ## One by default. This is a normal weapon.
 @export var burst_timer: Timer
 @export var burst_delay := 0.075
+@export var spread_velocity_influence := 5.0
 # -- UI VARS --
 @export_category("User Interface")
 @export var bullet_cooldown_timer: Timer ## Timer that controls the player's fire rate.
@@ -74,24 +76,31 @@ var ammo: int # The player's current ammo.
 @onready var pivot := $Pivot # Pivot that the player's sprite rotates around
 @export var reloading_ui: Control ## UI for reloading.
 @export var dashing_ui: Control
-func _retro_bar_render(number: float, maximum: float, length: int) -> String: #this is for the retro health bar system. It's int based currently.
+@export var health_bar_charlength := 10
+@export var wave_bar_charlength := 50
+
+
+func _retro_bar_render(number: float, maximum: float, length: int) -> String: 
+	#this is for the retro health bar system. It's int based currently.
 	var temp_string := "" #the return value
 	var ratio = number / maximum # calculates the ratio between the max and value
 	var real_number = round(ratio * length) # Figures out how many bars should be filled in
 	for i in range(length):
 		if i < real_number:
-			temp_string += "■"
+			temp_string += "■" # No this is not a literal. It's visual.
 		else:
 			temp_string += "□"
 	return temp_string
 
 
 func _ready() -> void:
-	bullets_per_shot = clampi(bullets_per_shot, 1, 50)
+	# Initialise variables!
+	bullets_per_shot = clampi(bullets_per_shot, 1, INF)
 	health = max_health
 	ammo = max_ammo
 	_refresh()
 	Globals.start_wave.connect(_refresh)
+	
 	
 func _refresh() -> void: # This runs at the start of each wave.
 		# Init gameplay variables.
@@ -108,10 +117,15 @@ func _refresh() -> void: # This runs at the start of each wave.
 	eyes_sprite.texture = eyes_image_normal
 	bullet_damage *= gun_damage_per_wave
 	burst_timer.wait_time = burst_delay
+	# Clamp max ammo to more than 1.
+	max_ammo = clamp(max_ammo, 1, INF)
+	fire_delay = clamp(fire_delay, 0, INF)
+
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if frozen: 
+		# Used when in an upgrade or transition.
 		return
 	#Camera logic. Note the camera and player start CENTERED at 0,0.
 	camera_wrapper.position = position
@@ -127,35 +141,45 @@ func _process(delta: float) -> void:
 	else:
 		# Otherwise slow the player down.
 		velocity *= 1 - (friction * delta)
-	# Give the eyes some movement by offsetting based on the look vector and an assigned length with quantisaton!
+	# Give the eyes some movement by offsetting based on the look vector 
+	#and an assigned length with quantisaton!
 	var eyes_angle = (get_global_mouse_position() - position).normalized().angle()
 	eyes_angle = snapped(eyes_angle, eyes_angle_quantisation)
 	eyes_sprite.position = eyes_move_dist * Vector2.from_angle(eyes_angle)
-	if Input.is_action_just_pressed("movement_dash") and not dash_on_cooldown and not direction == Vector2.ZERO:
+	# how dashing... 
+	if Input.is_action_just_pressed("movement_dash")\
+	and not dash_on_cooldown and not direction == Vector2.ZERO:
+		#dashing is handled as an extra speed bonus that decays over time.
 		dash_timer.start()
 		dash_on_cooldown = true
 		dashing_ui.visible = true
 		Globals.play_sound(dash_sound)
 		dash_power_left = dash_strength
-		if dash_reload:
-			ammo = clamp(ammo + max_ammo / 2, 0, max_ammo)
-	if dash_power_left > 0:
+		if dash_reload: # IF the player has that one upgrade, reload a bit when dashing.
+			ammo = clamp(ammo + max_ammo / dash_reload_coeff, 0, max_ammo)
+	
+	if dash_power_left > 0: # Ramp down dash if it's not fully decayed.
 		dash_power_left -= delta * dash_decay_strength
-		
-	dash_power_left = clampf(dash_power_left, 0, INF)
+
+	dash_power_left = clampf(dash_power_left, 0, INF) # never let dash power go below 0.
 	if not dash_on_cooldown:
 		dash_direction = direction
-	velocity += dash_power_left * dash_direction
+	velocity += dash_power_left * dash_direction # apply the dash itself.
 	velocity = velocity.limit_length(max_speed + dash_power_left) # Limit the player's speed.
-	pivot.look_at(get_global_mouse_position())
+	pivot.look_at(get_global_mouse_position()) # Aim and fire!
+	
 	move_and_slide() # Note to self: put movement logic BEFORE move_and_slide(). You dumbass.
 	
 	#health and ammo ui updating 
-	health_label.text = "Health: " + _retro_bar_render(health, max_health, 10)\
+	health_label.text = "Health: " + _retro_bar_render(health, max_health, health_bar_charlength)\
 	+ " (" + str(health) + "/" + str(max_health) + ")"
-	ammo_label.text = "Ammo: " + _retro_bar_render(ammo, max_ammo, 10)\
+	ammo_label.text = "Ammo: " + _retro_bar_render(ammo, max_ammo, health_bar_charlength)\
 	+ " (" + str(ammo) + "/" + str(max_ammo) + ")"
-	wave_timer_label.text = _retro_bar_render(wave_manager.enemies_left, wave_manager.wave_enemies_amount, 50)
+	wave_timer_label.text = _retro_bar_render(
+			wave_manager.enemies_left, 
+			wave_manager.wave_enemies_amount,
+			wave_bar_charlength
+	)
 	
 	# Death Handling.
 	if health <= 0:
@@ -180,7 +204,8 @@ func _process(delta: float) -> void:
 				new_bullet.position = position
 				# Bullet Velocity is randomised based on both spread and itself!
 				if not homing_bullets:
-					new_bullet.speed = (bullet_velocity + (randf_range(-1, 1) * spread * (bullet_velocity / 5.0)))
+					new_bullet.speed = (bullet_velocity + (randf_range(-1, 1) * spread\
+					* (bullet_velocity / spread_velocity_influence)))
 				else:
 					new_bullet.speed = bullet_velocity
 				new_bullet.damage = bullet_damage
@@ -206,6 +231,7 @@ func _process(delta: float) -> void:
 	or Input.is_action_just_pressed("reload"))\
 	and not reloading\
 	and not shooting:
+		# Reload if the player is pressing, just pressed, not already reloading, and not shooting.
 		reloading = true
 		reload_timer.start()
 		reloading_ui.visible = true
@@ -217,29 +243,43 @@ func _process(delta: float) -> void:
 	
 	# Fancy reload animation bar refill. This is cosmetic as you can't shoot while reloading.
 	if reloading:
-		@warning_ignore("narrowing_conversion")
+		
 		ammo = (max_ammo * (1 - (reload_timer.time_left / reload_time)))
 # Stop shooting when done shooting.
 
-func _on_bullet_cooldown_timeout() -> void:
-	shooting = false
 
-func take_damage(damage: float) -> void:
-	if immune:
+func _on_bullet_cooldown_timeout() -> void:
+	shooting = false # For fire rate limiting.
+
+
+func take_damage(damage: float) -> void: # Ouch. 
+	
+	if immune: # Immunity frames!
 		return
+	
 	Globals.play_sound(hit_hurt_sound)
 	camera.shake(hurt_camera_shake)
 	health -= damage
-	immunity_timer.start()
+	immunity_timer.start() # Apply immunity frames when hurt.
 	immune = true
 	eyes_sprite.texture = eyes_image_hurt
 
 
+# What a behemoth of a function this is. 
 func check_upgrade(upgrade_name) -> void:
 	var loaded_upgrade: Upgrade
-	if not FileAccess.file_exists(upgrade_folder_filepath + upgrade_name.to_lower() + upgrade_file_extension):
-		push_warning("No upgrade found at filepath " + upgrade_folder_filepath + upgrade_name.to_lower() + upgrade_file_extension + "!!")
-	loaded_upgrade = load(upgrade_folder_filepath + upgrade_name.to_lower() + upgrade_file_extension)
+	# First, check if the file even exists with the name of the upgrade, otherwise
+	# There's no upgrade to apply, obviously.
+	if not FileAccess.file_exists(upgrade_folder_filepath + upgrade_name.to_lower()\
+	+ upgrade_file_extension):
+		push_warning("No upgrade found at filepath " + upgrade_folder_filepath\
+		+ upgrade_name.to_lower() + upgrade_file_extension + "!!")
+	# Load it !
+	loaded_upgrade = load(upgrade_folder_filepath + upgrade_name.to_lower()\
+	+ upgrade_file_extension)
+	# For every mod, check what kind of upgrade it is, then apply depending!
+	# Numerical attributes like spread etc have a modifer bonus, multiplier and override.
+	# Booleans just have true or false.
 	for mod in loaded_upgrade.modified_attributes:
 		if mod.modified_attribute == Globals.player_attributes.FIRE_DELAY:
 			fire_delay += mod.modifier_bonus
@@ -330,12 +370,12 @@ func check_upgrade(upgrade_name) -> void:
 	pass
 
 
-func _on_dash_timer_timeout() -> void:
+func _on_dash_timer_timeout() -> void: # When dash recharges, remove ui and take it off cooldown.
 	dash_on_cooldown = false
 	dashing_ui.visible = false
 
 
 
-func _on_immunity_timer_timeout() -> void:
+func _on_immunity_timer_timeout() -> void: # No longer immune.
 	immune = false
 	eyes_sprite.texture = eyes_image_normal

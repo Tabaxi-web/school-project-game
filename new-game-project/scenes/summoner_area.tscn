@@ -4,9 +4,15 @@
 [ext_resource type="Texture2D" uid="uid://dyul7yxxl32yg" path="res://assets/Circle.png" id="2_l5tw3"]
 [ext_resource type="Script" uid="uid://dd11xsuetiiyp" path="res://scripts/summoner_area_bullet.gd" id="3_07eax"]
 [ext_resource type="AudioStream" uid="uid://bretfb5ygrc0t" path="res://assets/sounds/summoner_explosion.wav" id="3_q455x"]
+[ext_resource type="FontFile" uid="uid://clcwproebc0of" path="res://assets/UI/pixChicago.ttf" id="5_ctkwo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ijtd6"]
 radius = 32.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_ijtd6"]
+line_spacing = -1.62
+font = ExtResource("5_ctkwo")
+font_color = Color(0, 1, 0, 1)
 
 [node name="summon" type="Area2D" unique_id=1580603616 node_paths=PackedStringArray("indicator_circle", "progress_circle")]
 script = ExtResource("3_07eax")
@@ -33,3 +39,22 @@ shape = SubResource("CircleShape2D_ijtd6")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1278321697]
+
+[node name="Label" type="Label" parent="." unique_id=1522973779]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -15.0
+offset_right = 21.0
+offset_bottom = 15.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "!"
+label_settings = SubResource("LabelSettings_ijtd6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_trim_flags = 128
+justification_flags = 161

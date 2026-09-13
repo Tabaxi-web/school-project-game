@@ -1,6 +1,8 @@
 extends ProgressBar
 
 @export var reload_timer: Timer
+
+
 # Called when the node enters the scene tree for the first time.
 # Not SUPER happy with this being a seperate script... ah well
 # Makes the reload bar line up with the timer.

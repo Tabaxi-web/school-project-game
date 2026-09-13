@@ -1,9 +1,15 @@
 extends Node2D
 
+## -- DEPRECITATED - DO NOT MARK
+## -- DEPRECITATED - DO NOT MARK
+## -- DEPRECITATED - DO NOT MARK
+
 @export var wave_number_label: Label
 @export var upgrade_label: Label
 var wave_number: int
 var wait_time := 2.5
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# A bunch of visual stuff. 

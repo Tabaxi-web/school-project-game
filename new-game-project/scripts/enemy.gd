@@ -3,6 +3,7 @@ extends CharacterBody2D
 var health: float
 var player: CharacterBody2D
 @export var health_bar : ProgressBar ## Health bar progressbar.
+@export var health_tween_time := 0.2
 @export var acceleration := 50 ## Acceleration of the movement.
 @export var max_speed := 200 ## Max speed.
 @export var attack_area : Area2D ## Area for the melee attacks of the enemy.
@@ -25,6 +26,8 @@ var player: CharacterBody2D
 @export var bullet_velocity := 500 ## Velocity of the player's bullets.
 @export var bullet_damage := 30.0 ## Damage of the player's bullets.
 var cooling_down := false ## Whether the enemy is cooling down from an attack or not.
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	health = max_health
@@ -51,18 +54,23 @@ func _process(delta: float) -> void:
 		queue_free()
 	
 	#Look at the player.
-	var eyes_angle
+	var eyes_angle: float
 	if ranged:
 		# This weights the actual direction of the player vs where the enemy think they'll be
-		eyes_angle = lerp(predictive_rotation(player), position.direction_to(player.position).angle(), eyes_predictive_weight)
+		eyes_angle = lerp(
+				predictive_rotation(player), 
+				position.direction_to(player.position).angle(), 
+				eyes_predictive_weight
+		)
 	else:
 		# No need to do allat for melee enemies.
 		eyes_angle = position.direction_to(player.position).angle()
+	
 	eyes_angle = snapped(eyes_angle, eyes_angle_quantisation)
 	eyes_sprite.position = eyes_move_dist * Vector2.from_angle(eyes_angle)
 	# Movement.
 	
-	if not ranged:
+	if not ranged: # i.e. if melee
 		# If the enemy is further away than the stopping distance, move towards them.
 		if position.distance_to(player.position) > stopping_distance:
 			velocity += delta * acceleration * (player.position - position)
@@ -75,7 +83,8 @@ func _process(delta: float) -> void:
 		if position.distance_to(player.position) > ranged_stopping_distance:
 			velocity += delta * acceleration * (player.position - position)
 			velocity = velocity.limit_length(max_speed)
-		elif position.distance_to(player.position) < ranged_stopping_distance / ranged_backaway_coefficient:
+		elif position.distance_to(player.position) <\
+		ranged_stopping_distance / ranged_backaway_coefficient:
 			velocity += delta * acceleration * -(player.position - position)
 			velocity = velocity.limit_length(max_speed)
 		else:
@@ -87,6 +96,7 @@ func _process(delta: float) -> void:
 		#basic melee attack.
 		if not cooling_down:
 			for body in attack_area.get_overlapping_bodies():
+				# Get overlapping means it doesn't have to be when the player collides.
 				if body == player:
 					cooling_down = true
 					player.take_damage(attack_damage)
@@ -107,12 +117,17 @@ func _process(delta: float) -> void:
 func take_damage(damage: float) -> void:
 	var tween = get_tree().create_tween()
 	health -= damage
-	tween.tween_property(health_bar, "value", health / max_health, 0.2)
+	# Move the healthbar down smoothly
+	tween.tween_property(health_bar, "value", health / max_health, health_tween_time)
+
 	
 func _on_attack_timer_timeout() -> void:
 	cooling_down = false
+
 	
 func predictive_rotation(body) -> float:
+	# This is a neat little function that predicts where the player will be!
+	# Shoutout kinematics... distance = velocity times time.
 	var predicted_position: Vector2
 	var time := bullet_velocity / position.distance_to(body.position)
 	predicted_position = body.position + (body.velocity * time)
