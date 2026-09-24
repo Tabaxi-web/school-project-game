@@ -8,7 +8,7 @@ var wave := 1 # Wave number.
 var upgrades := [] # An array of dictionaries that define upgrades the player has.
 var rare_upgrades := [] # ditto, but the rares.
 var upgrade_screen_how_often := 3 # Every n waves the player will get an upgrade.
-
+var drama_time := 1.0 # How long the game waits before sending you to win or death screen
 # ENUM IDS for all upgrades.
 enum upgrade_ids {BUCKSHOT1, GUNNER1, HOLLOWPT1, COMMANDO1, SHARPSHT1, SHARPSHT2, FOCUS1, COMMANDO2,
 STRBURST, LSRBEAM, SWEEPER, MEDIC1, GUNNER2, BURST1, BURST2, SLAMMER} # ENUM ids for each upgrade.
@@ -22,7 +22,6 @@ HEALING_ORBS, HEALING_ORBS_AMOUNT, HEALING_ORBS_CHANCE, BURST_AMOUNT, BURST_DELA
 var healing_orbs := true
 var healing_orbs_amount := 20.0
 var healing_orbs_chance := 0.05
-
 # Signals for game loop logic.
 signal start_wave # Starts the wave
 signal upgrade_screen # Summons the upgrade screen.
@@ -123,7 +122,7 @@ func _process(_delta: float) -> void:
 	AudioServer.set_bus_volume_linear(music_bus_index, music_volume)
 
 func reset_all_globals() -> void: # Used to reset game state on death.
-	wave = 1
+	wave = 999
 	upgrades = []
 	potential_common_upgrades = potential_common_upgrades_init_value
 	potential_rare_upgrades = potential_rare_upgrades_init_value
@@ -150,3 +149,7 @@ func play_sound(sound: AudioStream) -> void: # Generic sound player.
 	player.play()
 	await player.finished
 	player.queue_free()
+
+func handle_death() -> void:
+	await get_tree().create_timer(drama_time).timeout
+	get_tree().change_scene_to_file("res://scenes/game_over.tscn")

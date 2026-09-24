@@ -29,12 +29,16 @@ extends CharacterBody2D
 var dash_direction: Vector2
 var dash_power_left := 0
 var health: float
+var prev_health: float # Used to tell the healthbar when to update.
 var dash_on_cooldown := false
 @export var immunity_time: float # The amount of time in s that the play is immune for after getting hit.
 @export var immunity_timer: Timer # The timer responsible for the above.
 @export var eyes_image_normal: Texture2D # Normal eyes.
 @export var eyes_image_hurt: Texture2D # Hurt eyes.
-@export var immune := false
+@export var immune := false # whether the player is immune to damage.
+@export var heal_on_wave := 20.0 # How much to heal the player by every wave.
+@export var death_fx: PackedScene # The particles to shoot when the player dies.
+
 #-- SOUND VARS --
 @export_category("Sounds")
 @export var shoot_sound: AudioStream
@@ -75,11 +79,11 @@ var ammo: int # The player's current ammo.
 @export var bullet_scene: PackedScene ## Bullet scene to instantiate
 @onready var pivot := $Pivot # Pivot that the player's sprite rotates around
 @export var reloading_ui: Control ## UI for reloading.
-@export var dashing_ui: Control
-@export var health_bar_charlength := 10
-@export var wave_bar_charlength := 50
-
-
+@export var dashing_ui: Control ## UI for dashing
+@export var health_bar_charlength := 10 # HP bar length in characters
+@export var wave_bar_charlength := 50 # Ditto for the wave progress bar.
+@export var health_circle: TextureProgressBar
+@export var health_tween_time := 0.2
 func _retro_bar_render(number: float, maximum: float, length: int) -> String: 
 	#this is for the retro health bar system. It's int based currently.
 	var temp_string := "" #the return value
@@ -119,11 +123,19 @@ func _refresh() -> void: # This runs at the start of each wave.
 	burst_timer.wait_time = burst_delay
 	# Clamp max ammo to more than 1.
 	max_ammo = clamp(max_ammo, 1, INF)
+	ammo = max_ammo # Reload the player's gun
+	health = clamp(health + heal_on_wave, 0, max_health) # Heal the player by a certain amount.
+	# Clamp that.
 	fire_delay = clamp(fire_delay, 0, INF)
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if prev_health != health: # IF the health is different, tween the health circle to the new value.
+		var tween = create_tween()
+		tween.tween_property(health_circle, "value", health / max_health, health_tween_time)
+	prev_health = health
 	if frozen: 
 		# Used when in an upgrade or transition.
 		return
@@ -180,10 +192,14 @@ func _process(delta: float) -> void:
 			wave_manager.wave_enemies_amount,
 			wave_bar_charlength
 	)
-	
 	# Death Handling.
 	if health <= 0:
-		get_tree().change_scene_to_file("res://scenes/game_over.tscn")
+		Globals.handle_death()
+		var fx = death_fx.instantiate()
+		fx.position = position
+		add_sibling(fx)
+		fx.emitting = true
+		queue_free()
 	# Shooting!
 	# If automatic and pressed, or semi and just pressed, and not shooting, and ammo left:
 	if ((Input.is_action_pressed("shoot") and automatic)\

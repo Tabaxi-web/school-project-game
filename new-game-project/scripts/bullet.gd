@@ -55,7 +55,7 @@ func _process(delta: float) -> void:
 		move_local_x(speed * delta)
 	# Put some spin on it for fun
 	$SpriteContainer.rotation += (speed * delta) * spin_coefficient
-	# Damage falloff. Clamps to 0 so no enemy healing.
+	# Damage falloff. Now multiplicive. Clamps to 0 so no enemy healing.
 	damage = damage - (speed * (lifetime - lifetime_timer.time_left) *\
 	damage_falloff_coefficient * damage * delta)
 	damage = clampf(damage, 0, INF)

@@ -1,37 +1,40 @@
 extends Node2D
 
-var wave_enemies_amount: int
-var enemies: Array
-var enemies_left: int
-var percent_enemies_left: float
-var intermission := true
-var in_wave := false
-@export var enemy_scene: PackedScene
-@export var ranged_enemy_scene: PackedScene
-@export var summoner_enemy_scene: PackedScene
-@export var playable_area: Control
-@export var area_headway: float
-@export var ranged_enemy_chance := 0.4
-@export var summoner_enemy_chance := 0.1
-@export var wave_scaling_coefficient := 5
-@export var wave_scaling_bonus := 2
-@export var wave_health_scaling := 100
+var wave_enemies_amount: int ## Amount of enemies in this wave.
+var enemies: Array ## Array of enemy instances
+var enemies_left: int ## How many enemies left in the wave
+var percent_enemies_left: float ## percernt of that
+var intermission := true # If true, don't run wave logic
+var in_wave := false # If true, run wave logic
+@export var enemy_scene: PackedScene ## Scene of the enemy.
+@export var ranged_enemy_scene: PackedScene ## Scene of the ranged enemy.
+@export var summoner_enemy_scene: PackedScene ## Scene of the summoner enemy.
+@export var playable_area: Control ## Control which holds the bounds of the playable area
+@export var area_headway: float ## how far away from the edges of the area to spawn the enemies.
+@export var ranged_enemy_chance := 0.4 ## Chance for a ranged enemy
+@export var summoner_enemy_chance := 0.1 ## ditto for summoner enemies.
+@export var wave_scaling_coefficient := 5 ## Amount of enemies per new wave, coeffcient
+@export var wave_scaling_bonus := 2 ## ^ plus this amount.
+@export var wave_health_scaling := 100 ## How much more hp to give the enemies per wave
 @export var time_between_enemies_min := 2.0
 @export var time_between_enemies_max := 3.5
-@export var wave_time_between_enemies_coefficient := 0.1
-@export var player: Node2D
-@export var wave_title_label: Label
-@export var upgrade_scene: PackedScene
-@export var round_ui: CanvasLayer
-@export var wave_title_impact_time: float
-@export var boss_enemy_scene: PackedScene
-@export var boss_wave := 13
-
+@export var wave_time_between_enemies_coefficient := 0.1 ## How much to decrease the time between enemies per wave
+@export var player: Node2D ## The player
+@export var wave_title_label: Label ## The wave titlecard
+@export var upgrade_scene: PackedScene ## Upgrade screen to spawn.
+@export var round_ui: CanvasLayer ## UI to show in the round
+@export var wave_title_impact_time: float ## Time to wait for the wave title to show
+@export var boss_enemy_scene: PackedScene ## boss enemy
+@export var boss_wave := 13 ## which wave is the boss wave?
+@export var boss_music: AudioStream ## Music to play for boss wave.
+@export var music_player_node_name := "MusicPlayer" ## Music player name childed to the player
+@export var win_screen_name := "res://scenes/win_screen.tscn"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Globals.start_wave.connect(_begin_wave)
 	Globals.upgrade_screen.connect(_upgrade_screen_make)
+	Globals.reset_all_globals()
 	_begin_wave()
 
 
@@ -81,9 +84,14 @@ func _process(delta: float) -> void:
 					enemies.append(enemy)
 					add_sibling(enemy)
 				# Wait a little between enemies.
-				await get_tree().create_timer(randf_range(time_between_enemies_min, time_between_enemies_max)).timeout
+				if is_inside_tree():
+					await get_tree().create_timer(randf_range(time_between_enemies_min, time_between_enemies_max)).timeout
 		else:
 			# Boss wave! Spawn the boss in.
+			var music_player: AudioStreamPlayer2D
+			music_player = player.get_node(music_player_node_name)
+			music_player.stream = boss_music
+			music_player.play()
 			var enemy = boss_enemy_scene.instantiate()
 			enemy.position = Vector2.ZERO
 			enemies.append(enemy)
@@ -100,9 +108,18 @@ func _process(delta: float) -> void:
 
 func _begin_wave() -> void:
 	
+	# IF the player has cleared the boss wave, do a title card and send them to the screen
 	if Globals.wave == boss_wave + 1:
-		get_tree().change_scene_to_file("res://scenes/win_screen.tscn")
+		wave_title_label.visible = true
+		wave_title_label.text = "YOU  "
+		await get_tree().create_timer(wave_title_impact_time).timeout
+		wave_title_label.text = "YOU WIN!"
+		await get_tree().create_timer(wave_title_impact_time).timeout
+		wave_title_label.visible = false
+		get_tree().change_scene_to_file(win_screen_name)
 		return
+	
+	# Otherwise, do a cool impact gamejuicey thing with the wave title.
 	wave_title_label.visible = true
 	wave_title_label.text = "WAVE  "
 	await get_tree().create_timer(wave_title_impact_time).timeout

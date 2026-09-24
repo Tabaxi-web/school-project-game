@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://cder5ela3m3no" path="res://scenes/upgrade_screen.tscn" id="13_wjob3"]
 [ext_resource type="PackedScene" uid="uid://b7f6nvkmwk4hc" path="res://scenes/enemy_summoner.tscn" id="14_8xp80"]
 [ext_resource type="PackedScene" uid="uid://d3aue0kvoq8gs" path="res://scenes/boss_enemy.tscn" id="15_sp04v"]
+[ext_resource type="AudioStream" uid="uid://b2f0qb3judn08" path="res://assets/sounds/boss_music.mp3" id="16_ihbck"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_0rdsr"]
 font = ExtResource("2_d2op2")
@@ -196,3 +197,4 @@ upgrade_scene = ExtResource("13_wjob3")
 round_ui = NodePath("../UIMain/RoundUI")
 wave_title_impact_time = 1.5
 boss_enemy_scene = ExtResource("15_sp04v")
+boss_music = ExtResource("16_ihbck")
