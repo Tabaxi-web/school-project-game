@@ -224,6 +224,7 @@ func _process(delta: float) -> void:
 					* (bullet_velocity / spread_velocity_influence)))
 				else:
 					new_bullet.speed = bullet_velocity
+				# This is basically all english; init variables.	
 				new_bullet.damage = bullet_damage
 				new_bullet.crit_chance = crit_chance
 				new_bullet.crit_damage = crit_damage

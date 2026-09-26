@@ -42,6 +42,7 @@ func _process(delta: float) -> void:
 		return
 	# Health handling.
 	if health <= 0:
+		# Die, play a sound, do an explosion, maybe drop an orb.
 		Globals.play_sound(death_sfx)
 		var fx = death_fx.instantiate()
 		fx.global_position = position
@@ -104,6 +105,7 @@ func _process(delta: float) -> void:
 	if ranged: 
 		if not cooling_down and position.distance_to(player.position) < ranged_stopping_distance:
 			# This bullet logic is about the same as the player's.
+			#Instantiate the bullet, give it position, velocity etc.
 			var new_bullet = bullet_prefab.instantiate()
 			new_bullet.position = position
 			new_bullet.speed = bullet_velocity

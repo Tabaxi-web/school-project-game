@@ -45,7 +45,8 @@ func _ready() -> void:
 		else:
 			upgrade = Globals.potential_common_upgrades[randi_range(0, 
 			len(Globals.potential_common_upgrades) - 1)]
-		if upgrade in upgrades_this_time: 
+		if upgrade in upgrades_this_time: # If the upgrade has already been chosen to be shown
+			# this round.
 			continue
 		upgrades_this_time.append(upgrade)
 		i += 1
@@ -59,6 +60,7 @@ func _ready() -> void:
 		if upgrade[upgrade_icon]  != null:
 			upgrade_card.texture_rect.texture = load(upgrade[upgrade_icon])
 		add_child(upgrade_card)
+		# The "holders" are placeholders that the cards tween position to for some animation.
 		var holder = upgrade_holder_prefab.instantiate()
 		upgrade_card_carousel.add_child(holder)
 		holder.add_to_group("Upgrade_Card_Holders")
